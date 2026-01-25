@@ -1,16 +1,24 @@
-# Pet Manager - Front-End
+# Pet e Tutores – Front-End
 
-Aplicação Front-End desenvolvida em React + TypeScript como parte de um processo seletivo público do Governo do Estado de Mato Grosso.
+## Visão Geral do Projeto
+Aplicação Front-End desenvolvida em React + TypeScript como parte de um
+processo seletivo público do Governo do Estado de Mato Grosso.
 
-## Tecnologias
+## Tecnologias Utilizadas
 - React 18
 - TypeScript
 - Vite
 - Tailwind CSS
 - Axios
 
-## Execução local
+## Arquitetura da Aplicação
+A aplicação segue uma arquitetura em camadas, separando responsabilidades
+entre apresentação, domínio e infraestrutura, utilizando o padrão Facade.
 
-```bash
-npm install 
-npm run dev
+## Estrutura de Pastas
+```text
+src/
+    aplicacao/
+    dominio/
+    infraestrutura/
+    estado/
