@@ -12,8 +12,14 @@ processo seletivo público do Governo do Estado de Mato Grosso.
 - Axios
 
 ## Arquitetura da Aplicação
-A aplicação segue uma arquitetura em camadas, separando responsabilidades
-entre apresentação, domínio e infraestrutura, utilizando o padrão Facade.
+A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
+
+- `aplicacao/`: páginas, componentes, rotas e facades (orquestração)
+- `dominio/`: modelos TypeScript de negócio
+- `infraestrutura/`: serviços HTTP e autenticação
+- `estado/`: gerenciamento de estado com BehaviorSubject
+
+Essa organização facilita manutenção, testes e evolução do projeto.
 
 ## Estrutura de Pastas
 ```text

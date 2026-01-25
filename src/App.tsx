@@ -1,11 +1,5 @@
+import Rotas from "./aplicacao/rotas/Rotas";
 
-function App() {
-
-  return (
-    <>
-
-    </>
-  )
+export default function App() {
+  return <Rotas />;
 }
-
-export default App
