@@ -33,3 +33,10 @@ src/
 
 As rotas de Pets e Tutores utilizam Lazy Loading com `React.lazy` e `Suspense`,
 permitindo carregamento sob demanda e melhor performance inicial dos componentes.
+
+
+## Modelos de Domínio
+
+Os modelos de domínio representam as entidades principais do sistema Pet, tutor e Foto, Refletido pela API.
+
+Eles ficam isolados da camada de apresentação, facilitando tipagem, manutenção e testes.
