@@ -40,3 +40,12 @@ permitindo carregamento sob demanda e melhor performance inicial dos componentes
 Os modelos de domínio representam as entidades principais do sistema Pet, tutor e Foto, Refletido pela API.
 
 Eles ficam isolados da camada de apresentação, facilitando tipagem, manutenção e testes.
+
+## Camada HTTP e Serviços
+
+A comunicação com a API é centralizada em uma camada de serviços, utilizando Axios configurado em um cliente HTTP único.
+
+Cada serviço é responsável apenas por consumir endpoints específicos, mantendo a camada de apresentação desacoplada da infraestrutura.
+
+Os endpoints de listagem já são preparados para paginação, utilizando
+parâmetros de página e tamanho fixo de 10 itens.
