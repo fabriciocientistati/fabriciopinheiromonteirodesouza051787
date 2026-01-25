@@ -28,3 +28,8 @@ src/
     dominio/
     infraestrutura/
     estado/
+
+## Rotas e Lazy Loading
+
+As rotas de Pets e Tutores utilizam Lazy Loading com `React.lazy` e `Suspense`,
+permitindo carregamento sob demanda e melhor performance inicial dos componentes.
