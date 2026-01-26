@@ -10,6 +10,13 @@ processo seletivo público do Governo do Estado de Mato Grosso.
 - Vite
 - Tailwind CSS
 - Axios
+- React Router DOM
+
+## Execução Local
+
+```bash
+npm install
+npm run dev
 
 ## Arquitetura da Aplicação
 A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
@@ -20,6 +27,8 @@ A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
 - `estado/`: gerenciamento de estado com BehaviorSubject
 
 Essa organização facilita manutenção, testes e evolução do projeto.
+
+A navegação é organizada em rotas públicas e privadas, facilitando manutenção, leitura e controle de acesso. O Carregamento das páginas é feito sob demanda com React.lazy
 
 ## Estrutura de Pastas
 ```text

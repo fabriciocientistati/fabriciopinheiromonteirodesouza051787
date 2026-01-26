@@ -1,4 +1,4 @@
-export default function PetsPagina() {
+export default function ListaPets() {
   return (
     <div className="space-y-1 ">
       <h2 className="text-xl font-semibold text-slate-100">
