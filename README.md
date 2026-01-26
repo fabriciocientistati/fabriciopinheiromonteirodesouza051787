@@ -49,3 +49,14 @@ Cada serviço é responsável apenas por consumir endpoints específicos, manten
 
 Os endpoints de listagem já são preparados para paginação, utilizando
 parâmetros de página e tamanho fixo de 10 itens.
+
+## Autenticação e Segurança
+
+Os contratos de autenticação (credenciais e tokens) são definidos na
+camada de domínio, evitando tipagens soltas na infraestrutura.
+
+A aplicação utiliza autenticação JWT, com login e renovação automática do token de acesso via refresh token.
+
+O interceptador HTTP é responsável por injetar o token nas requisições e renovar a autenticação de forma transparente ao usuário.
+
+
