@@ -39,6 +39,22 @@ A aplicação utiliza o padrão Facade para desacoplar a camada de apresentaçã
 O estado da aplicação é gerenciado com BehaviorSubject, conforme exigido no edital.
 Cada entidade (Pets, Tutores) possui um estado centralizado.
 
+## Listagem de Pets com Paginação
+
+A listagem de pets utiliza paginação com tamanho fixo de 10 itens por página, conforme exigido no edital.
+
+A paginação é controlada da seguinte forma:
+
+A API recebe os parâmetros de página e tamanho
+
+A Facade orquestra a chamada e atualiza o estado reativo
+
+O estado centralizado mantém a página atual e o total de registros
+
+A interface calcula o total de páginas e controla a navegação
+
+Essa abordagem garante simplicidade, previsibilidade e separação clara de responsabilidades.
+
 ## Estrutura de Pastas
 ```text
 src/
@@ -65,8 +81,8 @@ A comunicação com a API é centralizada em uma camada de serviços, utilizando
 
 Cada serviço é responsável apenas por consumir endpoints específicos, mantendo a camada de apresentação desacoplada da infraestrutura.
 
-Os endpoints de listagem já são preparados para paginação, utilizando
-parâmetros de página e tamanho fixo de 10 itens.
+Os endpoints de listagem são preparados para paginação, utilizando parâmetros de página e tamanho fixo de 10 itens.
+O controle de navegação entre páginas é realizado na camada de apresentação, com dados fornecidos pela Facade.
 
 ## Autenticação e Segurança
 
