@@ -2,8 +2,8 @@ import { clienteHttp } from '../http/clienteHttp'
 import type { Pet } from '../../dominio/modelos/Pet'
 
 export class PetsServico {
-    async listar(pagina: number): Promise<Pet[]> {
-        const resposta = await clienteHttp.get<Pet[]>('/v1/pets', {
+    async listar(pagina: number) {
+        const resposta = await clienteHttp.get('/v1/pets', {
         params: {
             page: pagina,
             size: 10
@@ -18,17 +18,17 @@ export class PetsServico {
         return resposta.data
     }
 
-    async criar(dados: Partial<Pet>): Promise<Pet> {
-        const resposta = await clienteHttp.post<Pet>(`/v1/pets`, dados)
-        return resposta.data
+    async criar(dados: Omit<Pet, 'id'>): Promise<Pet> {
+        const response = await clienteHttp.post('/v1/pets', dados)
+        return response.data
     }
 
-    async atualizar(id: number, dados: Partial<Pet>): Promise<Pet> {
-        const resposta = await clienteHttp.put<Pet>(`/v1/pets/${id}`, dados)
-        return resposta.data
+    async atualizar(id: number, dados: Omit<Pet, 'id'>): Promise<Pet> {
+        const response = await clienteHttp.put(`/v1/pets/${id}`, dados)
+        return response.data
     }
 
-    async remover(id: number) {
+    async remover(id: number): Promise<void> {
         await clienteHttp.delete(`/v1/pets/${id}`)
     }
 }

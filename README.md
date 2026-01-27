@@ -30,6 +30,12 @@ Essa organização facilita manutenção, testes e evolução do projeto.
 
 A navegação é organizada em rotas públicas e privadas, facilitando manutenção, leitura e controle de acesso. O Carregamento das páginas é feito sob demanda com React.lazy
 
+## Facade Pattern
+
+A aplicação utiliza o padrão Facade para desacoplar a camada de apresentação
+da camada de infraestrutura. Os componentes React interagem apenas com facades,
+que orquestram os serviços HTTP e regras de uso da API.
+
 ## Estrutura de Pastas
 ```text
 src/

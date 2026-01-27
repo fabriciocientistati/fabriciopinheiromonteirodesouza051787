@@ -12,7 +12,7 @@ export function RotasPrivadas() {
         path="/"
         element={
             <RotaProtegida>
-            <ListaPets />
+                <ListaPets />
             </RotaProtegida>
         }
         />
@@ -21,7 +21,7 @@ export function RotasPrivadas() {
         path="/pets/:id"
         element={
             <RotaProtegida>
-            <DetalhePet />
+                <DetalhePet />
             </RotaProtegida>
         }
         />
