@@ -1,9 +1,8 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { AutenticacaoServico } from '../../../infraestrutura/servicos/AutenticacaoServico'
 import { PetsServico } from '../../../infraestrutura/servicos/PetsServico'
 import { salvarTokens } from '../../../infraestrutura/autenticacao/armazenamentoToken'
 import type { CredenciaisLogin } from '../../../dominio/modelos/Autenticacao'
-
 
 const autenticacaoServico = new AutenticacaoServico()
 const petsServico = new PetsServico()
@@ -85,3 +84,4 @@ export default function TesteAutenticacao() {
     </div>
   )
 }
+

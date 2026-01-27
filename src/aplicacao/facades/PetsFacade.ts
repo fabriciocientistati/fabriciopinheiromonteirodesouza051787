@@ -1,26 +1,30 @@
-import type { Pet } from "../../dominio/modelos/Pet"
-import { PetsServico } from "../../infraestrutura/servicos/PetsServico"
+import { petsEstado } from '../../estado/petsEstado'
+import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
 
-export class PetsFacade {
-  private servico = new PetsServico()
+const petsServico = new PetsServico()
 
-  listar(pagina: number) {
-    return this.servico.listar(pagina)
+class PetsFacade {
+  readonly estado$ = petsEstado.estado$
+
+  async listar(pagina = 0) {
+    try {
+      petsEstado.definirCarregando()
+
+      const resposta = await petsServico.listar(pagina, 10)
+
+      petsEstado.definirDados(
+        resposta.content,
+        resposta.page,
+        resposta.total,
+      )
+    } catch {
+      petsEstado.definirErro('Erro ao carregar lista de pets')
+    }
   }
 
-  obterPorId(id: number) {
-    return this.servico.obterPorId(id)
-  }
-
-  criar(dados: Omit<Pet, 'id'>) {
-    return this.servico.criar(dados)
-  }
-
-  atualizar(id: number, dados: Omit<Pet, 'id'>) {
-    return this.servico.atualizar(id, dados)
-  }
-
-  remover(id: number) {
-    return this.servico.remover(id)
+  limpar() {
+    petsEstado.limpar()
   }
 }
+
+export const petsFacade = new PetsFacade()

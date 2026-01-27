@@ -32,9 +32,12 @@ A navegação é organizada em rotas públicas e privadas, facilitando manutenç
 
 ## Facade Pattern
 
-A aplicação utiliza o padrão Facade para desacoplar a camada de apresentação
-da camada de infraestrutura. Os componentes React interagem apenas com facades,
-que orquestram os serviços HTTP e regras de uso da API.
+A aplicação utiliza o padrão Facade para desacoplar a camada de apresentação da infraestrutura. Os componentes React interagem apenas com facades, que orquestram os serviços HTTP e atualizam o estado reativo via BehaviorSubject. Isso garante baixo acoplamento, previsibilidade e facilidade de testes.
+
+## Gerenciamento de Estado com BehaviorSubject
+
+O estado da aplicação é gerenciado com BehaviorSubject, conforme exigido no edital.
+Cada entidade (Pets, Tutores) possui um estado centralizado.
 
 ## Estrutura de Pastas
 ```text

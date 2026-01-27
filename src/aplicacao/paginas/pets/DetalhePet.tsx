@@ -1,13 +1,41 @@
-export default function DetalhePet() {
-    return (
-    <div className="space-y-1 ">
-        <h2 className="text-xl font-semibold text-slate-100">
-        Pets
-        </h2>
+﻿import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { petsFacade } from '../../facades/PetsFacade'
+import type { PetsViewEstado } from '../../../estado/petsEstado'
 
-        <p className="text-sm text-slate-400 ">
-        Detalhe pet
-        </p>
+export function DetalhePet() {
+  const { id } = useParams()
+  const [estado, setEstado] = useState<PetsViewEstado | null>(null)
+
+  useEffect(() => {
+    const inscricao = petsFacade.estado$.subscribe(setEstado)
+
+    if (id) {
+      // próxima etapa: buscar pet por id
+      // petsFacade.buscarPorId(Number(id))
+    }
+
+    return () => {
+      inscricao.unsubscribe()
+    }
+  }, [id])
+
+  if (!estado) {
+    return <p>Inicializando...</p>
+  }
+
+  if (estado.carregando) {
+    return <p>Carregando...</p>
+  }
+
+  if (estado.erro) {
+    return <p>{estado.erro}</p>
+  }
+
+  return (
+    <div>
+      <h1>Detalhe do Pet</h1>
+      <p>ID: {id}</p>
     </div>
-    );
+  )
 }
