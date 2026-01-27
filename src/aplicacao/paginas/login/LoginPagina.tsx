@@ -1,87 +1,63 @@
 ﻿import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AutenticacaoServico } from '../../../infraestrutura/servicos/AutenticacaoServico'
-import { PetsServico } from '../../../infraestrutura/servicos/PetsServico'
 import { salvarTokens } from '../../../infraestrutura/autenticacao/armazenamentoToken'
-import type { CredenciaisLogin } from '../../../dominio/modelos/Autenticacao'
 
-const autenticacaoServico = new AutenticacaoServico()
-const petsServico = new PetsServico()
+export default function LoginPagina() {
+  const [usuario, setUsuario] = useState('')
+  const [senha, setSenha] = useState('')
+  const [erro, setErro] = useState<string | null>(null)
+  const [carregando, setCarregando] = useState(false)
 
-export default function TesteAutenticacao() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [mensagem, setMensagem] = useState<string | null>(null)
+  const navigate = useNavigate()
+  const autenticacaoServico = new AutenticacaoServico()
 
-  async function fazerLogin() {
+  async function realizarLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setErro(null)
+    setCarregando(true)
+
     try {
-      const credenciais: CredenciaisLogin = {
-        username,
-        password,
-      }
-
-      const resposta = await autenticacaoServico.login(credenciais)
+      const resposta = await autenticacaoServico.login({
+        username: usuario,
+        password: senha,
+      })
 
       salvarTokens(
         resposta.access_token,
-        resposta.refresh_token
+        resposta.refresh_token,
       )
 
-      console.log('Tokens salvos no storage:', resposta)
-      setMensagem('Login realizado com sucesso')
-    } catch (erro) {
-      console.error(erro)
-      setMensagem('Erro ao realizar login')
-    }
-  }
-
-  async function testarRequisicaoProtegida() {
-    try {
-      const pets = await petsServico.listar(0)
-      console.log('Resposta da API protegida:', pets)
-      setMensagem('Requisição protegida executada com sucesso')
-    } catch (erro) {
-      console.error(erro)
-      setMensagem('Erro na requisição protegida')
+      navigate('/', { replace: true })
+    } catch {
+      setErro('Usuário ou senha inválidos')
+    } finally {
+      setCarregando(false)
     }
   }
 
   return (
-    <div className="p-6 max-w-md space-y-4">
-      <h1 className="text-xl font-semibold">
-        Teste de Autenticação
-      </h1>
+    <form onSubmit={realizarLogin}>
+      <h1>Login</h1>
 
       <input
-        className="border p-2 w-full"
         placeholder="Usuário"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={usuario}
+        onChange={e => setUsuario(e.target.value)}
       />
 
       <input
-        className="border p-2 w-full"
         type="password"
         placeholder="Senha"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={senha}
+        onChange={e => setSenha(e.target.value)}
       />
 
-      <button
-        onClick={fazerLogin}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Fazer login
-      </button>
+      {erro && <p>{erro}</p>}
 
-      <button
-        onClick={testarRequisicaoProtegida}
-        className="bg-green-600 text-white px-4 py-2 rounded"
-      >
-        Testar requisição protegida
+      <button type="submit" disabled={carregando}>
+        {carregando ? 'Entrando...' : 'Entrar'}
       </button>
-
-      {mensagem && <p>{mensagem}</p>}
-    </div>
+    </form>
   )
 }
-

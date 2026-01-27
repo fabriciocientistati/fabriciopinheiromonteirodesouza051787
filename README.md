@@ -44,16 +44,19 @@ Cada entidade (Pets, Tutores) possui um estado centralizado.
 A listagem de pets utiliza paginação com tamanho fixo de 10 itens por página, conforme exigido no edital.
 
 A paginação é controlada da seguinte forma:
-
 A API recebe os parâmetros de página e tamanho
-
 A Facade orquestra a chamada e atualiza o estado reativo
-
 O estado centralizado mantém a página atual e o total de registros
-
 A interface calcula o total de páginas e controla a navegação
-
 Essa abordagem garante simplicidade, previsibilidade e separação clara de responsabilidades.
+
+1. A UI solicita uma página específica à Facade 
+2. A Facade chama o serviço com `page` e `size=10` 
+3. O estado centralizado é atualizado com: 
+    - itens retornados pela API 
+    - página atual 
+    - total de registros 
+4. A interface calcula o total de páginas e controla a navegação entre elas Essa abordagem mantém o código simples, previsível e fácil de testar, garantindo separação clara de responsabilidades entre UI, Facade e serviços HTTP.
 
 ## Estrutura de Pastas
 ```text
