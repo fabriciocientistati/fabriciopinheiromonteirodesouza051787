@@ -4,6 +4,7 @@ import type { Pet } from '../dominio/modelos/Pet'
 export type PetsViewEstado = {
   itens: Pet[]
   carregando: boolean
+  criando?: boolean
   erro?: string
   pagina: number
   total: number
@@ -15,8 +16,9 @@ const estadoInicial: PetsViewEstado = {
   carregando: false,
   pagina: 0,
   total: 0,
-  petSelecionado: null,
+  petSelecionado: null
 }
+
 
 class PetsEstado {
   private readonly estadoInterno$ =
@@ -36,12 +38,30 @@ class PetsEstado {
     })
   }
 
+definirCriando() {
+  this.estadoInterno$.next({
+    ...this.estadoInterno$.value,
+    criando: true,
+    erro: undefined,
+  })
+}
+
+definirCriado() {
+  this.estadoInterno$.next({
+    ...this.estadoInterno$.value,
+    criando: false,
+  })
+}
+
+
   definirDados(itens: Pet[], pagina: number, total: number) {
     this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
       itens,
       pagina,
       total,
       carregando: false,
+      erro: undefined,
     })
   }
 

@@ -1,5 +1,6 @@
 import { petsEstado } from '../../estado/petsEstado'
 import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
+import type { Pet } from '../../dominio/modelos/Pet'
 
 const petsServico = new PetsServico()
 
@@ -22,6 +23,20 @@ class PetsFacade {
     }
   }
 
+async criar(dados: Omit<Pet, 'id'>) {
+  try {
+    petsEstado.definirCriando()
+
+    const petCriado = await petsServico.criar(dados)
+
+    petsEstado.definirCriado()
+    return petCriado
+  } catch {
+    petsEstado.definirErro('Erro ao criar pet')
+    throw new Error('Erro ao criar pet')
+  }
+}
+
 async buscarPorId(id: number) {
   try {
     petsEstado.definirCarregandoDetalhe() 
@@ -33,6 +48,25 @@ async buscarPorId(id: number) {
     petsEstado.definirErro('Erro ao carregar detalhes do pet') 
   } 
 }  
+
+async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
+  try {
+    petsEstado.definirCriando()
+
+    const petCriado = await petsServico.criar(dados)
+
+    if (arquivo) {
+      await petsServico.adicionarFoto(petCriado.id, arquivo)
+    }
+
+    petsEstado.definirCriado()
+
+    return petCriado
+  } catch {
+    petsEstado.definirErro('Erro ao criar pet')
+    throw new Error('Erro ao criar pet')
+  }
+}
 
   limpar() {
     petsEstado.limpar()

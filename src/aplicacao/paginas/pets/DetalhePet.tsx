@@ -1,19 +1,18 @@
 ﻿import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { petsFacade } from '../../facades/PetsFacade'
 import type { PetsViewEstado } from '../../../estado/petsEstado'
 
 export function DetalhePet() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [estado, setEstado] = useState<PetsViewEstado | null>(null)
 
   useEffect(() => {
     const sub = petsFacade.estado$.subscribe(setEstado)
-
     if (id) {
       petsFacade.buscarPorId(Number(id))
     }
-
     return () => sub.unsubscribe()
   }, [id])
 
@@ -26,6 +25,11 @@ export function DetalhePet() {
 
   return (
     <div>
+      <button
+        onClick={() => navigate(-1)}>
+        Voltar
+      </button>
+
       <h1>Detalhe do Pet</h1>
 
       {pet.foto?.url && (
@@ -56,7 +60,7 @@ export function DetalhePet() {
                   alt={tutor.nome}
                   className="w-20 h-20 object-cover rounded-full mt-2"
                 />
-              )}  
+              )}
             </li>
           ))}
         </ul>

@@ -90,6 +90,31 @@ A imagem do pet e dos tutores é exibida diretamente a partir da URL fornecida
 pela API, sem necessidade de chamadas adicionais.
 
 
+## Criação de Pets com Upload de Imagem
+
+A tela de criação de pets permite cadastrar um novo pet enviando:
+
+- nome
+- raça
+- idade
+- imagem (opcional)
+
+O fluxo segue o padrão definido pelo backend:
+
+1. O pet é criado via `POST /v1/pets`
+2. Caso uma imagem seja selecionada, ela é enviada em seguida via  
+   `POST /v1/pets/{id}/foto` utilizando `multipart/form-data`
+3. O usuário é redirecionado automaticamente para a tela de detalhes do pet
+
+A interface inclui:
+
+- validação de campos obrigatórios
+- preview da imagem antes do envio
+- feedback de erro
+- botão para retornar à lista de pets
+
+Esse fluxo mantém a responsabilidade única de cada endpoint e garante uma experiência consistente e previsível para o usuário.
+
 
 ## Estrutura de Pastas
 ```text

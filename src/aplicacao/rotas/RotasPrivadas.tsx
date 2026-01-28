@@ -2,6 +2,12 @@ import { Route } from 'react-router-dom'
 import { lazy } from 'react'
 import { RotaProtegida } from './RotaProtegida'
 
+export const CriarPetPagina = lazy(() => 
+  import('../paginas/pets/CriarPet').then(modulo => ({
+    default: modulo.CriarPet,
+  })),
+)
+
 export const ListaPetsPagina = lazy(() =>
   import('../paginas/pets/ListaPets').then(modulo => ({
     default: modulo.ListaPets,
@@ -18,6 +24,15 @@ export const DetalhePetPagina = lazy(() =>
 export function RotasPrivadas() {
     return (
     <>
+        <Route
+        path="/pets/novo"
+        element={
+            <RotaProtegida>
+              <CriarPetPagina/>
+            </RotaProtegida>
+        }
+        />
+
         <Route
         path="/"
         element={

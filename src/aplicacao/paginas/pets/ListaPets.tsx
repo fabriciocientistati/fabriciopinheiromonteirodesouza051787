@@ -24,7 +24,7 @@ export function ListaPets() {
   return (
     <div>
       <h1>Lista de Pets</h1>
-
+      <Link to="/pets/novo">Criar novo pet</Link>
       <ul>
         {estado.itens.map(pet => (
           <li key={pet.id}>

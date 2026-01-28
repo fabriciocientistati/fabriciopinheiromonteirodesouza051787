@@ -45,10 +45,10 @@ export class PetsServico {
 
   async adicionarFoto(id: number, arquivo: File): Promise<Pet> {
     const formData = new FormData()
-    formData.append('arquivo', arquivo)
+    formData.append('foto', arquivo)
 
     const resposta = await clienteHttp.post<Pet>(
-      `/v1/pets/${id}/foto`,
+      `/v1/pets/${id}/fotos`,
       formData,
       {
         headers: {
