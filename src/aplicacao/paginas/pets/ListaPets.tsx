@@ -35,6 +35,13 @@ export function ListaPets() {
             >
               Ver detalhes
             </Link>
+
+            <Link
+              to={`/pets/${pet.id}/editar`}
+              className="text-blue-600 underline"
+            >
+              Atualizar
+            </Link>
           </li>
         ))}
       </ul>

@@ -7,6 +7,10 @@ const petsServico = new PetsServico()
 class PetsFacade {
   readonly estado$ = petsEstado.estado$
 
+  obterSnapshot() {
+    return petsEstado.obterSnapshot()
+  }
+
   async listar(pagina = 0) {
     try {
       petsEstado.definirCarregando()
@@ -34,6 +38,18 @@ async criar(dados: Omit<Pet, 'id'>) {
   } catch {
     petsEstado.definirErro('Erro ao criar pet')
     throw new Error('Erro ao criar pet')
+  }
+}
+
+async atualizar(id: number, dados: Partial<Pet>) {
+  try {
+    petsEstado.definirCriando()
+    const pet = await petsServico.atualizar(id, dados)
+    petsEstado.definirCriado()
+    return pet
+  } catch {
+    petsEstado.definirErro('Erro ao atualizar pet')
+    throw new Error('Erro ao atualizar pet')
   }
 }
 
@@ -65,6 +81,24 @@ async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
   } catch {
     petsEstado.definirErro('Erro ao criar pet')
     throw new Error('Erro ao criar pet')
+  }
+}
+
+async atualizarFoto(id: number, arquivo: File) {
+  try {
+    await petsServico.adicionarFoto(id, arquivo)
+  } catch {
+    petsEstado.definirErro('Erro ao atualizar foto')
+    throw new Error('Erro ao atualizar foto')
+  }
+}
+
+async removerFoto(petId: number, fotoId: number) {
+  try {
+    await petsServico.removerFoto(petId, fotoId)
+  } catch {
+    petsEstado.definirErro('Erro ao remover foto')
+    throw new Error('Erro ao remover pet')
   }
 }
 

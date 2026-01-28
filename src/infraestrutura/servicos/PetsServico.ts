@@ -61,7 +61,7 @@ export class PetsServico {
   }
 
   async removerFoto(petId: number, fotoId: number): Promise<void> {
-    await clienteHttp.delete(`/v1/pets/${petId}/foto/${fotoId}`)
+    await clienteHttp.delete(`/v1/pets/${petId}/fotos/${fotoId}`)
   }
 }
 

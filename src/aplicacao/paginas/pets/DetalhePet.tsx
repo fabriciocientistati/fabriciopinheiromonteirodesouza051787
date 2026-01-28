@@ -26,7 +26,7 @@ export function DetalhePet() {
   return (
     <div>
       <button
-        onClick={() => navigate(-1)}>
+        onClick={() => navigate('/')}>
         Voltar
       </button>
 

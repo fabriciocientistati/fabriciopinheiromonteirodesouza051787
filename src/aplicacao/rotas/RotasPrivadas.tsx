@@ -8,6 +8,12 @@ export const CriarPetPagina = lazy(() =>
   })),
 )
 
+export const AtualizarPetPagina = lazy(() => 
+  import('../paginas/pets/AtualizarPet').then(modulo => ({ 
+    default: modulo.AtualizarPet, 
+  })), 
+)
+
 export const ListaPetsPagina = lazy(() =>
   import('../paginas/pets/ListaPets').then(modulo => ({
     default: modulo.ListaPets,
@@ -25,30 +31,39 @@ export function RotasPrivadas() {
     return (
     <>
         <Route
-        path="/pets/novo"
-        element={
-            <RotaProtegida>
+          path="/pets/novo"
+          element={
+              <RotaProtegida>
               <CriarPetPagina/>
-            </RotaProtegida>
-        }
+              </RotaProtegida>
+          }
         />
 
         <Route
-        path="/"
-        element={
+          path="/pets/:id/editar"
+          element={
             <RotaProtegida>
+              <AtualizarPetPagina/>
+            </RotaProtegida>
+          }
+        />
+
+        <Route
+          path="/"
+          element={
+              <RotaProtegida>
                 <ListaPetsPagina />
-            </RotaProtegida>
-        }
+              </RotaProtegida>
+          }
         />
 
         <Route
-        path="/pets/:id"
-        element={
-            <RotaProtegida>
+          path="/pets/:id"
+          element={
+              <RotaProtegida>
                 <DetalhePetPagina />
-            </RotaProtegida>
-        }
+              </RotaProtegida>
+          }
         />
     </>
     )

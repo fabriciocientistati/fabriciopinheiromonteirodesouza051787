@@ -115,6 +115,24 @@ A interface inclui:
 
 Esse fluxo mantém a responsabilidade única de cada endpoint e garante uma experiência consistente e previsível para o usuário.
 
+## Atualização de Pets (com imagem e remoção de foto)
+
+A aplicação agora permite atualizar os dados de um pet, incluindo:
+
+- nome  
+- raça  
+- idade  
+- imagem (opcional)
+
+Durante a edição, o usuário pode:
+
+- enviar uma nova imagem  
+- visualizar a imagem atual  
+- remover a foto existente  
+
+A UI permanece simples e desacoplada, enquanto a Facade orquestra toda a lógica de negócio.  
+As rotas foram atualizadas para incluir `/pets/:id/editar` com carregamento dinâmico (lazy loading).
+
 
 ## Estrutura de Pastas
 ```text
