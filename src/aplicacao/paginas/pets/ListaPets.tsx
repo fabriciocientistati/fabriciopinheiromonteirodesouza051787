@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { petsFacade } from '../../facades/PetsFacade'
 import type { PetsViewEstado } from '../../../estado/petsEstado'
+import { Link } from 'react-router-dom'
 
 const TAMANHO_PAGINA = 10
 
@@ -26,7 +27,15 @@ export function ListaPets() {
 
       <ul>
         {estado.itens.map(pet => (
-          <li key={pet.id}>{pet.nome}</li>
+          <li key={pet.id}>
+            {pet.nome}{' '}
+            <Link
+              to={`/pets/${pet.id}`}
+              className="text-blue-600 underline"
+            >
+              Ver detalhes
+            </Link>
+          </li>
         ))}
       </ul>
 

@@ -22,6 +22,18 @@ class PetsFacade {
     }
   }
 
+async buscarPorId(id: number) {
+  try {
+    petsEstado.definirCarregandoDetalhe() 
+    
+    const pet = await petsServico.buscarPorId(id) 
+    
+    petsEstado.definirDetalhe(pet) 
+  } catch { 
+    petsEstado.definirErro('Erro ao carregar detalhes do pet') 
+  } 
+}  
+
   limpar() {
     petsEstado.limpar()
   }

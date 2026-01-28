@@ -58,6 +58,19 @@ Essa abordagem garante simplicidade, previsibilidade e separação clara de resp
     - total de registros 
 4. A interface calcula o total de páginas e controla a navegação entre elas Essa abordagem mantém o código simples, previsível e fácil de testar, garantindo separação clara de responsabilidades entre UI, Facade e serviços HTTP.
 
+## Navegação para Detalhamento do Pet
+
+Cada item da listagem de pets exibe um link “Ver detalhes”, que direciona o usuário para a rota `/pets/:id`.
+
+A responsabilidade da listagem é apenas:
+
+- exibir os pets da página atual
+- permitir navegação entre páginas
+- oferecer acesso ao detalhe de cada pet
+
+O carregamento dos dados completos do pet é feito exclusivamente na tela de detalhamento, garantindo responsabilidade única e mantendo a lista leve e performática.
+
+
 ## Estrutura de Pastas
 ```text
 src/

@@ -11,31 +11,25 @@ export function DetalhePet() {
     const inscricao = petsFacade.estado$.subscribe(setEstado)
 
     if (id) {
-      // próxima etapa: buscar pet por id
-      // petsFacade.buscarPorId(Number(id))
+      petsFacade.buscarPorId(Number(id))
     }
 
-    return () => {
-      inscricao.unsubscribe()
-    }
+    return () => inscricao.unsubscribe()
   }, [id])
 
-  if (!estado) {
-    return <p>Inicializando...</p>
-  }
+  if (!estado) return <p>Inicializando...</p>
+  if (estado.carregando) return <p>Carregando...</p>
+  if (estado.erro) return <p>{estado.erro}</p>
+  if (!estado.petSelecionado) return <p>Pet não encontrado.</p>
 
-  if (estado.carregando) {
-    return <p>Carregando...</p>
-  }
-
-  if (estado.erro) {
-    return <p>{estado.erro}</p>
-  }
+  const pet = estado.petSelecionado
 
   return (
     <div>
       <h1>Detalhe do Pet</h1>
-      <p>ID: {id}</p>
+      <p><strong>Nome:</strong> {pet.nome}</p>
+      <p><strong>Raça:</strong> {pet.raca}</p>
+      <p><strong>Idade:</strong> {pet.idade}</p>
     </div>
   )
 }

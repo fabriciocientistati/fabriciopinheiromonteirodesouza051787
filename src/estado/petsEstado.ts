@@ -7,6 +7,7 @@ export type PetsViewEstado = {
   erro?: string
   pagina: number
   total: number
+  petSelecionado?: Pet | null
 }
 
 const estadoInicial: PetsViewEstado = {
@@ -14,6 +15,7 @@ const estadoInicial: PetsViewEstado = {
   carregando: false,
   pagina: 0,
   total: 0,
+  petSelecionado: null,
 }
 
 class PetsEstado {
@@ -42,6 +44,23 @@ class PetsEstado {
       carregando: false,
     })
   }
+
+definirCarregandoDetalhe() {
+  this.estadoInterno$.next({ 
+    ...this.estadoInterno$.value, 
+    carregando: true, 
+    erro: undefined, 
+    petSelecionado: null, 
+  }) 
+}
+
+definirDetalhe(pet: Pet) { 
+  this.estadoInterno$.next({ 
+    ...this.estadoInterno$.value, 
+    carregando: false, 
+    petSelecionado: pet, 
+  }) 
+}
 
   definirErro(mensagem: string) {
     this.estadoInterno$.next({
