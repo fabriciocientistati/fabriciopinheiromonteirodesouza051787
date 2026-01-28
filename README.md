@@ -70,6 +70,26 @@ A responsabilidade da listagem é apenas:
 
 O carregamento dos dados completos do pet é feito exclusivamente na tela de detalhamento, garantindo responsabilidade única e mantendo a lista leve e performática.
 
+## Detalhamento Completo do Pet
+
+A tela de detalhamento utiliza o schema completo retornado pelo endpoint `/pets/{id}`,
+exibindo todas as informações do pet, incluindo:
+
+- nome
+- raça
+- idade
+- foto do pet
+- lista de tutores associados
+- foto de cada tutor
+
+A listagem utiliza apenas o schema resumido, enquanto o detalhamento carrega o
+`PetResponseCompletoDto`, garantindo responsabilidade única e evitando tráfego
+desnecessário de dados.
+
+A imagem do pet e dos tutores é exibida diretamente a partir da URL fornecida
+pela API, sem necessidade de chamadas adicionais.
+
+
 
 ## Estrutura de Pastas
 ```text
