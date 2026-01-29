@@ -39,7 +39,7 @@ A aplicação utiliza o padrão Facade para desacoplar a camada de apresentaçã
 O estado da aplicação é gerenciado com BehaviorSubject, conforme exigido no edital.
 Cada entidade (Pets, Tutores) possui um estado centralizado.
 
-## Listagem de Pets com Paginação
+## Listagem de Pets com Paginação e Fluxo de Edição de Pets
 
 A listagem de pets utiliza paginação com tamanho fixo de 10 itens por página, conforme exigido no edital.
 
@@ -51,12 +51,13 @@ A interface calcula o total de páginas e controla a navegação
 Essa abordagem garante simplicidade, previsibilidade e separação clara de responsabilidades.
 
 1. A UI solicita uma página específica à Facade 
-2. A Facade chama o serviço com `page` e `size=10` 
+2. A Facade orquestra mudanças de página e recarrega a lista. 
 3. O estado centralizado é atualizado com: 
     - itens retornados pela API 
     - página atual 
     - total de registros 
-4. A interface calcula o total de páginas e controla a navegação entre elas Essa abordagem mantém o código simples, previsível e fácil de testar, garantindo separação clara de responsabilidades entre UI, Facade e serviços HTTP.
+    - remoção da foto existente
+
 
 ## Navegação para Detalhamento do Pet
 
@@ -132,7 +133,6 @@ Durante a edição, o usuário pode:
 
 A UI permanece simples e desacoplada, enquanto a Facade orquestra toda a lógica de negócio.  
 As rotas foram atualizadas para incluir `/pets/:id/editar` com carregamento dinâmico (lazy loading).
-
 
 ## Estrutura de Pastas
 ```text

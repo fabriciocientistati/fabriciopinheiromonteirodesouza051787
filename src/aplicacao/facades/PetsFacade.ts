@@ -19,13 +19,20 @@ class PetsFacade {
 
       petsEstado.definirDados(
         resposta.content,
-        resposta.page,
+        resposta.pagina,
         resposta.total,
+        resposta.tamanhoPagina,
+        resposta.paginaContador
       )
     } catch {
       petsEstado.definirErro('Erro ao carregar lista de pets')
     }
   }
+
+  async irParaPagina(pagina: number) {
+  petsEstado.definirPagina(pagina)
+  await this.listar(pagina)
+}
 
 async criar(dados: Omit<Pet, 'id'>) {
   try {
@@ -90,6 +97,15 @@ async atualizarFoto(id: number, arquivo: File) {
   } catch {
     petsEstado.definirErro('Erro ao atualizar foto')
     throw new Error('Erro ao atualizar foto')
+  }
+}
+
+async removerPet(id: number) {
+  try {
+    await petsServico.remover(id)
+  } catch {
+    petsEstado.definirErro('Erro ao remover pet')
+    throw new Error('Erro ao remover pet')
   }
 }
 

@@ -3,10 +3,10 @@ import type { Pet } from '../../dominio/modelos/Pet'
 
 export interface RespostaPaginada<T> {
   content: T[]
-  page: number
-  size: number
+  pagina: number
+  tamanhoPagina: number
   total: number
-  pageCount: number
+  paginaContador: number
 }
 
 export class PetsServico {
@@ -18,10 +18,35 @@ export class PetsServico {
       params: {
         page: pagina,
         size: tamanhoPagina,
+        pagina: pagina,
+        tamanhoPagina: tamanhoPagina,
       },
     })
 
-    return resposta.data
+    const data = resposta.data as Partial<RespostaPaginada<Pet>> & {
+      page?: number
+      size?: number
+      totalPages?: number
+      totalElements?: number
+      number?: number
+      itens?: Pet[]
+    }
+
+    const paginaAtual = data.pagina ?? data.page ?? data.number ?? 0
+    const tamanhoAtual = data.tamanhoPagina ?? data.size ?? 0
+    const total = data.total ?? data.totalElements ?? 0
+    const paginaContador =
+      data.paginaContador ??
+      data.totalPages ??
+      (tamanhoAtual > 0 ? Math.ceil(total / tamanhoAtual) : 0)
+
+    return {
+      content: data.content ?? data.itens ?? [],
+      pagina: paginaAtual,
+      tamanhoPagina: tamanhoAtual,
+      total,
+      paginaContador,
+    }
   }
 
   async buscarPorId(id: number): Promise<Pet> {

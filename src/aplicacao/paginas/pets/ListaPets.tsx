@@ -1,70 +1,93 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { petsFacade } from '../../facades/PetsFacade'
 import type { PetsViewEstado } from '../../../estado/petsEstado'
-import { Link } from 'react-router-dom'
-
-const TAMANHO_PAGINA = 10
 
 export function ListaPets() {
-  const [estado, setEstado] = useState<PetsViewEstado | null>(null)
+  const [estado, setEstado] = useState<PetsViewEstado>({
+    itens: [],
+    carregando: false,
+    pagina: 0,
+    total: 0,
+    tamanhoPagina: 0,
+    contadorPagina: 0,
+    petSelecionado: null
+  })
 
   useEffect(() => {
-    const inscricao = petsFacade.estado$.subscribe(setEstado)
-    petsFacade.listar(0)
+    petsFacade.listar()
 
-    return () => inscricao.unsubscribe()
+    const sub = petsFacade.estado$.subscribe(novoEstado => {
+      setEstado(novoEstado)
+    })
+
+    return () => sub.unsubscribe()
   }, [])
 
-  if (!estado) return <p>Inicializando...</p>
-  if (estado.carregando) return <p>Carregando...</p>
-  if (estado.erro) return <p>{estado.erro}</p>
+  async function excluirPet(id: number) {
+    const confirmar = confirm('Tem certeza que deseja excluir este pet?')
+    if (!confirmar) return
 
-  const totalPaginas = Math.ceil(estado.total / TAMANHO_PAGINA)
+    try {
+      await petsFacade.removerPet(id)
+      petsFacade.listar() 
+    } catch {
+      alert('Erro ao remover pet')
+    }
+  }
+
+  function proximaPagina() {
+    if (estado.pagina + 1 < estado.contadorPagina) {
+      petsFacade.irParaPagina(estado.pagina + 1)
+    }
+  }
+
+  function paginaAnterior() {
+    if (estado.pagina > 0) {
+      petsFacade.irParaPagina(estado.pagina - 1)
+    }
+  }
+
+  if (estado.carregando) {
+    return <p>Carregando...</p>
+  }
 
   return (
     <div>
       <h1>Lista de Pets</h1>
+
       <Link to="/pets/novo">Criar novo pet</Link>
+
+      {estado.itens.length === 0 && <p>Nenhum pet encontrado.</p>}
+
       <ul>
         {estado.itens.map(pet => (
           <li key={pet.id}>
-            {pet.nome}{' '}
-            <Link
-              to={`/pets/${pet.id}`}
-              className="text-blue-600 underline"
-            >
-              Ver detalhes
-            </Link>
+            {pet.nome} — {pet.raca} — {pet.idade} anos
 
-            <Link
-              to={`/pets/${pet.id}/editar`}
-              className="text-blue-600 underline"
-            >
-              Atualizar
-            </Link>
+            <Link to={`/pets/${pet.id}`}> Ver </Link>
+
+            <Link to={`/pets/${pet.id}/editar`}> Atualizar </Link>
+
+            <button onClick={() => excluirPet(pet.id)}>
+              Excluir
+            </button>
           </li>
         ))}
       </ul>
 
-      <div style={{ marginTop: 16 }}>
-        <button
-          disabled={estado.pagina === 0}
-          onClick={() => petsFacade.listar(estado.pagina - 1)}
-        >
-          Anterior
-        </button>
-
-        <span style={{ margin: '0 8px' }}>
-          Página {estado.pagina + 1} de {totalPaginas}
-        </span>
-
-        <button
-          disabled={estado.pagina + 1 >= totalPaginas}
-          onClick={() => petsFacade.listar(estado.pagina + 1)}
-        >
-          Próxima
-        </button>
-      </div>
+      <div> 
+        <button disabled={estado.pagina === 0} onClick={paginaAnterior}> 
+          Anterior 
+        </button> 
+        <span> 
+          Página {estado.pagina + 1} de {estado.contadorPagina} 
+        </span> 
+        <button disabled={estado.pagina + 1 >= estado.contadorPagina} onClick={proximaPagina}> 
+          Próxima 
+        </button> 
+      </div> 
+        
     </div>
   )
 }

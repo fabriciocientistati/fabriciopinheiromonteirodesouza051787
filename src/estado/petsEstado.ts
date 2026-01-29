@@ -8,6 +8,8 @@ export type PetsViewEstado = {
   erro?: string
   pagina: number
   total: number
+  tamanhoPagina: number,
+  contadorPagina: number,
   petSelecionado?: Pet | null
 }
 
@@ -16,9 +18,10 @@ const estadoInicial: PetsViewEstado = {
   carregando: false,
   pagina: 0,
   total: 0,
+  tamanhoPagina: 10,
+  contadorPagina: 0,
   petSelecionado: null
 }
-
 
 class PetsEstado {
   private readonly estadoInterno$ =
@@ -54,14 +57,23 @@ definirCriado() {
 }
 
 
-  definirDados(itens: Pet[], pagina: number, total: number) {
+  definirDados(itens: Pet[], pagina: number, total: number, tamanhoPagina: number, contadorPagina: number) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       itens,
       pagina,
       total,
+      tamanhoPagina,
+      contadorPagina,
       carregando: false,
       erro: undefined,
+    })
+  }
+
+  definirPagina(pagina: number) {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      pagina
     })
   }
 

@@ -115,21 +115,15 @@ async function removerFoto() {
 
         <input type="file" accept="image/*" onChange={selecionarArquivo} />
 
-        {preview && (
-          <>
-            <img src={preview} alt="Preview" width={150} height={150} />
-
-            {preview && ( 
-              <> <img src={preview} alt="Preview" width={150} height={150} /> 
-              
-              {fotoId && ( 
-                <button type="button" onClick={removerFoto}> 
-                  Remover Foto 
-                </button> 
-              )} 
-              </> 
-            )}
-          </>
+        {preview && ( 
+          <> <img src={preview} alt="Preview" width={150} height={150} /> 
+          
+          {fotoId && ( 
+            <button type="button" onClick={removerFoto}> 
+              Remover Foto 
+            </button> 
+          )} 
+          </> 
         )}
 
         {erro && <p>{erro}</p>}
