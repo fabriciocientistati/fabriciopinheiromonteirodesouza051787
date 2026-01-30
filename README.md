@@ -11,6 +11,7 @@ processo seletivo público do Governo do Estado de Mato Grosso.
 - Tailwind CSS
 - Axios
 - React Router DOM
+- RxJS (BehaviorSubject)
 
 ## Execução Local
 
@@ -21,55 +22,55 @@ npm run dev
 ## Arquitetura da Aplicação
 A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
 
+src/
 - `aplicacao/`: páginas, componentes, rotas e facades (orquestração)
-- `dominio/`: modelos TypeScript de negócio
-- `infraestrutura/`: serviços HTTP e autenticação
+- `dominio/`: modelos e contratos de negócio
+- `infraestrutura/`: serviços HTTP, autenticação e negócio
 - `estado/`: gerenciamento de estado com BehaviorSubject
 
-Essa organização facilita manutenção, testes e evolução do projeto.
+Essa organização:
+    - facilita manutenção 
+    - reduz acoplamento
+    - melhora testabilidade 
+    - mantém prvisibilidade do fluxo de dados
+    - evolução do projeto.
 
 A navegação é organizada em rotas públicas e privadas, facilitando manutenção, leitura e controle de acesso. O Carregamento das páginas é feito sob demanda com React.lazy
 
 ## Facade Pattern
 
-A aplicação utiliza o padrão Facade para desacoplar a camada de apresentação da infraestrutura. Os componentes React interagem apenas com facades, que orquestram os serviços HTTP e atualizam o estado reativo via BehaviorSubject. Isso garante baixo acoplamento, previsibilidade e facilidade de testes.
+Chamam serviços HTTP, atualizam o estado reativo, mantêm a UI simples e previsível.
+
+A aplicação utiliza o padrão Facade para desacoplar a camada de apresentação da infraestrutura. Os componentes interagem apenas com facades, que orquestram os serviços HTTP e atualizam o estado reativo via BehaviorSubject. Isso garante baixo acoplamento.
 
 ## Gerenciamento de Estado com BehaviorSubject
 
 O estado da aplicação é gerenciado com BehaviorSubject, conforme exigido no edital.
 Cada entidade (Pets, Tutores) possui um estado centralizado.
 
-## Listagem de Pets com Paginação e Fluxo de Edição de Pets
+itens, carregamento, erros, paginação, item selecionado, a UI apenas assina o estado e dispara itenções, sem manupular dados diretamente.
 
-A listagem de pets utiliza paginação com tamanho fixo de 10 itens por página, conforme exigido no edital.
+## Listagem de Pets com Paginação
 
-A paginação é controlada da seguinte forma:
+A listagem utiliza paginação com 10 itens por página, conforme edital.
+
+Fluxo da paginação:
+A UI solicita uma página à Face
+A Facade chama o serviço e atualiza o estado
+
+O estado mantém:
+    - itens
+    - página atual
+    - total de registros
+    - tamanho da página
+    - total de página
+    
+A UI exibe e navega entre páginas sem lógica de domínio.
+
 A API recebe os parâmetros de página e tamanho
 A Facade orquestra a chamada e atualiza o estado reativo
 O estado centralizado mantém a página atual e o total de registros
-A interface calcula o total de páginas e controla a navegação
-Essa abordagem garante simplicidade, previsibilidade e separação clara de responsabilidades.
-
-1. A UI solicita uma página específica à Facade 
-2. A Facade orquestra mudanças de página e recarrega a lista. 
-3. O estado centralizado é atualizado com: 
-    - itens retornados pela API 
-    - página atual 
-    - total de registros 
-    - remoção da foto existente
-
-
-## Navegação para Detalhamento do Pet
-
-Cada item da listagem de pets exibe um link “Ver detalhes”, que direciona o usuário para a rota `/pets/:id`.
-
-A responsabilidade da listagem é apenas:
-
-- exibir os pets da página atual
-- permitir navegação entre páginas
-- oferecer acesso ao detalhe de cada pet
-
-O carregamento dos dados completos do pet é feito exclusivamente na tela de detalhamento, garantindo responsabilidade única e mantendo a lista leve e performática.
+A interface calcula o total de páginas e controla a navegação.
 
 ## Detalhamento Completo do Pet
 
@@ -90,7 +91,6 @@ desnecessário de dados.
 A imagem do pet e dos tutores é exibida diretamente a partir da URL fornecida
 pela API, sem necessidade de chamadas adicionais.
 
-
 ## Criação de Pets com Upload de Imagem
 
 A tela de criação de pets permite cadastrar um novo pet enviando:
@@ -107,18 +107,19 @@ O fluxo segue o padrão definido pelo backend:
    `POST /v1/pets/{id}/foto` utilizando `multipart/form-data`
 3. O usuário é redirecionado automaticamente para a tela de detalhes do pet
 
-A interface inclui:
+A UI oferece:
 
 - validação de campos obrigatórios
 - preview da imagem antes do envio
 - feedback de erro
+- UI desacoplada
 - botão para retornar à lista de pets
 
-Esse fluxo mantém a responsabilidade única de cada endpoint e garante uma experiência consistente e previsível para o usuário.
+Esse fluxo mantém a responsabilidade única de cada endpoint e mantendo previsibilidade ao usuário
 
 ## Atualização de Pets (com imagem e remoção de foto)
 
-A aplicação agora permite atualizar os dados de um pet, incluindo:
+A aplicação permite atualizar os dados de um pet, incluindo:
 
 - nome  
 - raça  
@@ -131,37 +132,29 @@ Durante a edição, o usuário pode:
 - visualizar a imagem atual  
 - remover a foto existente  
 
-A UI permanece simples e desacoplada, enquanto a Facade orquestra toda a lógica de negócio.  
+A UI apenas exibe e dispara intenções, enquanto a Facade orquestra toda a lógica de negócio.  
 As rotas foram atualizadas para incluir `/pets/:id/editar` com carregamento dinâmico (lazy loading).
-
-## Estrutura de Pastas
-```text
-src/
-    aplicacao/
-    dominio/
-    infraestrutura/
-    estado/
 
 ## Rotas e Lazy Loading
 
-As rotas de Pets e Tutores utilizam Lazy Loading com `React.lazy` e `Suspense`,
-permitindo carregamento sob demanda e melhor performance inicial dos componentes.
-
+As rotas de Pets e Tutores utilizam Lazy Loading com `React.lazy` e `Suspense`, rotas públicas e privadas, controle de acesso via autenticação,
+isso permite carregamento sob demanda e melhor performance inicial dos componentes.
 
 ## Modelos de Domínio
 
 Os modelos de domínio representam as entidades principais do sistema Pet, tutor e Foto, Refletido pela API.
 
-Eles ficam isolados da camada de apresentação, facilitando tipagem, manutenção e testes.
+Eles ficam isolados da camada da UI, facilitando tipagem forte, manutenção, testes e clareza.
 
 ## Camada HTTP e Serviços
 
 A comunicação com a API é centralizada em uma camada de serviços, utilizando Axios configurado em um cliente HTTP único.
 
-Cada serviço é responsável apenas por consumir endpoints específicos, mantendo a camada de apresentação desacoplada da infraestrutura.
+Cada serviço é responsável apenas por consumir endpoints específicos, mantendo a camada da UI desacoplada da infraestrutura.
 
-Os endpoints de listagem são preparados para paginação, utilizando parâmetros de página e tamanho fixo de 10 itens.
-O controle de navegação entre páginas é realizado na camada de apresentação, com dados fornecidos pela Facade.
+Serviço separados por entidade, paginação implementada no backend e consumida pela Facade.
+
+O controle de navegação entre páginas é realizado na camada de apresentação UI, com dados fornecidos pela Facade.
 
 ## Autenticação e Segurança
 
@@ -172,4 +165,11 @@ A aplicação utiliza autenticação JWT, com login e renovação automática do
 
 O interceptador HTTP é responsável por injetar o token nas requisições e renovar a autenticação de forma transparente ao usuário.
 
+A aplicação utiliza:
 
+    - Login com JWT
+    - Refresh Token automático
+    - Interceptador que injeta nas requisições
+    - Renovação transparente ao usuário
+
+Os contratos de autenticação ficam na camada de domínio, garantindo consistência tipada.
