@@ -5,7 +5,7 @@ import { petsFacade } from '../../facades/PetsFacade'
 export function CriarPet() {
   const [nome, setNome] = useState('')
   const [raca, setRaca] = useState('')
-  const [idade, setIdade] = useState(0)
+  const [idade, setIdade] = useState<number | ''>('')
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [erro, setErro] = useState<string | null>(null)
@@ -20,17 +20,31 @@ export function CriarPet() {
     }
   }
 
+  function validarCampos() {
+    if (!nome.trim()) return 'O nome é obrigatório'
+    if (!raca.trim()) return 'A raça é obrigatória.'
+    if (idade === '' || idade <= 0) return 'A idade deve ser maior que zero'
+  }
+
   async function salvar(e: React.FormEvent) {
     e.preventDefault()
-    setErro(null)
+
+    const erroValidacao = validarCampos()
+    if (erroValidacao) {
+      setErro(erroValidacao)
+      return
+    }
 
     try {
-      const pet = await petsFacade.criarComImagem(
-        { nome, raca, idade },
-        arquivo ?? undefined
+      const petCriado = await petsFacade.criarComImagem(
+        { nome, raca, idade: Number(idade) }
       )
 
-      navigate(`/pets/${pet.id}`)
+      if (arquivo) {
+        await petsFacade.atualizarFoto(petCriado.id, arquivo)
+      }
+
+      navigate(`/pets/${petCriado.id}`)
     } catch {
       setErro('Erro ao criar pet')
     }
@@ -56,7 +70,7 @@ export function CriarPet() {
         type="number"
         placeholder="Idade"
         value={idade}
-        onChange={e => setIdade(Number(e.target.value))}
+        onChange={e => setIdade(e.target.value === '' ? '' : Number(e.target.value))}
       />
 
       <input type="file" accept="image/*" onChange={selecionarArquivo} />
@@ -65,7 +79,8 @@ export function CriarPet() {
         <img
           src={preview}
           alt="Preview"
-          className="w-32 h-32 object-cover rounded mt-2"
+          width={150}
+          height={150}
         />
       )}
 

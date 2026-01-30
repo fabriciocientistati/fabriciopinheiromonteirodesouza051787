@@ -11,27 +11,32 @@ class PetsFacade {
     return petsEstado.obterSnapshot()
   }
 
-  async listar(pagina = 0) {
+  async listar(Qtdpagina = 0) {
     try {
       petsEstado.definirCarregando()
 
-      const resposta = await petsServico.listar(pagina, 10)
+      const { content,pagina,total,tamanhoPagina,paginaContador } =
+        await petsServico.listar(Qtdpagina, petsEstado.obterSnapshot().tamanhoPagina)
 
-      petsEstado.definirDados(
-        resposta.content,
-        resposta.pagina,
-        resposta.total,
-        resposta.tamanhoPagina,
-        resposta.paginaContador
-      )
+        petsEstado.definirDados(content, pagina, total, tamanhoPagina, paginaContador)
+
+      // const resposta = await petsServico.listar(pagina, 10)
+
+      // petsEstado.definirDados(
+      //   resposta.content,
+      //   resposta.pagina,
+      //   resposta.total,
+      //   resposta.tamanhoPagina,
+      //   resposta.paginaContador
+      // )
     } catch {
       petsEstado.definirErro('Erro ao carregar lista de pets')
     }
   }
 
-  async irParaPagina(pagina: number) {
-  petsEstado.definirPagina(pagina)
-  await this.listar(pagina)
+  async irParaPagina(Qtdpagina: number) {
+  petsEstado.definirPagina(Qtdpagina)
+  await this.listar(Qtdpagina)
 }
 
 async criar(dados: Omit<Pet, 'id'>) {
