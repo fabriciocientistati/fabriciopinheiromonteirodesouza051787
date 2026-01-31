@@ -20,15 +20,6 @@ class PetsFacade {
 
         petsEstado.definirDados(content, pagina, total, tamanhoPagina, paginaContador)
 
-      // const resposta = await petsServico.listar(pagina, 10)
-
-      // petsEstado.definirDados(
-      //   resposta.content,
-      //   resposta.pagina,
-      //   resposta.total,
-      //   resposta.tamanhoPagina,
-      //   resposta.paginaContador
-      // )
     } catch {
       petsEstado.definirErro('Erro ao carregar lista de pets')
     }

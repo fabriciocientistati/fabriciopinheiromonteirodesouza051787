@@ -1,14 +1,14 @@
+
 import type { AxiosRequestConfig } from 'axios'
-import { AutenticacaoServico } from '../servicos/AutenticacaoServico'
 import { clienteHttp } from '../http/clienteHttp'
+import { autenticacaoServico } from '../servicos/AutenticacaoServico'
 import {
   obterAccessToken,
   obterRefreshToken,
   salvarTokens,
   limparTokens,
 } from './armazenamentoToken'
-
-const autenticacaoServico = new AutenticacaoServico()
+import { autenticacaoEstado } from '../../estado/autenticacaoEstado'
 
 let atualizandoToken = false
 let filaRequisicoes: Array<(token: string) => void> = []
@@ -56,14 +56,19 @@ export function configurarInterceptadorJwt() {
 
         try {
           const refreshToken = obterRefreshToken()
-          if (!refreshToken) throw new Error('Refresh token ausente')
+          
+          if (!refreshToken) {
+            limparTokens()
+            return Promise.reject('Refresh token ausente')
+          }
 
-          const resposta =
-            await autenticacaoServico.refreshToken(refreshToken)
+          const resposta = await autenticacaoServico.refreshToken(refreshToken)
 
-          salvarTokens(
+          salvarTokens(resposta.access_token, resposta.refresh_token)
+
+          autenticacaoEstado.definirAutenticado(
             resposta.access_token,
-            resposta.refresh_token,
+            resposta.refresh_token
           )
 
           processarFila(resposta.access_token)

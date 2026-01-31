@@ -1,63 +1,52 @@
-﻿import { useState } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AutenticacaoServico } from '../../../infraestrutura/servicos/AutenticacaoServico'
-import { salvarTokens } from '../../../infraestrutura/autenticacao/armazenamentoToken'
+import { autenticacaoEstadoFacade } from '../../facades/AutenticacaoFacade'
+import { useAutenticacao } from '../../hooks/useAutenticacao'
 
-export default function LoginPagina() {
-  const [usuario, setUsuario] = useState('')
-  const [senha, setSenha] = useState('')
-  const [erro, setErro] = useState<string | null>(null)
-  const [carregando, setCarregando] = useState(false)
-
+export function Login() {
   const navigate = useNavigate()
-  const autenticacaoServico = new AutenticacaoServico()
+  const estado = useAutenticacao()
 
-  async function realizarLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setErro(null)
-    setCarregando(true)
+  const [nomeUsuario, setNomeUsuario] = useState('')
+  const [senhaUsuario, setSenhaUsuario] = useState('')
 
-    try {
-      const resposta = await autenticacaoServico.login({
-        username: usuario,
-        password: senha,
-      })
-
-      salvarTokens(
-        resposta.access_token,
-        resposta.refresh_token,
-      )
-
+  useEffect(() => {
+    if (estado.autenticado) {
       navigate('/', { replace: true })
-    } catch {
-      setErro('Usuário ou senha inválidos')
-    } finally {
-      setCarregando(false)
     }
+  }, [estado.autenticado])
+
+  function enviar(e: React.FormEvent) {
+    e.preventDefault()
+
+    autenticacaoEstadoFacade.login({
+      username: nomeUsuario,
+      password: senhaUsuario,
+    })
   }
 
   return (
-    <form onSubmit={realizarLogin}>
+    <div>
       <h1>Login</h1>
 
-      <input
-        placeholder="Usuário"
-        value={usuario}
-        onChange={e => setUsuario(e.target.value)}
-      />
+      <form onSubmit={enviar}>
+        <input
+          placeholder="Nome do usuário"
+          value={nomeUsuario}
+          onChange={e => setNomeUsuario(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Senha"
-        value={senha}
-        onChange={e => setSenha(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senhaUsuario}
+          onChange={e => setSenhaUsuario(e.target.value)}
+        />
 
-      {erro && <p>{erro}</p>}
+        {estado.erro && <p>{estado.erro}</p>}
 
-      <button type="submit" disabled={carregando}>
-        {carregando ? 'Entrando...' : 'Entrar'}
-      </button>
-    </form>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
   )
 }

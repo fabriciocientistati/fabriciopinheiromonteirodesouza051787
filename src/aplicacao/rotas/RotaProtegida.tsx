@@ -1,15 +1,18 @@
 import { Navigate } from 'react-router-dom'
-import { usuarioEstaAutenticado } from '../../infraestrutura/autenticacao/autenticacaoUtils'
-import type { JSX } from 'react/jsx-dev-runtime'
+import { useAutenticacao } from '../hooks/useAutenticacao'
+import type { JSX } from 'react'
 
-interface Props {
-    children: JSX.Element
-}
+export function RotaProtegida({ children }: { children: JSX.Element }) {
+  const estado = useAutenticacao()
 
-export function RotaProtegida({ children }: Props) {
-    if (!usuarioEstaAutenticado()) {
-        return <Navigate to="/login" replace />
-    }
+  if (estado.carregando) {
+    return null 
+  }
 
-    return children
+  if (!estado.autenticado) {
+    return <Navigate to="/login" replace />
+  }
+
+  return children
+
 }

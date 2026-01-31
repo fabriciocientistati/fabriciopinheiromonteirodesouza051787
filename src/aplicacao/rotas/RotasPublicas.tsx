@@ -1,7 +1,11 @@
 import { Route } from 'react-router-dom'
 import { lazy } from 'react'
 
-const Login = lazy(() => import('../paginas/login/LoginPagina'))
+export const Login = lazy(() => 
+  import('../paginas/login/LoginPagina').then(modulo => ({
+    default: modulo.Login,
+  })),
+)
 
 export function RotasPublicas() {
     return (
