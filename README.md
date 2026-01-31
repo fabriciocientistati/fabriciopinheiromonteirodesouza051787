@@ -37,6 +37,19 @@ Essa organização:
 
 A navegação é organizada em rotas públicas e privadas, facilitando manutenção, leitura e controle de acesso. O Carregamento das páginas é feito sob demanda com React.lazy
 
+## Facade do módulo de Tutores
+
+O módulo de Tutores utiliza uma Facade para centralizar regras de negócio e interações com o estado e o serviço.
+
+A Facade expõe métodos simples para a UI, como:
+    - carregar lista paginada
+    - carregar detalhes
+    - criar e atualizar tutor
+    - upload de foto
+    - vincular e desvincular pets
+
+Esse padrão reduz acoplamento, melhora testabilidade e mantém as páginas mais limpas.
+
 ## Serviço de Tutores
 
 O módulo de Tutores possui um serviço dedicado (TutoresServico) responsável por toda comunicação com a API pública.
