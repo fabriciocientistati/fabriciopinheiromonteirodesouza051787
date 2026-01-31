@@ -173,3 +173,18 @@ A aplicação utiliza:
     - Renovação transparente ao usuário
 
 Os contratos de autenticação ficam na camada de domínio, garantindo consistência tipada.
+
+## Autenticação com Refresh Token
+
+Possui autenticação JWT com suporte a refresh automático de token.
+
+    - O `access_token` é armazenado no `localStorage`.
+    - Quando o token expira, o interceptador detecta o erro 401 e chama `/autenticacao/refresh`.
+    - O `refresh_token` é enviado via header Authorization (Bearer).
+    - Se a API retornar um novo token, o interceptador:
+        - Salva os novos tokens
+        - Atualiza o estado reativo
+        - Reenvia a requisição original automaticamente
+    - Se o refresh falhar, o usuário é redirecionado para `/login`.
+
+    O fluxo é transparente para o usuário e garante persistência da sessão sem recarregar a página.
