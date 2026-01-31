@@ -26,6 +26,23 @@ export const DetalhePetPagina = lazy(() =>
   })),
 )
 
+export const CriarTutorPagina = lazy(() =>
+  import('../paginas/tutores/FormularioTutorPagina').then(modulo => ({
+    default: modulo.FormularioTutorPagina,
+  })),
+)
+
+export const DetalheTutorPagina = lazy(() =>
+  import('../paginas/tutores/DetalheTutorPagina').then(modulo => ({
+    default: modulo.DetalheTutorPagina,
+  })),
+)
+
+export const ListaTutoresPagina = lazy(() =>
+  import('../paginas/tutores/ListaTutoresPagina').then(modulo => ({
+    default: modulo.ListaTutoresPagina,
+  })),
+)
 
 export function RotasPrivadas() {
     return (
@@ -62,6 +79,33 @@ export function RotasPrivadas() {
           element={
               <RotaProtegida>
                 <DetalhePetPagina />
+              </RotaProtegida>
+          }
+        />
+
+        <Route
+          path="/tutores/novo"
+          element={
+              <RotaProtegida>
+                <CriarTutorPagina />
+              </RotaProtegida>
+          }
+        />
+
+        <Route
+          path="/tutores/:id/editar"
+          element={
+              <RotaProtegida>
+                <CriarTutorPagina />
+              </RotaProtegida>
+          }
+        />
+
+        <Route
+          path="/tutores/:id"
+          element={
+              <RotaProtegida>
+                <DetalheTutorPagina />
               </RotaProtegida>
           }
         />
