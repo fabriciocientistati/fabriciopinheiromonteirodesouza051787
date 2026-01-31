@@ -216,6 +216,14 @@ Durante a edição, o usuário pode:
 A UI apenas exibe e dispara intenções, enquanto a Facade orquestra toda a lógica de negócio.  
 As rotas foram atualizadas para incluir `/pets/:id/editar` com carregamento dinâmico (lazy loading).
 
+## Componentes Auxiliares
+
+O módulo de Tutores possui componentes reutilizáveis:
+    - ListaPetsVinculados: lista pets associados ao tutor, com botão de remoção.
+    - VincularPetModal: modal para selecionar um pet e vinculá-lo ao tutor, com paginação e integração com a Facade.
+
+Esses componentes mantêm a UI organizada, reutilizável e alinhada ao padrão do módulo de Pets.
+
 ## Rotas e Lazy Loading
 
 As rotas de Pets e Tutores utilizam Lazy Loading com `React.lazy` e `Suspense`, rotas públicas e privadas, controle de acesso via autenticação,
