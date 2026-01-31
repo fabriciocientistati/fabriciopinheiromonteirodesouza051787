@@ -50,22 +50,17 @@ export class TutoresServico {
         } 
     }
 
-    async buscarPorId(id: number): Promise<Tutor> {
-        const resposta = await clienteHttp.get<Tutor>(`/v1/tutores/${id}`)
+    async criar(tutor: Omit<Tutor, 'id' | 'foto'>): Promise<Tutor> {      
+        const resposta = await clienteHttp.post('/v1/tutores', tutor)    
         return resposta.data
     }
 
-    async criar(dados: Partial<Tutor>): Promise<Tutor> {
-        const resposta = await clienteHttp.post<Tutor>('/v1/tutores', dados)
+    async atualizar(id: number, tutor: Omit<Tutor, 'id' | 'foto'>): Promise<Tutor> {
+        const resposta = await clienteHttp.put(`/v1/tutores/${id}`, tutor)
         return resposta.data
     }
 
-    async atualizar(id: number, dados: Partial<Tutor>): Promise<Tutor> {
-        const resposta = await clienteHttp.put<Tutor>(`/v1/tutores/${id}`, dados)
-        return resposta.data
-    }
-
-    async adicionarFoto(id: number, arquivo: File): Promise<Tutor> {
+    async atualizarFoto(id: number, arquivo: File): Promise<Tutor> {
       const formData = new FormData()
       formData.append('foto', arquivo)
   
@@ -82,6 +77,11 @@ export class TutoresServico {
       return resposta.data
     }  
 
+    async buscarPorId(id: number): Promise<Tutor> {
+        const resposta = await clienteHttp.get(`/v1/tutores/${id}`)
+        return resposta.data
+    }
+    
     async listarPetsVinculados(idTutor: number): Promise<PetVinculado[]> {
         const resposta = await clienteHttp.get(`/v1/tutores/${idTutor}/pets`)
         return resposta.data
