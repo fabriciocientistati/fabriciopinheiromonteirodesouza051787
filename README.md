@@ -60,6 +60,18 @@ Remover foto
 
 O serviço segue o padrão de responsabilidade única, sem lógica de UI, garantindo clareza e facilidade de manutenção.
 
+## Gerenciamento de Estado (Pets e Tutores)
+
+Os módulos de Pets e Tutores utilizam estados reativos baseados em BehaviorSubject, seguindo o mesmo padrão arquitetural.
+Cada estado mantém:
+    - lista paginada
+    - item selecionado
+    - flags de carregamento e criação
+    - mensagens de erro
+    - dados auxiliares (pets vinculados, no caso de tutores)
+
+A atualização é sempre imutável e centralizada, garantindo previsibilidade, facilidade de testes e desacoplamento da UI.
+
 ## Facade Pattern
 
 Chamam serviços HTTP, atualizam o estado reativo, mantêm a UI simples e previsível.
