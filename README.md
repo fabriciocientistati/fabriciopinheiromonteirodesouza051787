@@ -141,9 +141,26 @@ Funcionalidades
 Exibe tutores em formato de cards, com paginação e acesso à criação de novos registros.
 A página consome exclusivamente a TutoresFacade.
 
-### Campo de Pesquisa na Listagem de Tutores
+### Detalhamento de Tutores e Pets Vinculados
 
-A página de listagem de tutores foi aprimorada com um campo de pesquisa minimalista, integrado ao design system e ao estado reativo da aplicação.
+A tela de detalhes do tutor agora exibe:
+
+- Informações completas do tutor (foto, email, telefone, endereço, CPF)
+- Lista de pets vinculados com foto, nome, raça e idade
+- Botões para editar tutor, vincular pet, remover vínculo e voltar à listagem
+- Recarregamento automático do tutor após desvincular pet
+
+### Design System de Botões
+
+Todos os botões foram padronizados com variantes de cor:
+
+- **Editar** → laranja
+- **Remover** → vermelho
+- **Vincular** → azul
+- **Criar / Inserir** → verde
+- **Voltar** → cinza (secundário)
+
+Essas variantes estão disponíveis no componente `<Botao />` e podem ser reutilizadas em toda a aplicação.
 
 #### Comportamento UX definido:
 
