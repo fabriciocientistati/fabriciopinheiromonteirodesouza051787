@@ -7,6 +7,14 @@ class TutoresFacade {
 
   readonly estado$ = tutoresEstado.estado$
 
+  obterSnapshot() {
+    return tutoresEstado.obterSnapshot()
+  }
+
+  irParaPagina(pagina: number) {
+    tutoresEstado.definirPagina(pagina)
+  }
+
   async carregarPagina(Qtdpagina = 0) {
     try {
       tutoresEstado.definirCarregando()
