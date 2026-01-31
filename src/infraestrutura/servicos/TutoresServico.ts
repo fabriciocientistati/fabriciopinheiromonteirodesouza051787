@@ -14,23 +14,24 @@ export class TutoresServico {
     async listar(
         pagina: number,
         tamanhoPagina: number,
+        busca?: string
     ): Promise<RespostaPaginada<Tutor>> {
+
         const resposta = await clienteHttp.get<RespostaPaginada<Tutor>>('/v1/tutores', {
-            params: {
+        params: {
             page: pagina,
             size: tamanhoPagina,
-            pagina: pagina,
-            tamanhoPagina: tamanhoPagina,
-            }
-        }) 
-        
+            nome: busca || undefined
+        }
+        })
+
         const data = resposta.data as Partial<RespostaPaginada<Tutor>> & {
-            page?: number
-            size?: number
-            totalPages?: number
-            totalElements?: number
-            number?: number
-            itens?: Tutor[]    
+        page?: number
+        size?: number
+        totalPages?: number
+        totalElements?: number
+        number?: number
+        itens?: Tutor[]
         }
 
         const paginaAtual = data.pagina ?? data.page ?? data.number ?? 0
@@ -42,12 +43,12 @@ export class TutoresServico {
         (tamanhoAtual > 0 ? Math.ceil(total / tamanhoAtual) : 0)
 
         return {
-            content: data.content ?? data.itens ?? [],
-            pagina: paginaAtual,
-            tamanhoPagina: tamanhoAtual,
-            total,
-            paginaContador,
-        } 
+        content: data.content ?? data.itens ?? [],
+        pagina: paginaAtual,
+        tamanhoPagina: tamanhoAtual,
+        total,
+        paginaContador
+        }
     }
 
     async criar(tutor: Omit<Tutor, 'id' | 'foto'>): Promise<Tutor> {      

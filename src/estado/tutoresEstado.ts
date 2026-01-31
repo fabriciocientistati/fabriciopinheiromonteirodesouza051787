@@ -12,6 +12,7 @@ export type TutoresViewEstado = {
   tamanhoPagina: number
   contadorPagina: number
   tutorSelecionado?: Tutor | null
+  filtroBusca: string
   petsVinculados: PetVinculado[]
 }
 
@@ -23,6 +24,7 @@ const estadoInicial: TutoresViewEstado = {
   tamanhoPagina: 10,
   contadorPagina: 0,
   tutorSelecionado: null,
+  filtroBusca: '',
   petsVinculados: []
 }
 
@@ -92,6 +94,13 @@ class TutoresEstado {
       erro: undefined,
       tutorSelecionado: null,
       petsVinculados: [],
+    })
+  }
+
+  definirBusca(busca: string) {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      filtroBusca: busca,
     })
   }
 

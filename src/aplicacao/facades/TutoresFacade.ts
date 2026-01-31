@@ -19,15 +19,22 @@ class TutoresFacade {
     try {
       tutoresEstado.definirCarregando()
 
-      const { content,pagina,total,tamanhoPagina,paginaContador } =
-        await tutoresServico.listar(Qtdpagina, tutoresEstado.obterSnapshot().tamanhoPagina)
+      const { tamanhoPagina, filtroBusca } = tutoresEstado.obterSnapshot()
 
-        tutoresEstado.definirDados(content, pagina, total, tamanhoPagina, paginaContador)
+      const { content, pagina, total, tamanhoPagina: tam, paginaContador } =
+        await tutoresServico.listar(Qtdpagina, tamanhoPagina, filtroBusca)
+
+      tutoresEstado.definirDados(content, pagina, total, tam, paginaContador)
 
     } catch {
       tutoresEstado.definirErro('Erro ao carregar tutores')
     }
   }
+
+  definirBusca(busca: string) {
+    tutoresEstado.definirBusca(busca)
+  }
+
 
   async carregarDetalhe(id: number) {
     try {

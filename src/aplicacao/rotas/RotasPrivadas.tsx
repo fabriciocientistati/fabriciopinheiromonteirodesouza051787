@@ -109,6 +109,15 @@ export function RotasPrivadas() {
               </RotaProtegida>
           }
         />
+
+        <Route
+          path="/tutores"
+          element={
+              <RotaProtegida>
+                <ListaTutoresPagina />
+              </RotaProtegida>
+          }
+        />
     </>
     )
 }

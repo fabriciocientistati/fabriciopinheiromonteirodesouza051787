@@ -1,13 +1,32 @@
-import type { ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode, KeyboardEvent } from 'react'
 import clsx from 'clsx'
+
+type CardProps = HTMLAttributes<HTMLDivElement> & {
+  children: ReactNode
+}
 
 export function Card({
   children,
-  className
-}: {
-  children: ReactNode
-  className?: string
-}) {
+  className,
+  onClick,
+  onKeyDown,
+  role,
+  tabIndex,
+  ...props
+}: CardProps) {
+  const clicavel = Boolean(onClick)
+  const roleFinal = role ?? (clicavel ? 'button' : undefined)
+  const tabIndexFinal = tabIndex ?? (clicavel ? 0 : undefined)
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (clicavel && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault()
+      event.currentTarget.click()
+    }
+
+    onKeyDown?.(event)
+  }
+
   return (
     <div
       className={clsx(
@@ -15,6 +34,11 @@ export function Card({
         'hover:shadow-md transition',
         className
       )}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role={roleFinal}
+      tabIndex={tabIndexFinal}
+      {...props}
     >
       {children}
     </div>
