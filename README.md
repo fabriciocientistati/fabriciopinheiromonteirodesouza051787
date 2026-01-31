@@ -141,6 +141,27 @@ Funcionalidades
 Exibe tutores em formato de cards, com paginação e acesso à criação de novos registros.
 A página consome exclusivamente a TutoresFacade.
 
+### Campo de Pesquisa na Listagem de Tutores
+
+A página de listagem de tutores foi aprimorada com um campo de pesquisa minimalista, integrado ao design system e ao estado reativo da aplicação.
+
+#### Comportamento UX definido:
+
+- O estado global (`filtroBusca`) é atualizado via `definirBusca()`
+- A função `carregarPagina()` é chamada com o termo de busca
+- O serviço envia o parâmetro `nome` para a API conforme especificação Swagger
+- A lista de tutores é atualizada reativamente com os resultados filtrados
+
+#### Detalhes técnicos:
+
+- O estado `TutoresViewEstado` agora inclui `filtroBusca: string`
+- O facade `TutoresFacade` possui `definirBusca(busca: string)`
+- O serviço `TutoresServico.listar()` envia `nopme` como query param
+- O componente `ListaTutoresPagina` escuta `estado.filtroBusca` e `estado.pagina` para disparar atualizações
+
+Esse fluxo garante uma experiência fluida, moderna e alinhada ao padrão UX definido para o projeto.
+
+
 ## Detalhamento do Tutor
 
 Exibe dados completos do tutor e a lista de pets vinculados, permitindo remoção de vínculo e navegação para edição.
