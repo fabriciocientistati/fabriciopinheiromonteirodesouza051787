@@ -87,9 +87,17 @@ async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
   }
 }
 
-async atualizarFoto(id: number, arquivo: File) {
+async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
   try {
-    await petsServico.adicionarFoto(id, arquivo)
+    const petAtualizado = await petsServico.adicionarFoto(id, arquivo)
+    const fotoNovaId = petAtualizado.foto?.id ?? null
+
+    if (fotoIdAnterior && fotoIdAnterior !== fotoNovaId) {
+      await petsServico.removerFoto(id, fotoIdAnterior)
+    }
+
+    petsEstado.definirDetalhe(petAtualizado)
+    return petAtualizado
   } catch {
     petsEstado.definirErro('Erro ao atualizar foto')
     throw new Error('Erro ao atualizar foto')
@@ -110,7 +118,7 @@ async removerFoto(petId: number, fotoId: number) {
     await petsServico.removerFoto(petId, fotoId)
   } catch {
     petsEstado.definirErro('Erro ao remover foto')
-    throw new Error('Erro ao remover pet')
+    throw new Error('Erro ao remover foto')
   }
 }
 

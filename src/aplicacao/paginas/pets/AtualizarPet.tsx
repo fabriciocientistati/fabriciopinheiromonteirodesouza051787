@@ -38,6 +38,9 @@ useEffect(() => {
 async function removerFoto() {
   if (!id || !fotoId) return
 
+  const confirmar = confirm('Tem certeza que deseja excluir a foto desse pet?')
+  if (!confirmar) return
+
   try {
     await petsFacade.removerFoto(Number(id), fotoId)
     setPreview(null)
@@ -80,7 +83,7 @@ async function removerFoto() {
       })
 
       if (arquivo) {
-        await petsFacade.atualizarFoto(Number(id), arquivo)
+        await petsFacade.atualizarFoto(Number(id), arquivo, fotoId)
       }
 
       navigate(`/pets/${id}`)
