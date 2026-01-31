@@ -37,6 +37,29 @@ Essa organização:
 
 A navegação é organizada em rotas públicas e privadas, facilitando manutenção, leitura e controle de acesso. O Carregamento das páginas é feito sob demanda com React.lazy
 
+## Serviço de Tutores
+
+O módulo de Tutores possui um serviço dedicado (TutoresServico) responsável por toda comunicação com a API pública.
+Ele implementa:
+
+Listagem paginada de tutores
+
+Busca por ID
+
+Criação e atualização
+
+Upload de foto
+
+Listagem de pets vinculados
+
+Vinculação e remoção de vínculo
+
+Remover tutor
+
+Remover foto
+
+O serviço segue o padrão de responsabilidade única, sem lógica de UI, garantindo clareza e facilidade de manutenção.
+
 ## Facade Pattern
 
 Chamam serviços HTTP, atualizam o estado reativo, mantêm a UI simples e previsível.
