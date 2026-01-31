@@ -84,8 +84,19 @@ export class TutoresServico {
     }
     
     async listarPetsVinculados(idTutor: number): Promise<PetVinculado[]> {
-        const resposta = await clienteHttp.get(`/v1/tutores/${idTutor}/pets`)
-        return resposta.data
+    const resposta = await clienteHttp.get('/v1/pets', {
+        params: { tutorId: idTutor }
+    })
+
+    const data = resposta.data as
+        | PetVinculado[]
+        | { content?: PetVinculado[] }
+
+    if (Array.isArray(data)) {
+        return data
+    }
+
+    return data.content ?? []
     }
 
     async vincularPet(idTutor: number, idPet: number): Promise<void> {

@@ -1,7 +1,13 @@
-export interface PetVinculado {
+
+export type PetVinculado = {
   id: number
   nome: string
-  especie: string
+  raca: string
   idade: number
-  fotoUrl?: string
+  foto?: {
+    id: number
+    nome: string
+    contentType: string
+    url: string
+  }
 }

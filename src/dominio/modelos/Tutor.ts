@@ -1,4 +1,5 @@
 import type { Foto } from './Foto'
+import type { PetVinculado } from './PetVinculado'
 
 export interface Tutor {
   id: number
@@ -8,4 +9,5 @@ export interface Tutor {
   endereco: string
   cpf: number
   foto?: Foto
+  pets?: PetVinculado[]
 }

@@ -44,7 +44,7 @@ export function ListaTutoresPagina() {
             className="w-64"
           />
 
-          <Botao onClick={() => navigate('/tutores/novo')}>
+          <Botao variante="sucesso" onClick={() => navigate('/tutores/novo')}>
             Novo Tutor
           </Botao>
         </div>

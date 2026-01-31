@@ -35,15 +35,15 @@ class TutoresFacade {
     tutoresEstado.definirBusca(busca)
   }
 
-
   async carregarDetalhe(id: number) {
     try {
       tutoresEstado.definirCarregandoDetalhe()
 
       const tutor = await tutoresServico.buscarPorId(id)
+
       tutoresEstado.definirDetalhe(tutor)
 
-      const pets = await tutoresServico.listarPetsVinculados(id)
+      const pets = tutor.pets ?? []
       tutoresEstado.definirPetsVinculados(pets)
 
     } catch {
@@ -93,8 +93,10 @@ class TutoresFacade {
     try {
       await tutoresServico.vincularPet(idTutor, idPet)
 
-      const pets = await tutoresServico.listarPetsVinculados(idTutor)
-      tutoresEstado.definirPetsVinculados(pets)
+      const tutorAtualizado = await tutoresServico.buscarPorId(idTutor)
+
+      tutoresEstado.definirDetalhe(tutorAtualizado)
+      tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
 
     } catch {
       tutoresEstado.definirErro('Erro ao vincular pet ao tutor')
@@ -105,8 +107,10 @@ class TutoresFacade {
     try {
       await tutoresServico.removerVinculo(idTutor, idPet)
 
-      const pets = await tutoresServico.listarPetsVinculados(idTutor)
-      tutoresEstado.definirPetsVinculados(pets)
+      const tutorAtualizado = await tutoresServico.buscarPorId(idTutor)
+
+      tutoresEstado.definirDetalhe(tutorAtualizado) 
+      tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
 
     } catch {
       tutoresEstado.definirErro('Erro ao remover vínculo do pet')
