@@ -55,6 +55,12 @@ Esse padrão reduz acoplamento, melhora testabilidade e mantém as páginas mais
 A página de listagem de tutores exibe os registros em formato de cards, com paginação e botão para criação de novos tutores.
 A página consome exclusivamente a Facade (TutoresFacade), mantendo a UI simples e desacoplada.
 
+## Detalhamento do Tutor
+
+A página de detalhes exibe os dados completos do tutor, incluindo foto, email, telefone e endereço.
+Também lista os pets vinculados, permitindo a remoção de vínculo e navegação para edição.
+A página consome exclusivamente a Facade, mantendo o código limpo e desacoplado.
+
 ## Serviço de Tutores
 
 O módulo de Tutores possui um serviço dedicado (TutoresServico) responsável por toda comunicação com a API pública.
