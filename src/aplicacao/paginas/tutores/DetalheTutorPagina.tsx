@@ -1,7 +1,9 @@
-﻿import { useEffect } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { tutoresFacade } from '../../facades/TutoresFacade'
 import { useObservable } from '../../hooks/useObservable'
+import { ListaPetsVinculados } from './componentes/ListaPetsVinculados'
+import { VincularPetModal } from './componentes/VincularPetModal'
 
 export function DetalheTutorPagina() {
   const { id } = useParams()
@@ -10,6 +12,8 @@ export function DetalheTutorPagina() {
     tutoresFacade.estado$,
     tutoresFacade.obterSnapshot(),
   )
+
+  const [modalAberto, setModalAberto] = useState(false)
 
   useEffect(() => {
     if (id) {
@@ -24,7 +28,7 @@ export function DetalheTutorPagina() {
   }
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">Detalhes do Tutor</h1>
 
@@ -35,6 +39,8 @@ export function DetalheTutorPagina() {
           Editar
         </button>
       </div>
+
+      {estado.erro && <p className="text-red-600">{estado.erro}</p>}
 
       <div className="flex items-center gap-6">
         <img
@@ -47,35 +53,37 @@ export function DetalheTutorPagina() {
           <p><strong>Nome:</strong> {tutor.nome}</p>
           <p><strong>Email:</strong> {tutor.email}</p>
           <p><strong>Telefone:</strong> {tutor.telefone}</p>
-          <p><strong>Endereco:</strong> {tutor.endereco}</p>
+          <p><strong>Endereço:</strong> {tutor.endereco}</p>
+          <p><strong>CPF:</strong> {tutor.cpf}</p>
         </div>
       </div>
 
-      <div>
-        <h2 className="text-lg font-semibold mt-6">Pets Vinculados</h2>
+      <div className="space-y-3">
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-semibold">Pets Vinculados</h2>
 
-        {estado.petsVinculados.length === 0 ? (
-          <p className="text-gray-600">Nenhum pet vinculado.</p>
-        ) : (
-          <ul className="space-y-2 mt-2">
-            {estado.petsVinculados.map((pet) => (
-              <li key={pet.id} className="flex justify-between items-center border p-3 rounded">
-                <div>
-                  <p className="font-semibold">{pet.nome}</p>
-                  <p className="text-sm text-gray-600">{pet.especie} — {pet.idade} anos</p>
-                </div>
+          <button
+            onClick={() => setModalAberto(true)}
+            className="px-4 py-2 bg-green-600 text-white rounded"
+          >
+            Vincular Pet
+          </button>
+        </div>
 
-                <button
-                  onClick={() => tutoresFacade.removerVinculo(tutor.id, pet.id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded"
-                >
-                  Remover
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ListaPetsVinculados
+          pets={estado.petsVinculados}
+          onRemover={(idPet) => tutoresFacade.removerVinculo(tutor.id, idPet)}
+        />
       </div>
+
+      <VincularPetModal
+        aberto={modalAberto}
+        onFechar={() => setModalAberto(false)}
+        onVincular={async (idPet) => {
+          await tutoresFacade.vincularPet(tutor.id, idPet)
+          setModalAberto(false)
+        }}
+      />
     </div>
   )
 }
