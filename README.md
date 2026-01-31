@@ -156,6 +156,11 @@ Serviço separados por entidade, paginação implementada no backend e consumida
 
 O controle de navegação entre páginas é realizado na camada de apresentação UI, com dados fornecidos pela Facade.
 
+## Modelos de Domínio (Pets e Tutores)
+
+Os modelos seguem estritamente o schema oficial da API pública, garantindo consistência e Clean Code.
+Cada entidade é representada de forma isolada, evitando acoplamento indevido entre módulos.
+
 ## Autenticação e Segurança
 
 Os contratos de autenticação (credenciais e tokens) são definidos na
