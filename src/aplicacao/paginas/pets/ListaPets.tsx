@@ -4,15 +4,9 @@ import { petsFacade } from '../../facades/PetsFacade'
 import type { PetsViewEstado } from '../../../estado/petsEstado'
 
 export function ListaPets() {
-  const [estado, setEstado] = useState<PetsViewEstado>({
-    itens: [],
-    carregando: false,
-    pagina: 0,
-    total: 0,
-    tamanhoPagina: 0,
-    contadorPagina: 0,
-    petSelecionado: null
-  })
+  const [estado, setEstado] = useState<PetsViewEstado>(
+    petsFacade.obterSnapshot(),
+  )
 
   useEffect(() => {
     petsFacade.listar()

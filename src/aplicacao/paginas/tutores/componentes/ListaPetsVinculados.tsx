@@ -1,4 +1,4 @@
-import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado"
+﻿import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado"
 
 
 export function ListaPetsVinculados({
@@ -22,7 +22,7 @@ export function ListaPetsVinculados({
           <div>
             <p className="font-semibold">{pet.nome}</p>
             <p className="text-sm text-gray-600">
-              {pet.especie} — {pet.idade} anos
+              {pet.raca} â€” {pet.idade} anos
             </p>
           </div>
 
@@ -36,3 +36,4 @@ export function ListaPetsVinculados({
     </ul>
   )
 }
+
