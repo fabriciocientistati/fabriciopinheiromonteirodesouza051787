@@ -58,6 +58,23 @@ O carregamento das páginas é feito sob demanda com React.lazy.
 
     - Serviços HTTP possuem responsabilidade única, sem conhecimento de UI.
 
+    ### Ajustes no fluxo de Tutores
+
+    O fluxo de Tutores foi refinado com foco em clareza arquitetural.
+
+    Principais ajustes realizados:
+
+    - Refatoração da listagem de tutores, separando responsabilidades entre página (orquestração) e componente de renderização.
+    - Correção e padronização dos estados de loading, erro e lista vazia.
+    - Busca por nome ajustada para comportamento previsível (busca vazia retorna todos os tutores).
+    - Paginação funcional e informativa, com controle de limites e indicação da página atual.
+    - Extração do formulário de tutor para um componente reutilizável, utilizado tanto para criação quanto edição.
+    - Implementação de validações básicas no formulário para garantir integridade dos dados.
+    - Ajuste do componente de upload de foto, mantendo responsabilidade única (seleção e pré-visualização), sem acoplamento com API.
+    - Pequenos refinamentos visuais utilizando TailwindCSS, priorizando legibilidade e UX sem foco em design visual.
+
+    As decisões priorizaram código limpo, fácil manutenção e aderência aos requisitos do edital, mantendo espaço para evolução futura do domínio.
+
 ## Gerenciamento de Estado (Pets e Tutores)
 
 Cada módulo possui um estado reativo baseado em BehaviorSubject, mantendo:
@@ -122,16 +139,6 @@ A tela de detalhes do tutor agora exibe:
 - Lista de pets vinculados com foto, nome, raça e idade
 - Botões para editar tutor, vincular pet, remover vínculo e voltar à listagem
 - Recarregamento automático do tutor após desvincular pet
-
-### Design System de Botões
-
-Todos os botões foram padronizados com variantes de cor:
-
-- **Editar** → laranja
-- **Remover** → vermelho
-- **Vincular** → azul
-- **Criar / Inserir** → verde
-- **Voltar** → cinza (secundário)
 
 Essas variantes estão disponíveis no componente `<Botao />` e podem ser reutilizadas em toda a aplicação.
 
