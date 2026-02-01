@@ -26,57 +26,6 @@ O projeto consome uma **API pública de Pets e Tutores**, aplicando boas prátic
 npm install
 npm run dev
 
-## UI e Design System
-
-O frontend utiliza **TailwindCSS** com um estilo visual **minimalista moderno (inspirado em Apple)**, priorizando clareza, legibilidade e foco no conteúdo.  
-Para garantir consistência e reaproveitamento, foi criado um pequeno **design system** com componentes base reutilizáveis.
-
-### Estilo visual
-
-- Predominância de fundo branco e cinzas suaves  
-- Bordas finas e discretas (`border-gray-200` / `border-gray-300`)  
-- Sombras leves (`shadow-sm`, `shadow-md`)  
-- Espaçamento generoso (`p-4`, `p-6`, `gap-4`, `space-y-4`)  
-- Tipografia limpa com hierarquia clara (`text-2xl`, `text-lg`, `text-sm`)  
-
-### Componentes base de UI
-
-Os componentes abaixo são usados em todo o projeto para evitar duplicação de código e manter a interface consistente:
-
-- **Botao** (`src/aplicacao/componentes/ui/Botao.tsx`)  
-  - Variantes: `primario`, `secundario`, `perigo`, `texto`  
-  - Usa `clsx` para composição de classes Tailwind  
-  - Focado em ações claras e previsíveis
-
-- **Input** (`src/aplicacao/componentes/ui/Input.tsx`)  
-  - Suporte a `label`  
-  - Estilo minimalista com foco em legibilidade  
-  - Estados de foco com `focus:ring` e `focus:outline-none`
-
-- **Card** (`src/aplicacao/componentes/ui/Card.tsx`)  
-  - Fundo branco, borda suave e sombra leve  
-  - Usado para agrupar informações (tutores, pets, seções)
-
-- **Modal** (`src/aplicacao/componentes/ui/Modal.tsx`)  
-  - Fundo com `backdrop-blur` e overlay semitransparente  
-  - Conteúdo centralizado com bordas arredondadas  
-  - Integração com o componente `Botao`
-
-- **Titulo** (`src/aplicacao/componentes/ui/Titulo.tsx`)  
-  - Define a hierarquia visual das páginas  
-  - Usado em páginas principais (lista, detalhe, formulário)
-
-- **Secao** (`src/aplicacao/componentes/ui/Secao.tsx`)  
-  - Agrupa blocos de conteúdo com título e espaçamento consistente  
-  - Facilita a leitura e organização visual das telas
-
-### Composição de classes com clsx
-
-Para manter o código mais limpo e legível, foi adicionada a dependência [`clsx`](https://www.npmjs.com/package/clsx), utilizada na composição de classes Tailwind em componentes reutilizáveis:
-
-```ts
-npm install clsx
-
 
 ## Arquitetura da Aplicação
 A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
