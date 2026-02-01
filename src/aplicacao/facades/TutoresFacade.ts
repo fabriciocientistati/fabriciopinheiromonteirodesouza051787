@@ -75,6 +75,18 @@ class TutoresFacade {
     tutoresFacade.carregarPagina(anterior)
   }
 
+  async buscarPorId(id: number) {
+    try {
+      tutoresEstado.definirCarregandoDetalhe() 
+      
+      const pet = await tutoresServico.buscarPorId(id) 
+      
+      tutoresEstado.definirDetalhe(pet) 
+    } catch { 
+      tutoresEstado.definirErro('Erro ao carregar detalhes do tutor') 
+    } 
+  }  
+
   async carregarDetalhe(id: number) {
     try {
       tutoresEstado.definirCarregandoDetalhe()

@@ -1,68 +1,75 @@
-// import { useEffect, useState } from 'react'
-// import { Botao } from './Botao'
+import { useState } from 'react'
+import { Botao } from './Botao'
 
-// type UploadFotoProps = {
-//   fotoInicial?: string | null
-//   onChange: (arquivo: File | null) => void
-//   label?: string
-// }
+interface UploadFotoProps {
+  fotoAtual?: string
+  onUpload: (arquivo: File | null) => void
+}
 
-// export function UploadFoto({ fotoInicial, onChange, label }: UploadFotoProps) {
-//   const [preview, setPreview] = useState<string | null>(fotoInicial ?? null)
+export function UploadFoto({ fotoAtual, onUpload }: UploadFotoProps) {
+  const [previewLocal, setPreviewLocal] = useState<string | null>(fotoAtual ?? null)
 
-//   useEffect(() => {
-//     if (fotoInicial !== preview) {
-//       setPreview(fotoInicial ?? null)
-//     }
-//   }, [fotoInicial])
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const arquivo = event.target.files?.[0]
+    if (!arquivo) return
 
-//   function aoSelecionarArquivo(e: React.ChangeEvent<HTMLInputElement>) {
-//     const arquivo = e.target.files?.[0]
-//     if (!arquivo) return
+    onUpload(arquivo)
 
-//     const url = URL.createObjectURL(arquivo)
-//     setPreview(url)
-//     onChange(arquivo)
-//   }
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setPreviewLocal(reader.result as string)
+    }
+    reader.readAsDataURL(arquivo)
+  }
 
-//   function removerFoto() {
-//     setPreview(null)
-//     onChange(null)
-//   }
+  function removerFoto() {
+    setPreviewLocal(null)
+    onUpload(null)
+  }
 
-//   return (
-//     <div className="space-y-2">
+  const preview = previewLocal ?? null
 
-//       {label && <p className="font-medium">{label}</p>}
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm font-medium text-gray-700">
+        Foto do Tutor
+      </label>
 
-//       <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4">
+        <div className="w-24 h-24 rounded-full overflow-hidden border shadow-sm bg-gray-100">
+          {preview ? (
+            <img
+              src={preview}
+              alt="Pré-visualização da foto"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+              Sem foto
+            </div>
+          )}
+        </div>
 
-//         <img
-//           src={preview || '/sem-foto.png'}
-//           alt="Foto"
-//           className="w-24 h-24 rounded-full object-cover border"
-//         />
+        <div className="flex flex-col gap-2">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleChange}
+            className="text-sm"
+          />
 
-//         <div className="flex flex-col gap-2">
-
-//           <input
-//             type="file"
-//             accept="image/*"
-//             onChange={aoSelecionarArquivo}
-//             className="block"
-//           />
-
-//           {preview && (
-//             <Botao
-//               variante="perigo"
-//               onClick={removerFoto}
-//               className="w-fit"
-//             >
-//               Remover foto
-//             </Botao>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
+          {preview && (
+            <Botao
+              variante="perigo"
+              type="button"
+              onClick={removerFoto}
+              className="px-2 py-1 text-xs w-fit"
+            >
+              Remover foto
+            </Botao>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
