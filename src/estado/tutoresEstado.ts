@@ -6,7 +6,7 @@ export type TutoresViewEstado = {
   itens: Tutor[]
   carregando: boolean
   criando?: boolean
-  erro?: string
+  erro: string | null
   pagina: number
   total: number
   tamanhoPagina: number
@@ -22,6 +22,7 @@ const estadoInicial: TutoresViewEstado = {
   carregando: false,
   pagina: 0,
   total: 0,
+  erro: null,
   tamanhoPagina: 10,
   contadorPagina: 0,
   tutorSelecionado: null,
@@ -44,7 +45,7 @@ class TutoresEstado {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       carregando: true,
-      erro: undefined,
+      erro: null,
     })
   }
 
@@ -59,7 +60,7 @@ class TutoresEstado {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       criando: true,
-      erro: undefined,
+      erro: null,
     })
   }
 
@@ -85,7 +86,7 @@ class TutoresEstado {
       tamanhoPagina,
       contadorPagina,
       carregando: false,
-      erro: undefined,
+      erro: null,
     })
   }
 
@@ -100,7 +101,7 @@ class TutoresEstado {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       carregando: true,
-      erro: undefined,
+      erro: null,
       tutorSelecionado: null,
       petsVinculados: [],
     })
