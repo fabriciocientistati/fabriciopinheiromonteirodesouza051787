@@ -89,10 +89,12 @@ Funcionalidades
 
 A busca de pets foi atualizada para seguir o mesmo padrão da listagem de tutores:
 
+- Debounce
 - Campo de busca com debounce
 - Filtro reativo via estado
 - Paginação integrada
 - Comportamento consistente entre páginas e modais
+- UX responsiva
 
 A modal de vinculação de pets agora permite buscar por nome com resposta imediata e visualização paginada.
 
@@ -284,6 +286,15 @@ O módulo de Tutores possui componentes reutilizáveis:
     - VincularPetModal: modal para selecionar um pet e vinculá-lo ao tutor, com paginação e integração com a Facade.
 
 Esses componentes mantêm a UI organizada, reutilizável e alinhada ao padrão do módulo de Pets.
+
+Atualizações no VincularPetModal:
+    - O modal recebeu melhorias importantes:
+    - Layout responsivo com flex-col no mobile e flex-row no desktop
+    - Botões adaptados para toque em telas pequenas
+    - Cards reorganizados para melhor leitura
+    - Busca reativa integrada ao estado global
+
+Essas melhorias tornam o fluxo de vinculação mais rápido, intuitivo e consistente com o restante da aplicação.
 
 ## Rotas e Lazy Loading
 
