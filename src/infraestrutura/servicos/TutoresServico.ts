@@ -99,6 +99,16 @@ export class TutoresServico {
     return data.content ?? []
     }
 
+    async listarPets(nome?: string) {
+        const resposta = await clienteHttp.get('/v1/pets', {
+            params: {
+            name: nome || undefined
+            }
+        })
+
+        return resposta.data.content ?? resposta.data ?? []
+        }
+
     async vincularPet(idTutor: number, idPet: number): Promise<void> {
         await clienteHttp.post(`/v1/tutores/${idTutor}/pets/${idPet}`)
     }

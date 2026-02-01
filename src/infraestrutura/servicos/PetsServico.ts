@@ -9,39 +9,51 @@ export interface RespostaPaginada<T> {
   paginaContador: number
 }
 
+export interface RespostaPaginadaApi<T> extends Partial<RespostaPaginada<T>> {
+  page?: number
+  size?: number
+  totalPages?: number
+  totalElements?: number
+  number?: number
+  itens?: T[]
+  items?: T[]
+  data?: T[]
+}
+
 export class PetsServico {
   async listar(
     pagina: number,
     tamanhoPagina: number,
+    busca?: string,
   ): Promise<RespostaPaginada<Pet>> {
-    const resposta = await clienteHttp.get<RespostaPaginada<Pet>>('/v1/pets', {
+    const filtro = busca?.trim() || undefined
+    const resposta = await clienteHttp.get<RespostaPaginadaApi<Pet> | Pet[]>('/v1/pets', {
       params: {
         page: pagina,
         size: tamanhoPagina,
         pagina: pagina,
         tamanhoPagina: tamanhoPagina,
+        busca: filtro,
+        nome: filtro,
+        name: filtro,
+        q: filtro,
       },
     })
 
-    const data = resposta.data as Partial<RespostaPaginada<Pet>> & {
-      page?: number
-      size?: number
-      totalPages?: number
-      totalElements?: number
-      number?: number
-      itens?: Pet[]
-    }
+    const raw = resposta.data
+    const data: RespostaPaginadaApi<Pet> = Array.isArray(raw) ? { content: raw } : raw
+    const content = data.content ?? data.itens ?? data.items ?? data.data ?? []
 
     const paginaAtual = data.pagina ?? data.page ?? data.number ?? 0
-    const tamanhoAtual = data.tamanhoPagina ?? data.size ?? 0
-    const total = data.total ?? data.totalElements ?? 0
+    const tamanhoAtual = data.tamanhoPagina ?? data.size ?? content.length
+    const total = data.total ?? data.totalElements ?? content.length
     const paginaContador =
       data.paginaContador ??
       data.totalPages ??
       (tamanhoAtual > 0 ? Math.ceil(total / tamanhoAtual) : 0)
 
     return {
-      content: data.content ?? data.itens ?? [],
+      content,
       pagina: paginaAtual,
       tamanhoPagina: tamanhoAtual,
       total,

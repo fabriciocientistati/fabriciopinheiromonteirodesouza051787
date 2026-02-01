@@ -1,86 +1,140 @@
-﻿import { useEffect } from 'react'
-import { petsFacade } from '../../../facades/PetsFacade'
-import { useObservable } from '../../../hooks/useObservable'
+﻿import { useEffect, useState } from "react";
+import { petsFacade } from "../../../facades/PetsFacade";
+import { useObservable } from "../../../hooks/useObservable";
+import { Card } from "../../../componentes/ui/Card";
+import { Botao } from "../../../componentes/ui/Botao";
+import { Input } from "../../../componentes/ui/Input";
+
+const TEMPO_DEBOUNCE_MS = 300;
 
 export function VincularPetModal({
   aberto,
   onFechar,
   onVincular,
 }: {
-  aberto: boolean
-  onFechar: () => void
-  onVincular: (idPet: number) => Promise<void>
+  aberto: boolean;
+  onFechar: () => void;
+  onVincular: (idPet: number) => Promise<void>;
 }) {
   const estadoPets = useObservable(
     petsFacade.estado$,
     petsFacade.obterSnapshot(),
-  )
+  );
+
+  const [busca, setBusca] = useState(estadoPets.filtroBusca ?? "");
+
+  useEffect(() => {
+    if (!aberto) return;
+
+    const timeout = setTimeout(() => {
+      petsFacade.definirBusca(busca.trim());
+      petsFacade.irParaPagina(0);
+    }, TEMPO_DEBOUNCE_MS);
+
+    return () => clearTimeout(timeout);
+  }, [busca, aberto]);
 
   useEffect(() => {
     if (aberto) {
-      petsFacade.irParaPagina(0)
+      petsFacade.irParaPagina(0);
     }
-  }, [aberto])
+  }, [aberto]);
 
-  if (!aberto) return null
+  if (!aberto) return null;
 
-  const podeIrAnterior = estadoPets.pagina > 0
-  const podeIrProxima = estadoPets.pagina + 1 < estadoPets.contadorPagina
+  const podeIrAnterior = estadoPets.pagina > 0;
+  const podeIrProxima = estadoPets.pagina + 1 < estadoPets.contadorPagina;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg space-y-4">
         <h2 className="text-lg font-semibold">Vincular Pet</h2>
 
-        {estadoPets.carregando && <p>Carregando pets...</p>}
+        <Input
+          placeholder="Buscar pets..."
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          className="w-full"
+        />
+
+        {estadoPets.carregando && (
+          <p className="text-gray-500">Carregando pets...</p>
+        )}
         {estadoPets.erro && <p className="text-red-600">{estadoPets.erro}</p>}
 
         <ul className="space-y-2 max-h-64 overflow-auto">
           {estadoPets.itens.map((pet) => (
-            <li
+            <Card
               key={pet.id}
-              className="flex justify-between items-center border p-3 rounded"
+              className="flex justify-between items-center p-3"
             >
-              <div>
-                <p className="font-semibold">{pet.nome}</p>
-                <p className="text-sm text-gray-600">{pet.raca ?? 'Sem raça'}</p>
+              <div className="flex items-center gap-3">
+                <img
+                  src={pet.foto?.url || "/sem-foto.png"}
+                  alt={pet.nome}
+                  className="w-12 h-12 rounded-full object-cover border"
+                />
+
+                <div>
+                  <p className="font-semibold">{pet.nome}</p>
+                  <p className="text-sm text-gray-600">
+                    {pet.raca ?? "Sem raça"}
+                  </p>
+                </div>
               </div>
 
-              <button
-                onClick={() => onVincular(pet.id)}
-                className="px-3 py-1 bg-green-600 text-white rounded"
-              >
+              <Botao variante="sucesso" onClick={() => onVincular(pet.id)}>
                 Vincular
-              </button>
-            </li>
+              </Botao>
+            </Card>
           ))}
         </ul>
 
-        <div className="flex justify-between mt-4">
-          <button
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <Botao
+            variante="secundario"
+            disabled={!podeIrAnterior}
+            onClick={() => petsFacade.irParaPagina(0)}
+          >
+            «
+          </Botao>
+
+          <Botao
+            variante="secundario"
             disabled={!podeIrAnterior}
             onClick={() => petsFacade.irParaPagina(estadoPets.pagina - 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
           >
-            Anterior
-          </button>
+            ‹
+          </Botao>
 
-          <button
+          <span className="text-sm">
+            Página <strong>{estadoPets.pagina + 1}</strong> de{" "}
+            <strong>{estadoPets.contadorPagina}</strong>
+          </span>
+
+          <Botao
+            variante="secundario"
             disabled={!podeIrProxima}
             onClick={() => petsFacade.irParaPagina(estadoPets.pagina + 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
           >
-            Próxima
-          </button>
+            ›
+          </Botao>
+
+          <Botao
+            variante="secundario"
+            disabled={!podeIrProxima}
+            onClick={() =>
+              petsFacade.irParaPagina(estadoPets.contadorPagina - 1)
+            }
+          >
+            »
+          </Botao>
         </div>
 
-        <button
-          onClick={onFechar}
-          className="w-full px-4 py-2 bg-gray-300 rounded"
-        >
+        <Botao variante="perigo" onClick={onFechar} className="w-full">
           Fechar
-        </button>
+        </Botao>
       </div>
     </div>
-  )
+  );
 }

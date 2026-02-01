@@ -15,10 +15,11 @@ class PetsFacade {
     try {
       petsEstado.definirCarregando()
 
-      const { content,pagina,total,tamanhoPagina,paginaContador } =
-        await petsServico.listar(Qtdpagina, petsEstado.obterSnapshot().tamanhoPagina)
+      const { tamanhoPagina, filtroBusca } = petsEstado.obterSnapshot()
+      const { content,pagina,total,tamanhoPagina: tam,paginaContador } =
+        await petsServico.listar(Qtdpagina, tamanhoPagina, filtroBusca)
 
-        petsEstado.definirDados(content, pagina, total, tamanhoPagina, paginaContador)
+        petsEstado.definirDados(content, pagina, total, tam, paginaContador)
 
     } catch {
       petsEstado.definirErro('Erro ao carregar lista de pets')
@@ -67,6 +68,11 @@ async buscarPorId(id: number) {
     petsEstado.definirErro('Erro ao carregar detalhes do pet') 
   } 
 }  
+
+definirBusca(busca: string) {
+  petsEstado.definirBusca(busca)
+}
+
 
 async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
   try {

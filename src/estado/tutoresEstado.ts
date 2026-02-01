@@ -14,6 +14,7 @@ export type TutoresViewEstado = {
   tutorSelecionado?: Tutor | null
   filtroBusca: string
   petsVinculados: PetVinculado[]
+  petsDisponiveis: PetVinculado[]
 }
 
 const estadoInicial: TutoresViewEstado = {
@@ -25,7 +26,8 @@ const estadoInicial: TutoresViewEstado = {
   contadorPagina: 0,
   tutorSelecionado: null,
   filtroBusca: '',
-  petsVinculados: []
+  petsVinculados: [],
+  petsDisponiveis: [] as PetVinculado[],
 }
 
 class TutoresEstado {
@@ -43,6 +45,13 @@ class TutoresEstado {
       ...this.estadoInterno$.value,
       carregando: true,
       erro: undefined,
+    })
+  }
+
+  definirPetsDisponiveis(pets: PetVinculado[]) {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      petsDisponiveis: pets,
     })
   }
 

@@ -51,6 +51,12 @@ class TutoresFacade {
     }
   }
 
+  async carregarPetsDisponiveis(nome: string) {
+    const pets = await tutoresServico.listarPets(nome)
+    tutoresEstado.definirPetsDisponiveis(pets)
+  }
+
+
   async criar(tutor: Omit<Tutor, 'id' | 'foto'>) {
     try {
       tutoresEstado.definirCriando()

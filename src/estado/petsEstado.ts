@@ -8,9 +8,10 @@ export type PetsViewEstado = {
   erro?: string
   pagina: number
   total: number
-  tamanhoPagina: number,
-  contadorPagina: number,
+  tamanhoPagina: number
+  contadorPagina: number
   petSelecionado?: Pet | null
+  filtroBusca: string
 }
 
 const estadoInicial: PetsViewEstado = {
@@ -20,7 +21,8 @@ const estadoInicial: PetsViewEstado = {
   total: 0,
   tamanhoPagina: 10,
   contadorPagina: 0,
-  petSelecionado: null
+  petSelecionado: null,
+  filtroBusca: '',
 }
 
 class PetsEstado {
@@ -41,20 +43,20 @@ class PetsEstado {
     })
   }
 
-definirCriando() {
-  this.estadoInterno$.next({
-    ...this.estadoInterno$.value,
-    criando: true,
-    erro: undefined,
-  })
-}
+  definirCriando() {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      criando: true,
+      erro: undefined,
+    })
+  }
 
-definirCriado() {
-  this.estadoInterno$.next({
-    ...this.estadoInterno$.value,
-    criando: false,
-  })
-}
+  definirCriado() {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      criando: false,
+    })
+  }
 
 
   definirDados(itens: Pet[], pagina: number, total: number, tamanhoPagina: number, contadorPagina: number) {
@@ -77,22 +79,29 @@ definirCriado() {
     })
   }
 
-definirCarregandoDetalhe() {
-  this.estadoInterno$.next({ 
-    ...this.estadoInterno$.value, 
-    carregando: true, 
-    erro: undefined, 
-    petSelecionado: null, 
-  }) 
-}
+  definirCarregandoDetalhe() {
+    this.estadoInterno$.next({ 
+      ...this.estadoInterno$.value, 
+      carregando: true, 
+      erro: undefined, 
+      petSelecionado: null, 
+    }) 
+  }
 
-definirDetalhe(pet: Pet) { 
-  this.estadoInterno$.next({ 
-    ...this.estadoInterno$.value, 
-    carregando: false, 
-    petSelecionado: pet, 
-  }) 
-}
+  definirDetalhe(pet: Pet) { 
+    this.estadoInterno$.next({ 
+      ...this.estadoInterno$.value, 
+      carregando: false, 
+      petSelecionado: pet, 
+    }) 
+  }
+
+  definirBusca(busca: string) {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      filtroBusca: busca,
+    })
+  }
 
   definirErro(mensagem: string) {
     this.estadoInterno$.next({
