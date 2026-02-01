@@ -25,6 +25,7 @@ class TutoresFacade {
         await tutoresServico.listar(Qtdpagina, tamanhoPagina, filtroBusca)
 
       tutoresEstado.definirDados(content, pagina, total, tam, paginaContador)
+      
 
     } catch {
       tutoresEstado.definirErro('Erro ao carregar tutores')
@@ -106,6 +107,20 @@ class TutoresFacade {
 
     } catch {
       tutoresEstado.definirErro('Erro ao vincular pet ao tutor')
+    }
+  }
+
+  async removerTutor(id: number): Promise<void> {
+    try {
+      tutoresEstado.definirCarregando()
+
+      await tutoresServico.remover(id)
+
+      tutoresEstado.definirRemoverDaLista(id)
+
+    } catch {
+      tutoresEstado.definirErro('Erro ao remover tutor')
+      throw new Error('Erro ao remover tutor')
     }
   }
 

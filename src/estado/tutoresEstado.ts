@@ -41,6 +41,13 @@ class TutoresEstado {
     return this.estadoInterno$.value
   }
 
+  private atualizar(parcial: Partial<TutoresViewEstado>) {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      ...parcial,
+    })
+  }
+
   definirCarregando() {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
@@ -89,6 +96,26 @@ class TutoresEstado {
       erro: null,
     })
   }
+
+  definirRemoverDaLista(idTutor: number) {
+    const estadoAtual = this.estadoInterno$.value
+
+    const itensAtualizados = estadoAtual.itens.filter(t => t.id !== idTutor)
+
+    this.estadoInterno$.next({
+      ...estadoAtual,
+      itens: itensAtualizados,
+      total: Math.max(0, estadoAtual.total - 1),
+      carregando: false,
+      erro: null,
+
+      tutorSelecionado:
+        estadoAtual.tutorSelecionado?.id === idTutor
+          ? null
+          : estadoAtual.tutorSelecionado,
+    })
+  }
+
 
   definirPagina(pagina: number) {
     this.estadoInterno$.next({
