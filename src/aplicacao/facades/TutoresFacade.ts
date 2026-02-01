@@ -110,7 +110,7 @@ class TutoresFacade {
     }
   }
 
-  async removerTutor(id: number): Promise<void> {
+  async removerTutor(id: number) {
     try {
       tutoresEstado.definirCarregando()
 

@@ -41,13 +41,6 @@ class TutoresEstado {
     return this.estadoInterno$.value
   }
 
-  private atualizar(parcial: Partial<TutoresViewEstado>) {
-    this.estadoInterno$.next({
-      ...this.estadoInterno$.value,
-      ...parcial,
-    })
-  }
-
   definirCarregando() {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
@@ -102,13 +95,11 @@ class TutoresEstado {
 
     const itensAtualizados = estadoAtual.itens.filter(t => t.id !== idTutor)
 
-    this.estadoInterno$.next({
-      ...estadoAtual,
+    this.atualizar({
       itens: itensAtualizados,
       total: Math.max(0, estadoAtual.total - 1),
       carregando: false,
-      erro: null,
-
+      erro: undefined,
       tutorSelecionado:
         estadoAtual.tutorSelecionado?.id === idTutor
           ? null
@@ -161,6 +152,13 @@ class TutoresEstado {
       ...this.estadoInterno$.value,
       carregando: false,
       erro: mensagem,
+    })
+  }
+
+  private atualizar(parcial: Partial<TutoresViewEstado>) {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      ...parcial,
     })
   }
 
