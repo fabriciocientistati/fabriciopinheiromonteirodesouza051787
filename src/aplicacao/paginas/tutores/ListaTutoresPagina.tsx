@@ -73,11 +73,17 @@ export function ListaTutoresPagina() {
 
       <section className="space-y-2">
         <div className="bg-white border rounded-lg shadow-sm p-2 sm:p-4">
-          <ListaTutores
-            tutores={itens}
-            onSelecionar={id => navigate(`/tutores/${id}`)}
-            onExcluir={tutoresFacade.removerTutor}
-          />
+          {itens.length === 0 ? (
+            <p className="text-center text-gray-600">
+              Não há tutores cadastrados.
+            </p>
+          ) : (
+            <ListaTutores
+              tutores={itens}
+              onSelecionar={id => navigate(`/tutores/${id}`)}
+              onExcluir={tutoresFacade.removerTutor}
+            />
+          )}
         </div>
       </section>
 
