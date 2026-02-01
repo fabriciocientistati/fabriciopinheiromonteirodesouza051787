@@ -136,6 +136,17 @@ Funcionalidades
     - Vinculação e desvinculação de pets
     - Remoção de tutor
 
+### Busca de Pets Padronizada
+
+A busca de pets foi atualizada para seguir o mesmo padrão da listagem de tutores:
+
+- Campo de busca com debounce
+- Filtro reativo via estado
+- Paginação integrada
+- Comportamento consistente entre páginas e modais
+
+A modal de vinculação de pets agora permite buscar por nome com resposta imediata e visualização paginada.
+
 ## Listagem de Tutores
 
 Exibe tutores em formato de cards, com paginação e acesso à criação de novos registros.
