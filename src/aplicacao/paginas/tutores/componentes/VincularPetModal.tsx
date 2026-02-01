@@ -21,7 +21,7 @@ export function VincularPetModal({
     petsFacade.obterSnapshot(),
   );
 
-  const [busca, setBusca] = useState(estadoPets.filtroBusca ?? "");
+  const [busca, setBusca] = useState("");
   
   useEffect(() => {
     if (!aberto) return;
@@ -33,6 +33,20 @@ export function VincularPetModal({
 
     return () => clearTimeout(timeout);
   }, [busca, aberto]);
+
+  async function vincularPet(idPet: number) {
+    await onVincular(idPet);
+    setBusca("");
+    petsFacade.definirBusca("");
+    petsFacade.irParaPagina(0);
+  }
+
+  function fecharModal() {
+    setBusca("");
+    petsFacade.definirBusca("");
+    petsFacade.irParaPagina(0);
+    onFechar();
+  }
 
   if (!aberto) return null;
   
@@ -78,7 +92,7 @@ export function VincularPetModal({
                 </div>
               </div>
 
-              <Botao variante="sucesso" onClick={() => onVincular(pet.id)} className="w-full sm:w-auto">
+              <Botao variante="sucesso" onClick={() => vincularPet(pet.id)} className="w-full sm:w-auto">
                 Vincular
               </Botao>
             </Card>
@@ -126,7 +140,7 @@ export function VincularPetModal({
           </Botao>
         </div>
 
-        <Botao variante="perigo" onClick={onFechar} className="w-full sm:w-auto sm:self-end">
+        <Botao variante="perigo" onClick={fecharModal} className="w-full sm:w-auto sm:self-end">
           Fechar
         </Botao>
       </div>
