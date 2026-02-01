@@ -147,6 +147,17 @@ A busca de pets foi atualizada para seguir o mesmo padrão da listagem de tutore
 
 A modal de vinculação de pets agora permite buscar por nome com resposta imediata e visualização paginada.
 
+### Padronização do Formulário de Tutor
+
+O formulário de criação e edição de tutores foi totalmente estilizado para seguir o padrão visual da aplicação:
+
+- Preview da foto do tutor com opção de remoção
+- Feedback visual de validação diretamente nos campos
+- Botões padronizados com variantes (`sucesso`, `secundario`, `perigo`)
+- Layout responsivo e consistente com o restante do sistema
+
+Essa atualização melhora a experiência do usuário e mantém a identidade visual uniforme em toda a aplicação.
+
 ## Listagem de Tutores
 
 Exibe tutores em formato de cards, com paginação e acesso à criação de novos registros.
