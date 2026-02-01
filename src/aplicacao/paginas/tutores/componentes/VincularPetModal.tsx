@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { petsFacade } from "../../../facades/PetsFacade";
 import { useObservable } from "../../../hooks/useObservable";
 import { Card } from "../../../componentes/ui/Card";
@@ -22,6 +22,8 @@ export function VincularPetModal({
   );
 
   const [busca, setBusca] = useState("");
+  const [mensagemSucesso, setMensagemSucesso] = useState("");
+  const timeoutSucessoRef = useRef<number | null>(null);
   
   useEffect(() => {
     if (!aberto) return;
@@ -36,12 +38,25 @@ export function VincularPetModal({
 
   async function vincularPet(idPet: number) {
     await onVincular(idPet);
+    setMensagemSucesso("Pet vinculado com sucesso.");
+    if (timeoutSucessoRef.current) {
+      window.clearTimeout(timeoutSucessoRef.current);
+    }
+    timeoutSucessoRef.current = window.setTimeout(() => {
+      setMensagemSucesso("");
+      timeoutSucessoRef.current = null;
+    }, 2000);
     setBusca("");
     petsFacade.definirBusca("");
     petsFacade.irParaPagina(0);
   }
 
   function fecharModal() {
+    if (timeoutSucessoRef.current) {
+      window.clearTimeout(timeoutSucessoRef.current);
+      timeoutSucessoRef.current = null;
+    }
+    setMensagemSucesso("");
     setBusca("");
     petsFacade.definirBusca("");
     petsFacade.irParaPagina(0);
@@ -65,6 +80,10 @@ export function VincularPetModal({
           onChange={(e) => setBusca(e.target.value)}
           className="w-full"
         />
+
+        {mensagemSucesso && (
+          <p className="text-emerald-600 text-sm">{mensagemSucesso}</p>
+        )}
 
         {estadoPets.carregando && (
           <p className="text-gray-500">Carregando pets...</p>
@@ -147,3 +166,4 @@ export function VincularPetModal({
     </div>
   );
 }
+

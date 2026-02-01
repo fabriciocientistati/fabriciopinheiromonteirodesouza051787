@@ -81,7 +81,6 @@ export function ListaTutores({
         onVincular={async (idPet) => {
           if (!tutorParaVincular) return
           await tutoresFacade.vincularPet(tutorParaVincular.id, idPet)
-          setTutorParaVincular(null)
         }}
       />
 
