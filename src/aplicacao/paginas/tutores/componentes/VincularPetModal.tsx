@@ -22,7 +22,7 @@ export function VincularPetModal({
   );
 
   const [busca, setBusca] = useState(estadoPets.filtroBusca ?? "");
-
+  
   useEffect(() => {
     if (!aberto) return;
 
@@ -34,20 +34,15 @@ export function VincularPetModal({
     return () => clearTimeout(timeout);
   }, [busca, aberto]);
 
-  useEffect(() => {
-    if (aberto) {
-      petsFacade.irParaPagina(0);
-    }
-  }, [aberto]);
-
   if (!aberto) return null;
+  
 
   const podeIrAnterior = estadoPets.pagina > 0;
   const podeIrProxima = estadoPets.pagina + 1 < estadoPets.contadorPagina;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg space-y-4">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg lg:max-w-2xl xl:max-w-3xl p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-hidden">
         <h2 className="text-lg font-semibold">Vincular Pet</h2>
 
         <Input
@@ -62,20 +57,20 @@ export function VincularPetModal({
         )}
         {estadoPets.erro && <p className="text-red-600">{estadoPets.erro}</p>}
 
-        <ul className="space-y-2 max-h-64 overflow-auto">
+        <ul className="space-y-2 max-h-64 sm:max-h-72 lg:max-h-80 overflow-y-auto">
           {estadoPets.itens.map((pet) => (
             <Card
               key={pet.id}
-              className="flex justify-between items-center p-3"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <img
                   src={pet.foto?.url || "/sem-foto.png"}
                   alt={pet.nome}
                   className="w-12 h-12 rounded-full object-cover border"
                 />
 
-                <div>
+                <div className="text-center sm:text-left">
                   <p className="font-semibold">{pet.nome}</p>
                   <p className="text-sm text-gray-600">
                     {pet.raca ?? "Sem raça"}
@@ -83,14 +78,14 @@ export function VincularPetModal({
                 </div>
               </div>
 
-              <Botao variante="sucesso" onClick={() => onVincular(pet.id)}>
+              <Botao variante="sucesso" onClick={() => onVincular(pet.id)} className="w-full sm:w-auto">
                 Vincular
               </Botao>
             </Card>
           ))}
         </ul>
 
-        <div className="flex items-center justify-center gap-4 mt-8">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6">
           <Botao
             variante="secundario"
             disabled={!podeIrAnterior}
@@ -107,7 +102,7 @@ export function VincularPetModal({
             ‹
           </Botao>
 
-          <span className="text-sm">
+          <span className="text-sm text-gray-700">
             Página <strong>{estadoPets.pagina + 1}</strong> de{" "}
             <strong>{estadoPets.contadorPagina}</strong>
           </span>
@@ -131,7 +126,7 @@ export function VincularPetModal({
           </Botao>
         </div>
 
-        <Botao variante="perigo" onClick={onFechar} className="w-full">
+        <Botao variante="perigo" onClick={onFechar} className="w-full sm:w-auto sm:self-end">
           Fechar
         </Botao>
       </div>

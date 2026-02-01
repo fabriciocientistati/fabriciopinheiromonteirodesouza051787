@@ -15,16 +15,33 @@ class TutoresFacade {
     tutoresEstado.definirPagina(pagina)
   }
 
-  async carregarPagina(Qtdpagina = 0) {
+  async carregarPagina(pagina?: number) {
     try {
       tutoresEstado.definirCarregando()
 
-      const { tamanhoPagina, filtroBusca } = tutoresEstado.obterSnapshot()
+      const { tamanhoPagina, filtroBusca, pagina: paginaAtual } =
+        tutoresEstado.obterSnapshot()
+      const paginaSolicitada = pagina ?? paginaAtual
 
-      const { content, pagina, total, tamanhoPagina: tam, paginaContador } =
-        await tutoresServico.listar(Qtdpagina, tamanhoPagina, filtroBusca)
+      const {
+        content,
+        pagina: paginaResposta,
+        total,
+        tamanhoPagina: tam,
+        paginaContador,
+      } = await tutoresServico.listar(
+        paginaSolicitada,
+        tamanhoPagina,
+        filtroBusca,
+      )
 
-      tutoresEstado.definirDados(content, pagina, total, tam, paginaContador)
+      tutoresEstado.definirDados(
+        content,
+        paginaResposta,
+        total,
+        tam,
+        paginaContador,
+      )
       
 
     } catch {
@@ -32,8 +49,30 @@ class TutoresFacade {
     }
   }
 
-  definirBusca(busca: string) {
-    tutoresEstado.definirBusca(busca)
+    definirBusca(busca: string) {
+      const buscaNormalizada = busca.trim()
+
+      tutoresEstado.definirPagina(0)
+
+      tutoresEstado.definirBusca(buscaNormalizada === '' ? '' : buscaNormalizada)
+
+      tutoresFacade.carregarPagina(0)
+    }
+
+    proximaPagina() {
+    const estadoAtual = tutoresEstado.obterSnapshot()
+
+    const proxima = estadoAtual.pagina + 1
+    tutoresFacade.carregarPagina(proxima)
+  }
+
+  paginaAnterior() {
+    const estadoAtual = tutoresEstado.obterSnapshot()
+
+    if (estadoAtual.pagina === 0) return
+
+    const anterior = estadoAtual.pagina - 1
+    tutoresFacade.carregarPagina(anterior)
   }
 
   async carregarDetalhe(id: number) {
@@ -110,7 +149,7 @@ class TutoresFacade {
     }
   }
 
-  async removerTutor(id: number) {
+  async removerTutor(id: number){
     try {
       tutoresEstado.definirCarregando()
 
