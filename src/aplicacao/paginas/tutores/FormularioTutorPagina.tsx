@@ -79,14 +79,16 @@ export function FormularioTutorPagina() {
   }
 
   return (
-    <div>
-      <Titulo>{edicao ? 'Editar Tutor' : 'Novo Tutor'}</Titulo>
+    <div className="px-4 py-6">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Titulo>{edicao ? 'Editar Tutor' : 'Inserir Tutor'}</Titulo>
 
-      <FormularioTutor 
-        tutorInicial={edicao ? tutorSelecionado ?? undefined : undefined}
-        onSubmit={salvarTutor}
-        textoBotao={edicao ? 'Atualizar' : 'Cadastrar'}
-      />
+        <FormularioTutor 
+          tutorInicial={edicao ? tutorSelecionado ?? undefined : undefined}
+          onSubmit={salvarTutor}
+          textoBotao={edicao ? 'Atualizar' : 'Cadastrar'}
+        />
+      </div>
     </div>
   )
 }

@@ -91,6 +91,20 @@ O carregamento das páginas é feito sob demanda com React.lazy.
     Esses ajustes garantem previsibilidade, baixo acoplamento e melhor experiência do usuário.
 
 
+    ### Ajustes de Layout e Rotas Privadas
+
+    O layout da aplicação foi desacoplado entre áreas públicas e privadas.
+
+    Principais ajustes:
+    - Separação entre layout público (login) e layout autenticado
+    - Rotas privadas agrupadas sob uma única proteção de autenticação
+    - Remoção de elementos autenticados da tela de login 
+    - UI refinada com TailwindCSS para melhor legibilidade e experiência do usuário
+
+    Esses ajustes reduzem acoplamento, melhoram manutenção e garantem consistência visual, alinhando a aplicação aos requisitos do edital.
+
+
+
 ## Gerenciamento de Estado (Pets e Tutores)
 
 Cada módulo possui um estado reativo baseado em BehaviorSubject, mantendo:
