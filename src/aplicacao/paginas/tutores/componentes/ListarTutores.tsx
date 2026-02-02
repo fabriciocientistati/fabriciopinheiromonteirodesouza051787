@@ -27,53 +27,45 @@ export function ListaTutores({
     <>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tutores.map(tutor => (
-          <Card
-            key={tutor.id}
-            className="p-4 flex flex-col gap-3 border rounded-lg shadow-sm hover:shadow-md transition h-full"
-          >
-            {tutor.foto?.url && (
+        <Card className="p-4 flex flex-col sm:flex-row sm:items-start gap-6 min-h-[240px]">
+
+          <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:w-1/2">
+            {tutor.foto?.url ? (
               <img
                 src={tutor.foto.url}
                 alt={`Foto do tutor ${tutor.nome}`}
-                className="w-20 h-20 rounded-full object-cover border mx-auto"
+                className="w-20 h-20 rounded-full object-cover border"
               />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                Sem foto
+              </div>
             )}
 
-            <div className="text-center space-y-1">
-              <h3 className="text-lg font-semibold text-gray-800">
+            <div className="mt-3 space-y-1 w-full">
+              <h3 className="text-lg font-semibold text-gray-800 break-words">
                 {tutor.nome}
               </h3>
-
-              <p className="text-sm text-gray-600">{tutor.email}</p>
-              <p className="text-sm text-gray-600">{tutor.telefone}</p>
+              <p className="text-sm text-gray-600 break-words">{tutor.email}</p>
+              <p className="text-sm text-gray-600 break-words">{tutor.telefone}</p>
             </div>
+          </div>
 
-            <div className="flex flex-wrap justify-center gap-2 mt-2">
-              <Botao variante="sucesso" onClick={() => setTutorParaVincular(tutor)} className="w-full sm:w-auto">
-                Vincular Pet
-              </Botao>
-
-              <Botao onClick={() => onSelecionar(tutor.id)} className="w-full sm:w-auto">
-                Detalhar
-              </Botao>
-
-              <Botao
-                variante="laranja"
-                onClick={() => onEditar(tutor.id)}
-                className="w-full sm:w-auto"
-              >
-                Editar
-              </Botao>
-
-              <Botao
-                variante="perigo"
-                onClick={() => setTutorParaExcluir(tutor)}
-                className="w-full sm:w-auto"
-              >
-                Excluir
-              </Botao>
-            </div>
-          </Card>
+          <div className="flex flex-col gap-2 w-full sm:w-1/2">
+            <Botao variante="sucesso" onClick={() => setTutorParaVincular(tutor)} className="w-full">
+              Vincular Pet
+            </Botao>
+            <Botao onClick={() => onSelecionar(tutor.id)} className="w-full">
+              Detalhar
+            </Botao>
+            <Botao variante="laranja" onClick={() => onEditar(tutor.id)} className="w-full">
+              Editar
+            </Botao>
+            <Botao variante="perigo" onClick={() => setTutorParaExcluir(tutor)} className="w-full">
+              Excluir
+            </Botao>
+          </div>
+        </Card>
         ))}
       </div>
 

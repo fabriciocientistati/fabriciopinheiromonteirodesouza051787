@@ -16,8 +16,8 @@ const AtualizarPetPagina = lazy(() =>
 )
 
 const ListaPetsPagina = lazy(() =>
-  import('../paginas/pets/ListaPets').then(modulo => ({
-    default: modulo.ListaPets,
+  import('../paginas/pets/ListaPetsPagina').then(modulo => ({
+    default: modulo.ListaPetsPagina,
   })),
 )
 

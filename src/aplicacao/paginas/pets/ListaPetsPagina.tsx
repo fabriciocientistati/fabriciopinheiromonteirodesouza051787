@@ -1,0 +1,125 @@
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { petsFacade } from '../../facades/PetsFacade'
+import { Titulo } from '../../componentes/ui/Titulo'
+import { Input } from '../../componentes/ui/Input'
+import { Botao } from '../../componentes/ui/Botao'
+import { ListaPets } from './componentes/ListaPets'
+import { usePetsEstado } from '../../hooks/usePetsEstado'
+
+const TEMPO_DEBOUNCE = 400
+
+export function ListaPetsPagina() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const { itens, carregando, erro, pagina, total, tamanhoPagina } =
+    usePetsEstado()
+
+  const paginaAtual = pagina + 1
+  const totalPaginas =
+    tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
+
+  const [busca, setBusca] = useState('')
+
+  const mensagemSucesso =
+    (location.state as { mensagemSucesso?: string } | null)
+      ?.mensagemSucesso ?? null
+
+  useEffect(() => {
+    petsFacade.definirBusca('')
+    petsFacade.irParaPagina(0)
+    petsFacade.carregarPagina()
+  }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      petsFacade.definirBusca(busca.trim())
+      petsFacade.irParaPagina(0)
+      petsFacade.carregarPagina()
+    }, TEMPO_DEBOUNCE)
+
+    return () => clearTimeout(timeout)
+  }, [busca])
+
+  if (carregando)
+    return <p className="text-gray-600 text-sm">Carregando pets...</p>
+
+  if (erro)
+    return <p className="text-red-600 text-sm">{erro}</p>
+
+  return (
+    <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
+      {mensagemSucesso && (
+        <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3">
+          {mensagemSucesso}
+        </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <Titulo>Lista de Pets</Titulo>
+
+        <Botao
+          variante="sucesso"
+          onClick={() => navigate('/pets/novo')}
+        >
+          Novo Pet
+        </Botao>
+      </div>
+
+      <section className="space-y-4">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase">
+          Filtro de Busca
+        </h3>
+
+        <Input
+          placeholder="Buscar pet por nome"
+          value={busca}
+          onChange={e => setBusca(e.target.value)}
+        />
+      </section>
+
+      <section className="bg-white border rounded-lg shadow-sm p-4">
+        {itens.length === 0 ? (
+          <p className="text-center text-gray-600">
+            Não há pets cadastrados.
+          </p>
+        ) : (
+          <ListaPets
+            pets={itens}
+            onSelecionar={id => navigate(`/pets/${id}`)}
+            onEditar={id => navigate(`/pets/${id}/editar`)}
+            onExcluir={petsFacade.removerPet}
+          />
+        )}
+      </section>
+
+      <section className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 p-4 rounded-lg border max-w-xl">
+        <Botao
+          disabled={pagina === 0}
+          variante="secundario"
+          onClick={() => petsFacade.paginaAnterior()}
+        >
+          Anterior
+        </Botao>
+
+        <span>
+          Página <strong>{paginaAtual}</strong> de{' '}
+          <strong>{totalPaginas}</strong>
+        </span>
+
+        <Botao
+          disabled={paginaAtual >= totalPaginas}
+          variante="secundario"
+          onClick={() => petsFacade.proximaPagina()}
+        >
+          Próxima
+        </Botao>
+
+        <span className="ml-2 text-gray-600">
+          Total de pets: {total}
+        </span>
+      </section>
+    </div>
+  )
+}

@@ -11,25 +11,43 @@ class PetsFacade {
     return petsEstado.obterSnapshot()
   }
 
-  async listar(Qtdpagina = 0) {
-    try {
-      petsEstado.definirCarregando()
-
-      const { tamanhoPagina, filtroBusca } = petsEstado.obterSnapshot()
-      const { content,pagina,total,tamanhoPagina: tam,paginaContador } =
-        await petsServico.listar(Qtdpagina, tamanhoPagina, filtroBusca)
-
-        petsEstado.definirDados(content, pagina, total, tam, paginaContador)
-
-    } catch {
-      petsEstado.definirErro('Erro ao carregar lista de pets')
-    }
+  async irParaPagina(pagina: number) {
+    petsEstado.definirPagina(pagina)
+    await this.carregarPagina(pagina)
   }
 
-  async irParaPagina(Qtdpagina: number) {
-  petsEstado.definirPagina(Qtdpagina)
-  await this.listar(Qtdpagina)
-}
+  async carregarPagina(pagina?: number) {
+    try {
+      petsEstado.definirCarregando()
+    const { tamanhoPagina, filtroBusca, pagina: paginaAtual } =
+        petsEstado.obterSnapshot()
+      const paginaSolicitada = pagina ?? paginaAtual
+
+      const {
+        content,
+        pagina: paginaResposta,
+        total,
+        tamanhoPagina: tam,
+        paginaContador,
+      } = await petsServico.listar(
+        paginaSolicitada,
+        tamanhoPagina,
+        filtroBusca,
+      )
+
+      petsEstado.definirDados(
+        content,
+        paginaResposta,
+        total,
+        tam,
+        paginaContador,
+      )
+      
+
+    } catch {
+      petsEstado.definirErro('Erro ao carregar tutores')
+    }
+  }
 
 async criar(dados: Omit<Pet, 'id'>) {
   try {
@@ -69,9 +87,31 @@ async buscarPorId(id: number) {
   } 
 }  
 
-definirBusca(busca: string) {
-  petsEstado.definirBusca(busca)
-}
+async definirBusca(busca: string) {
+      const buscaNormalizada = busca.trim()
+
+      petsEstado.definirPagina(0)
+
+      petsEstado.definirBusca(buscaNormalizada === '' ? '' : buscaNormalizada)
+
+      petsFacade.carregarPagina(0)
+    }
+
+    proximaPagina() {
+    const estadoAtual = petsEstado.obterSnapshot()
+
+    const proxima = estadoAtual.pagina + 1
+    petsFacade.carregarPagina(proxima)
+  }
+
+  paginaAnterior() {
+    const estadoAtual = petsEstado.obterSnapshot()
+
+    if (estadoAtual.pagina === 0) return
+
+    const anterior = estadoAtual.pagina - 1
+    petsFacade.carregarPagina(anterior)
+  }
 
 
 async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
