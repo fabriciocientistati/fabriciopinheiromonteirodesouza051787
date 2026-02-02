@@ -141,6 +141,27 @@ alinhamento com o uso de Facade + BehaviorSubject.
 
     Esses ajustes garantem previsibilidade, baixo acoplamento e melhor experiência do usuário.
 
+    ## Telas de Detalhe (Pets e Tutores)
+
+    As telas de detalhe de Pets e Tutores seguem o mesmo padrão arquitetural,
+    separando responsabilidades entre página e componentes de UI.
+
+    Cada fluxo é composto por:
+
+    - **Página de Detalhe**
+    - Responsável por carregar os dados via Facade
+    - Controla estado de carregamento
+    - Orquestra navegação da tela
+
+    - **Componente de Detalhe**
+    - Exibe as informações principais da entidade
+    - Não contém lógica de carregamento ou navegação
+
+    Esse padrão garante:
+    - reutilização de layout
+    - clareza na leitura do código
+    - fácil manutenção
+    - visualização explícita das relações do domínio
 
     ### Ajustes de Layout e Rotas Privadas
 
