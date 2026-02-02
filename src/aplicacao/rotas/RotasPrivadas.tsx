@@ -4,14 +4,8 @@ import { RotaProtegida } from './RotaProtegida'
 import { LayoutPrivado } from '../layouts/LayoutPrivado'
 
 const CriarPetPagina = lazy(() =>
-  import('../paginas/pets/CriarPet').then(modulo => ({
-    default: modulo.CriarPet,
-  })),
-)
-
-const AtualizarPetPagina = lazy(() =>
-  import('../paginas/pets/AtualizarPet').then(modulo => ({
-    default: modulo.AtualizarPet,
+  import('../paginas/pets/FormularioPetPagina').then(modulo => ({
+    default: modulo.FormularioPetPagina,
   })),
 )
 
@@ -56,7 +50,7 @@ export function RotasPrivadas() {
     >
       <Route path="/pets" element={<ListaPetsPagina />} />
       <Route path="/pets/novo" element={<CriarPetPagina />} />
-      <Route path="/pets/:id/editar" element={<AtualizarPetPagina />} />
+      <Route path="/pets/:id/editar" element={<CriarPetPagina />} />
       <Route path="/pets/:id" element={<DetalhePetPagina />} />
 
       <Route path="/" element={<ListaTutoresPagina />} />

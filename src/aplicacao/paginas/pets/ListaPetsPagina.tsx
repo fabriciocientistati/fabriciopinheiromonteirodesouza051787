@@ -27,6 +27,16 @@ export function ListaPetsPagina() {
       ?.mensagemSucesso ?? null
 
   useEffect(() => {
+    if (!mensagemSucesso) return
+
+    const timeout = setTimeout(() => {
+      navigate(location.pathname, { replace: true, state: null })
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [mensagemSucesso, location.pathname, navigate])
+
+  useEffect(() => {
     petsFacade.definirBusca('')
     petsFacade.irParaPagina(0)
     petsFacade.carregarPagina()

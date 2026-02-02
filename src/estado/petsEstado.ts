@@ -72,6 +72,23 @@ class PetsEstado {
     })
   }
 
+  definirRemoverDaLista(idPet: number) {
+    const estadoAtual = this.estadoInterno$.value
+
+    const itensAtualizados = estadoAtual.itens.filter(t => t.id !== idPet)
+
+    this.atualizar({
+      itens: itensAtualizados,
+      total: Math.max(0, estadoAtual.total - 1),
+      carregando: false,
+      erro: undefined,
+      petSelecionado:
+        estadoAtual.petSelecionado?.id === idPet
+          ? null
+          : estadoAtual.petSelecionado,
+    })
+  }
+
   definirPagina(pagina: number) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
@@ -110,6 +127,13 @@ class PetsEstado {
       erro: mensagem,
     })
   }
+
+  private atualizar(parcial: Partial<PetsViewEstado>) {
+      this.estadoInterno$.next({
+        ...this.estadoInterno$.value,
+        ...parcial,
+      })
+    }
 
   limpar() {
     this.estadoInterno$.next(estadoInicial)

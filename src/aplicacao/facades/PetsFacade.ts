@@ -152,7 +152,12 @@ async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
 
 async removerPet(id: number) {
   try {
+    petsEstado.definirCarregando()
+
     await petsServico.remover(id)
+
+    petsEstado.definirRemoverDaLista(id)
+
   } catch {
     petsEstado.definirErro('Erro ao remover pet')
     throw new Error('Erro ao remover pet')
