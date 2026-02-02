@@ -103,6 +103,18 @@ O carregamento das páginas é feito sob demanda com React.lazy.
 
     Esses ajustes reduzem acoplamento, melhoram manutenção e garantem consistência visual, alinhando a aplicação aos requisitos do edital.
 
+    ### Ajustes de Layout, Navegação e UX
+
+    A interface da aplicação foi refinada para melhorar a experiência do usuário e alinhar o fluxo de navegação ao domínio do sistema.
+
+    Principais ajustes:
+    - Implementação de um sidebar fixo no layout autenticado
+    - Separação clara entre layout público (login) e layout privado
+    - Definição da lista de tutores como rota principal pós-login
+    - Agrupamento das rotas privadas sob uma única proteção
+    - Refinamento visual com TailwindCSS para maior legibilidade e clareza
+
+    Esses ajustes garantem navegação previsível, baixo acoplamento entre UI e regras de negócio e aderência aos requisitos do edital.
 
 
 ## Gerenciamento de Estado (Pets e Tutores)
