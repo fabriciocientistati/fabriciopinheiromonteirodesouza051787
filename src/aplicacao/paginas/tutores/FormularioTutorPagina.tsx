@@ -18,9 +18,10 @@ type FormularioTutorDados = {
 export function FormularioTutorPagina() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const { tutorSelecionado, carregando } = useTutoresEstado()
+  const { tutorSelecionado, carregando, erro } = useTutoresEstado()
 
   const edicao = Boolean(id)
+  const carregandoEdicao = edicao && (carregando || !tutorSelecionado)
 
   useEffect(() => {
     if (edicao && id) {
@@ -31,12 +32,14 @@ export function FormularioTutorPagina() {
   function montarDadosPersistencia(
     dados: FormularioTutorDados,
   ): Omit<Tutor, 'id' | 'foto'> {
+    const cpfNormalizado = dados.cpf.replace(/\D/g, '')
+
     return {
       nome: dados.nome,
       email: dados.email,
       telefone: dados.telefone,
       endereco: dados.endereco,
-      cpf: Number(dados.cpf),
+      cpf: cpfNormalizado,
     }
   }
 
@@ -51,13 +54,27 @@ export function FormularioTutorPagina() {
     }
 
     if (dados.foto) {
-      await tutoresFacade.atualizarFoto(tutorSalvo.id, dados.foto)
+      await tutoresFacade.atualizarFoto(
+        tutorSalvo.id,
+        dados.foto,
+        edicao ? tutorSelecionado?.foto?.id ?? null : null,
+      )
     }
 
-    navigate('/tutores')
+    navigate('/tutores', {
+      state: {
+        mensagemSucesso: edicao
+          ? 'Tutor alterado com sucesso.'
+          : 'Tutor criado com sucesso.',
+      },
+    })
   }
 
-  if (edicao && carregando) {
+  if (edicao && erro) {
+    return <p className="text-red-600 text-sm">{erro}</p>
+  }
+
+  if (carregandoEdicao) {
     return <p>Carregando tutor...</p>
   }
 

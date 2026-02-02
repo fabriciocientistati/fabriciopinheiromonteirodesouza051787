@@ -10,12 +10,14 @@ import { tutoresFacade } from '../../../facades/TutoresFacade'
 interface ListaTutoresProps {
   tutores: Tutor[]
   onSelecionar: (id: number) => void
+  onEditar: (id: number) => void
   onExcluir: (id: number) => Promise<void>
 }
 
 export function ListaTutores({
   tutores,
   onSelecionar,
+  onEditar,
   onExcluir,
 }: ListaTutoresProps) {
   const [tutorParaExcluir, setTutorParaExcluir] = useState<Tutor | null>(null)
@@ -57,7 +59,7 @@ export function ListaTutores({
 
               <Botao
                 variante="laranja"
-                onClick={() => onSelecionar(tutor.id)}
+                onClick={() => onEditar(tutor.id)}
                 className="w-full sm:w-auto"
               >
                 Editar

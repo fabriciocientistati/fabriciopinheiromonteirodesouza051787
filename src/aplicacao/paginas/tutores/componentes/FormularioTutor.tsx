@@ -29,9 +29,7 @@ export function FormularioTutor({
   const [email, setEmail] = useState(tutorInicial?.email ?? "");
   const [telefone, setTelefone] = useState(tutorInicial?.telefone ?? "");
   const [endereco, setEndereco] = useState(tutorInicial?.endereco ?? "");
-  const [cpf, setCpf] = useState(
-    tutorInicial?.cpf ? String(tutorInicial.cpf) : "",
-  );
+  const [cpf, setCpf] = useState(tutorInicial?.cpf ?? "");
   const [foto, setFoto] = useState<File | null>(null);
   const [salvando, setSalvando] = useState(false);
 

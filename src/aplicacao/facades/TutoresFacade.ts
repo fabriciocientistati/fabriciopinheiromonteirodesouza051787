@@ -139,9 +139,20 @@ class TutoresFacade {
     }
   }
 
-  async atualizarFoto(id: number, arquivo: File) {
+  async atualizarFoto(
+    id: number,
+    arquivo: File,
+    fotoIdAnterior?: number | null,
+  ) {
     try {
-      await tutoresServico.atualizarFoto(id, arquivo)
+      const tutorAtualizado = await tutoresServico.atualizarFoto(id, arquivo)
+      const fotoNovaId = tutorAtualizado.foto?.id ?? null
+
+      if (fotoIdAnterior && fotoNovaId && fotoIdAnterior !== fotoNovaId) {
+        await tutoresServico.removerFoto(id, fotoIdAnterior)
+      }
+
+      tutoresEstado.definirDetalhe(tutorAtualizado)
     } catch{
       tutoresEstado.definirErro('Erro ao enviar foto do tutor')
     }

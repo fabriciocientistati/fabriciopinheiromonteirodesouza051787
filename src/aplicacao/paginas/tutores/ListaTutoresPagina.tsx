@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { tutoresFacade } from '../../facades/TutoresFacade'
 import { useTutoresEstado } from '../../hooks/useTutoresEstado'
 import { Titulo } from '../../componentes/ui/Titulo'
@@ -11,12 +11,26 @@ const TEMPO_DEBOUNCE = 400
 
 export function ListaTutoresPagina() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { itens, carregando, erro, pagina, total, tamanhoPagina } = useTutoresEstado()
 
   const paginaAtual = pagina + 1
   const totalPaginas = tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
 
   const [busca, setBusca] = useState('')
+  const mensagemSucesso =
+    (location.state as { mensagemSucesso?: string } | null)
+      ?.mensagemSucesso ?? null
+
+  useEffect(() => {
+    if (!mensagemSucesso) return
+
+    const timeout = setTimeout(() => {
+      navigate(location.pathname, { replace: true, state: null })
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [mensagemSucesso, location.pathname, navigate])
 
   useEffect(() => {
     tutoresFacade.definirBusca('')
@@ -42,6 +56,12 @@ export function ListaTutoresPagina() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
+      {mensagemSucesso && (
+        <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3 text-center sm:text-left">
+          {mensagemSucesso}
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <Titulo>Lista de Tutores</Titulo>
 
@@ -78,11 +98,12 @@ export function ListaTutoresPagina() {
               Não há tutores cadastrados.
             </p>
           ) : (
-            <ListaTutores
-              tutores={itens}
-              onSelecionar={id => navigate(`/tutores/${id}`)}
-              onExcluir={tutoresFacade.removerTutor}
-            />
+          <ListaTutores
+            tutores={itens}
+            onSelecionar={id => navigate(`/tutores/${id}`)}
+            onEditar={id => navigate(`/tutores/${id}/editar`)}
+            onExcluir={tutoresFacade.removerTutor}
+          />
           )}
         </div>
       </section>
