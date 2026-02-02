@@ -18,7 +18,7 @@ export function LoginPagina() {
 
   useEffect(() => {
     if (estado.autenticado) {
-      navigate("/tutores");
+      navigate("/");
     }
   }, [estado.autenticado, navigate]);
 

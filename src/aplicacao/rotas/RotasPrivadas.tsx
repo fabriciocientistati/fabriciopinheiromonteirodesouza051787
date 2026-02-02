@@ -53,7 +53,7 @@ export function RotasPrivadas() {
       <Route path="/pets/:id/editar" element={<CriarPetPagina />} />
       <Route path="/pets/:id" element={<DetalhePetPagina />} />
 
-      <Route path="/" element={<ListaTutoresPagina />} />
+      <Route path="/" element={<ListaPetsPagina />} />
 
       <Route path="/tutores" element={<ListaTutoresPagina />} />
       <Route path="/tutores/novo" element={<CriarTutorPagina />} />

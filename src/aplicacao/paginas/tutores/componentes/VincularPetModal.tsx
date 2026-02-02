@@ -1,4 +1,5 @@
-﻿import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
+import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado";
 import { petsFacade } from "../../../facades/PetsFacade";
 import { useObservable } from "../../../hooks/useObservable";
 import { Card } from "../../../componentes/ui/Card";
@@ -11,10 +12,12 @@ export function VincularPetModal({
   aberto,
   onFechar,
   onVincular,
+  petsVinculados = [],
 }: {
   aberto: boolean;
   onFechar: () => void;
   onVincular: (idPet: number) => Promise<void>;
+  petsVinculados?: PetVinculado[];
 }) {
   const estadoPets = useObservable(
     petsFacade.estado$,
@@ -24,6 +27,11 @@ export function VincularPetModal({
   const [busca, setBusca] = useState("");
   const [mensagemSucesso, setMensagemSucesso] = useState("");
   const timeoutSucessoRef = useRef<number | null>(null);
+
+  const petsVinculadosIds = useMemo(
+    () => new Set(petsVinculados.map((pet) => pet.id)),
+    [petsVinculados],
+  );
   
   useEffect(() => {
     if (!aberto) return;
@@ -37,6 +45,8 @@ export function VincularPetModal({
   }, [busca, aberto]);
 
   async function vincularPet(idPet: number) {
+    if (petsVinculadosIds.has(idPet)) return;
+
     await onVincular(idPet);
     setMensagemSucesso("Pet vinculado com sucesso.");
     if (timeoutSucessoRef.current) {
@@ -91,31 +101,40 @@ export function VincularPetModal({
         {estadoPets.erro && <p className="text-red-600">{estadoPets.erro}</p>}
 
         <ul className="space-y-2 max-h-64 sm:max-h-72 lg:max-h-80 overflow-y-auto">
-          {estadoPets.itens.map((pet) => (
-            <Card
-              key={pet.id}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3"
-            >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <img
-                  src={pet.foto?.url || "/sem-foto.png"}
-                  alt={pet.nome}
-                  className="w-12 h-12 rounded-full object-cover border"
-                />
+          {estadoPets.itens.map((pet) => {
+            const vinculado = petsVinculadosIds.has(pet.id);
 
-                <div className="text-center sm:text-left">
-                  <p className="font-semibold">{pet.nome}</p>
-                  <p className="text-sm text-gray-600">
-                    {pet.raca ?? "Sem raça"}
-                  </p>
+            return (
+              <Card
+                key={pet.id}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3"
+              >
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <img
+                    src={pet.foto?.url || "/sem-foto.png"}
+                    alt={pet.nome}
+                    className="w-12 h-12 rounded-full object-cover border"
+                  />
+
+                  <div className="text-center sm:text-left">
+                    <p className="font-semibold">{pet.nome}</p>
+                    <p className="text-sm text-gray-600">
+                      {pet.raca ?? "Sem raça"}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <Botao variante="sucesso" onClick={() => vincularPet(pet.id)} className="w-full sm:w-auto">
-                Vincular
-              </Botao>
-            </Card>
-          ))}
+                <Botao
+                  variante="sucesso"
+                  disabled={vinculado}
+                  onClick={() => vincularPet(pet.id)}
+                  className="w-full sm:w-auto"
+                >
+                  {vinculado ? "Vinculado" : "Vincular"}
+                </Botao>
+              </Card>
+            );
+          })}
         </ul>
 
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6">
@@ -166,4 +185,3 @@ export function VincularPetModal({
     </div>
   );
 }
-

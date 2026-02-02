@@ -4,8 +4,6 @@ import type { Tutor } from '../../../../dominio/modelos/Tutor'
 import { Botao } from '../../../componentes/ui/Botao'
 import { Card } from '../../../componentes/ui/Card'
 import { Modal } from '../../../componentes/ui/Modal'
-import { VincularPetModal } from './VincularPetModal'
-import { tutoresFacade } from '../../../facades/TutoresFacade'
 
 interface ListaTutoresProps {
   tutores: Tutor[]
@@ -21,7 +19,6 @@ export function ListaTutores({
   onExcluir,
 }: ListaTutoresProps) {
   const [tutorParaExcluir, setTutorParaExcluir] = useState<Tutor | null>(null)
-  const [tutorParaVincular, setTutorParaVincular] = useState<Tutor | null>(null)
   
   return (
     <>
@@ -52,9 +49,6 @@ export function ListaTutores({
           </div>
 
           <div className="flex flex-col gap-2 w-full sm:w-1/2">
-            <Botao variante="sucesso" onClick={() => setTutorParaVincular(tutor)} className="w-full">
-              Vincular Pet
-            </Botao>
             <Botao onClick={() => onSelecionar(tutor.id)} className="w-full">
               Detalhar
             </Botao>
@@ -68,15 +62,6 @@ export function ListaTutores({
         </Card>
         ))}
       </div>
-
-      <VincularPetModal
-        aberto={!!tutorParaVincular}
-        onFechar={() => setTutorParaVincular(null)}
-        onVincular={async (idPet) => {
-          if (!tutorParaVincular) return
-          await tutoresFacade.vincularPet(tutorParaVincular.id, idPet)
-        }}
-      />
 
       <Modal
         aberto={!!tutorParaExcluir}

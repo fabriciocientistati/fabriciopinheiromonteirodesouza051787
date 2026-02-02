@@ -32,7 +32,7 @@ export function DetalhePetPagina() {
       />
 
       <div className="flex justify-center sm:justify-start">
-        <Botao variante="perigo" onClick={() => navigate('/pets')}>
+        <Botao variante="primario" onClick={() => navigate('/pets')}>
           Voltar para lista
         </Botao>
       </div>

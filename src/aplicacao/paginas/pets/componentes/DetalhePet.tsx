@@ -18,7 +18,7 @@ export function DetalhePet({ pet, tutores }: Props) {
 
       <CardPet pet={pet} />
 
-      <DetalheTutoresVinculados tutores={tutores} />
+      <DetalheTutoresVinculados petId={pet.id} tutores={tutores} />
     </div>
   )
 }
