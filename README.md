@@ -133,14 +133,15 @@ A página consome exclusivamente a TutoresFacade.
 
 ### Detalhamento de Tutores e Pets Vinculados
 
-A tela de detalhes do tutor agora exibe:
+### Detalhamento de Tutores (Leitura)
 
-- Informações completas do tutor (foto, email, telefone, endereço, CPF)
+A tela de detalhamento do tutor foi refatorada para atuar exclusivamente como **visualização de dados**, sem executar ações de mutação de estado.
+
+Ela exibe:
+- Informações completas do tutor (foto, email, telefone, endereço e CPF)
 - Lista de pets vinculados com foto, nome, raça e idade
-- Botões para editar tutor, vincular pet, remover vínculo e voltar à listagem
-- Recarregamento automático do tutor após desvincular pet
 
-Essas variantes estão disponíveis no componente `<Botao />` e podem ser reutilizadas em toda a aplicação.
+Essa separação garante que telas de leitura não executem ações de escrita, reduzindo acoplamento, efeitos colaterais e complexidade na UI.
 
 #### Comportamento UX definido:
 
