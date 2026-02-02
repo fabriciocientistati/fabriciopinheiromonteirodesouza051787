@@ -1,52 +1,44 @@
-﻿import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { autenticacaoEstadoFacade } from '../../facades/AutenticacaoFacade'
-import { useAutenticacao } from '../../hooks/useAutenticacao'
+﻿import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useObservable } from "../../hooks/useObservable";
+import { autenticacaoFacade } from "../../facades/AutenticacaoFacade";
+import { autenticacaoEstado } from "../../../estado/autenticacaoEstado";
+import { FormularioLogin } from "./compomentes/FormularioLogin";
 
-export function Login() {
-  const navigate = useNavigate()
-  const estado = useAutenticacao()
+export function LoginPagina() {
+  const navigate = useNavigate();
 
-  const [nomeUsuario, setNomeUsuario] = useState('')
-  const [senhaUsuario, setSenhaUsuario] = useState('')
+  const estado = useObservable(
+    autenticacaoEstado.estado$,
+    autenticacaoFacade.obterSnapshot()
+  );
+
+  const [usuario, setUsuario] = useState("");
+  const [senha, setSenha] = useState("");
 
   useEffect(() => {
     if (estado.autenticado) {
-      navigate('/', { replace: true })
+      navigate("/tutores");
     }
-  }, [estado.autenticado])
-
-  function enviar(e: React.FormEvent) {
-    e.preventDefault()
-
-    autenticacaoEstadoFacade.login({
-      username: nomeUsuario,
-      password: senhaUsuario,
-    })
-  }
+  }, [estado.autenticado, navigate]);
 
   return (
-    <div>
-      <h1>Login</h1>
-
-      <form onSubmit={enviar}>
-        <input
-          placeholder="Nome do usuário"
-          value={nomeUsuario}
-          onChange={e => setNomeUsuario(e.target.value)}
-        />
-
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senhaUsuario}
-          onChange={e => setSenhaUsuario(e.target.value)}
-        />
-
-        {estado.erro && <p>{estado.erro}</p>}
-
-        <button type="submit">Entrar</button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <FormularioLogin
+        username={usuario}
+        password={senha}
+        carregando={estado.carregando}
+        erro={estado.erro}
+        onUsernameChange={setUsuario}
+        onPasswordChange={setSenha}
+        onSubmit={() =>
+          autenticacaoFacade.login({
+            username: usuario,
+            password: senha,
+          })
+        }
+      />
     </div>
-  )
+  );
 }
+

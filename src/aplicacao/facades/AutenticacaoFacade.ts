@@ -10,19 +10,21 @@ import {
 
 class AutenticacaoFacade {
   async login(credenciais: CredenciaisLogin) {
+    autenticacaoEstado.definirCarregando();
+
     try {
-      autenticacaoEstado.definirCarregando()
+      const resposta = await autenticacaoServico.login(credenciais);
 
-      const resposta = await autenticacaoServico.login(credenciais)
-
-      salvarTokens(resposta.access_token, resposta.refresh_token)
+      salvarTokens(resposta.access_token, resposta.refresh_token);
 
       autenticacaoEstado.definirAutenticado(
         resposta.access_token,
         resposta.refresh_token
-      )
+      );
     } catch {
-      autenticacaoEstado.definirErro('Credenciais invalidas')
+      autenticacaoEstado.definirErro("Credenciais inválidas");
+    } finally {
+      autenticacaoEstado.finalizarCarregamento();
     }
   }
 
@@ -39,6 +41,10 @@ class AutenticacaoFacade {
     limparTokens()
     autenticacaoEstado.deslogar()
   }
+
+  obterSnapshot() {
+    return autenticacaoEstado.obterSnapshot()
+  }
 }
 
-export const autenticacaoEstadoFacade = new AutenticacaoFacade()
+export const autenticacaoFacade = new AutenticacaoFacade()

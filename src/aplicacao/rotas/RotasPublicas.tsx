@@ -3,7 +3,7 @@ import { lazy } from 'react'
 
 export const Login = lazy(() => 
   import('../paginas/login/LoginPagina').then(modulo => ({
-    default: modulo.Login,
+    default: modulo.LoginPagina,
   })),
 )
 

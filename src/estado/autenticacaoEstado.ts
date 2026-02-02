@@ -9,7 +9,7 @@ export type EstadoAutenticacao = {
 }
 
 const estadoInicial: EstadoAutenticacao = {
-    carregando: true,
+    carregando: false,
     autenticado: false,
 }
 
@@ -35,6 +35,14 @@ class GerenteAutenticacaoEstado {
             autenticado: true,
             token,
             refreshToken,
+            erro: undefined,
+        })
+    }
+
+    finalizarCarregamento() {
+        this.estadoInterno$.next({
+            ...this.estadoInterno$.value, 
+            carregando: false 
         })
     }
 
@@ -42,7 +50,10 @@ class GerenteAutenticacaoEstado {
         this.estadoInterno$.next({
             ...this.estadoInterno$.value,
             carregando: false,
-            erro,
+            autenticado: false,
+            token: undefined,
+            refreshToken: undefined,
+            erro: erro,
         })
     }
 

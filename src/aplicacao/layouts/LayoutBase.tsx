@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
-import { autenticacaoEstadoFacade } from "../facades/AutenticacaoFacade"
+import { autenticacaoFacade } from "../facades/AutenticacaoFacade"
 type Props = {
   children: ReactNode
 }
@@ -9,7 +9,7 @@ export default function LayoutBase({ children }: Props) {
   const navigate = useNavigate()
 
   function sair() {
-    autenticacaoEstadoFacade.logout()
+    autenticacaoFacade.logout()
     navigate("/login", { replace: true })
   }
 
