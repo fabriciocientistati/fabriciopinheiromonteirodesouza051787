@@ -54,11 +54,12 @@ export function RotasPrivadas() {
         </RotaProtegida>
       }
     >
-      <Route path="/" element={<ListaPetsPagina />} />
-
+      <Route path="/pets" element={<ListaPetsPagina />} />
       <Route path="/pets/novo" element={<CriarPetPagina />} />
       <Route path="/pets/:id/editar" element={<AtualizarPetPagina />} />
       <Route path="/pets/:id" element={<DetalhePetPagina />} />
+
+      <Route path="/" element={<ListaTutoresPagina />} />
 
       <Route path="/tutores" element={<ListaTutoresPagina />} />
       <Route path="/tutores/novo" element={<CriarTutorPagina />} />
