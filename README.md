@@ -46,6 +46,33 @@ Essa organização:
 A navegação é organizada em rotas públicas e privadas, com controle de acesso via autenticação.
 O carregamento das páginas é feito sob demanda com React.lazy.
 
+    ### Fluxos de Listagem (Pets e Tutores)
+
+    Os fluxos de listagem de Pets e Tutores seguem exatamente o mesmo padrão arquitetural,
+    garantindo consistência, previsibilidade e fácil manutenção.
+
+    Cada fluxo é dividido em três responsabilidades claras:
+
+    - Orquestra o fluxo da tela
+    - Controla busca, paginação e navegação
+    - Interage exclusivamente com a Facade
+
+    - **Componente de Listas**
+    - Responsável apenas pela renderização da UI
+    - Recebe dados e callbacks via props
+    - Não conhece Facade nem estado global
+
+    - **Hook reutilizáveis**
+    - Centraliza lógica comum de paginação
+    - Evita duplicação entre Pets e Tutores
+    - Facilita testes e evolução futura
+
+    Esse desenho garante:
+    - baixo acoplamento
+    - alta reutilização
+    - facilidade de testes unitários
+
+
 ## Decisões Técnicas
 
     - Facade Pattern foi adotado para desacoplar a UI da lógica de negócio e da infraestrutura.
