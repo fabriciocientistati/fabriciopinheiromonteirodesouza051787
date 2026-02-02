@@ -72,6 +72,30 @@ O carregamento das páginas é feito sob demanda com React.lazy.
     - alta reutilização
     - facilidade de testes unitários
 
+## Formulários de Criação e Edição (Pets e Tutores)
+
+Os fluxos de criação e edição de Pets e Tutores seguem o mesmo padrão arquitetural,
+garantindo consistência visual, previsibilidade de comportamento e fácil manutenção.
+
+Cada funcionalidade é composta por:
+
+- **Página**
+  - Orquestra o fluxo de criação e edição
+  - Resolve modo criação vs edição a partir da rota
+  - Interage exclusivamente com a Facade
+  - Controla navegação e mensagens de sucesso
+
+- **Formulário**
+  - Responsável apenas pela UI e validação
+  - Utiliza componentes reutilizáveis de interface
+  - Não conhece rotas, Facades ou estado global
+
+O mesmo componente de formulário é reutilizado tanto no modo de criação quanto
+no modo de edição, mudando apenas os dados iniciais recebidos via props.
+
+Esse padrão reduz duplicação de código, melhora a testabilidade e mantém
+alinhamento com o uso de Facade + BehaviorSubject.
+
 
 ## Decisões Técnicas
 
