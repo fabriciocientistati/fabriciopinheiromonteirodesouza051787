@@ -163,6 +163,29 @@ alinhamento com o uso de Facade + BehaviorSubject.
     - fácil manutenção
     - visualização explícita das relações do domínio
 
+    ## Gerenciamento de Vínculos entre Pets e Tutores
+
+    O sistema permite o gerenciamento completo dos vínculos entre Pets e Tutores
+    diretamente nas telas de detalhe, garantindo clareza e segurança na operação.
+
+    ### Desvinculação de Tutores de um Pet e Tutor
+
+    A desvinculação de um tutor é realizada na tela de **Detalhe do Pet**, no mesmo
+    local onde os tutores vinculados são exibidos.
+
+    A desvinculação de um pet é realizada na tela de **Detalhe do tutor**, no mesmo
+    local onde os pets vinculados são exibidos.
+
+    Características do fluxo:
+
+    - Ação disponível diretamente no card do tutor vinculado
+    - Confirmação obrigatória via modal
+    - Operação contextual, reduzindo risco de desvinculação incorreta
+    - Atualização do estado centralizado via Facade
+
+    Essa abordagem mantém o controle de vínculos próximo ao contexto onde eles são
+    visualizados, seguindo boas práticas de UX e arquitetura.
+
     ### Ajustes de Layout e Rotas Privadas
 
     O layout da aplicação foi desacoplado entre áreas públicas e privadas.
