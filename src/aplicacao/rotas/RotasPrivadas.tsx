@@ -16,8 +16,8 @@ const ListaPetsPagina = lazy(() =>
 )
 
 const DetalhePetPagina = lazy(() =>
-  import('../paginas/pets/DetalhePet').then(modulo => ({
-    default: modulo.DetalhePet,
+  import('../paginas/pets/DetalhePetPagina').then(modulo => ({
+    default: modulo.DetalhePetPagina,
   })),
 )
 
