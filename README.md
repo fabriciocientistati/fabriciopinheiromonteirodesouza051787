@@ -75,6 +75,8 @@ O carregamento das páginas é feito sob demanda com React.lazy.
 
     As decisões priorizaram código limpo, fácil manutenção e aderência aos requisitos do edital, mantendo espaço para evolução futura do domínio.
 
+    Correção no fluxo de edição de tutores: botão de editar direciona para a rota correta e o formulário carrega os dados do tutor para alteração, incluindo CPF e foto.
+
 ## Gerenciamento de Estado (Pets e Tutores)
 
 Cada módulo possui um estado reativo baseado em BehaviorSubject, mantendo:
