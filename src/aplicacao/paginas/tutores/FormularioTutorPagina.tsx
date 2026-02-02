@@ -82,7 +82,7 @@ export function FormularioTutorPagina() {
     <div>
       <Titulo>{edicao ? 'Editar Tutor' : 'Novo Tutor'}</Titulo>
 
-      <FormularioTutor
+      <FormularioTutor 
         tutorInicial={edicao ? tutorSelecionado ?? undefined : undefined}
         onSubmit={salvarTutor}
         textoBotao={edicao ? 'Atualizar' : 'Cadastrar'}

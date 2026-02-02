@@ -17,14 +17,17 @@ export function DetalhePetsVinculados({ pets }: Props) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {pets.map((pet) => (
-            <Card key={pet.id} className="flex gap-4 p-4">
+            <Card
+              key={pet.id}
+              className="flex flex-col sm:flex-row sm:items-center gap-4 p-4"
+            >
               <img
                 src={pet.foto?.url || "/sem-foto.png"}
                 alt={pet.nome}
-                className="w-16 h-16 rounded-full"
+                className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0"
               />
 
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="font-medium">{pet.nome}</p>
                 <p className="text-sm text-gray-600">{pet.raca}</p>
                 <p className="text-sm text-gray-600">

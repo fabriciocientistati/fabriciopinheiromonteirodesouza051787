@@ -12,12 +12,14 @@ interface Props {
 
 export function DetalheTutor({ tutor, pets }: Props) {
   return (
-    <>
-      <Titulo>Detalhes do Tutor</Titulo>
+    <div className="space-y-6">
+      <div className="text-center sm:text-left">
+        <Titulo>Detalhes do Tutor</Titulo>
+      </div>
 
       <CardTutor tutor={tutor} />
 
       <DetalhePetsVinculados pets={pets} />
-    </>
+    </div>
   );
 }
