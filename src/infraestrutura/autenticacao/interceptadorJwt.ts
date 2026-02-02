@@ -1,5 +1,5 @@
 
-import type { AxiosRequestConfig } from 'axios'
+import type { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { clienteHttp } from '../http/clienteHttp'
 import { autenticacaoServico } from '../servicos/AutenticacaoServico'
 import {
@@ -10,44 +10,72 @@ import {
 } from './armazenamentoToken'
 import { autenticacaoEstado } from '../../estado/autenticacaoEstado'
 
+interface RequisicaoComRetry extends AxiosRequestConfig {
+  _retry?: boolean
+}
+
+type ItemFila = {
+  resolver: (valor: unknown) => void
+  rejeitar: (erro: unknown) => void
+  config: RequisicaoComRetry
+}
+
 let atualizandoToken = false
-let filaRequisicoes: Array<(token: string) => void> = []
+let filaRequisicoes: ItemFila[] = []
 
 function processarFila(token: string) {
-  filaRequisicoes.forEach(callback => callback(token))
+  filaRequisicoes.forEach(({ resolver, config }) => {
+    if (config.headers) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    resolver(clienteHttp(config))
+  })
+  filaRequisicoes = []
+}
+
+function rejeitarFila(erro: unknown) {
+  filaRequisicoes.forEach(({ rejeitar }) => rejeitar(erro))
   filaRequisicoes = []
 }
 
 export function configurarInterceptadorJwt() {
-  clienteHttp.interceptors.request.use(config => {
-    const token = obterAccessToken()
-    const url = config.url ?? ''
+  clienteHttp.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+      const token = obterAccessToken()
+      const url = config.url ?? ''
 
-    const rotasPublicas = ['/autenticacao/login', '/autenticacao/refresh']
-    const ehRotaPublica = rotasPublicas.some(rota => url.includes(rota))
+      const rotasPublicas = ['/autenticacao/login', '/autenticacao/refresh']
+      const ehRotaPublica = rotasPublicas.some(rota => url.includes(rota))
 
-    if (token && !ehRotaPublica) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+      if (token && !ehRotaPublica) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
 
-    return config
-  })
+      return config
+    },
+  )
 
   clienteHttp.interceptors.response.use(
     response => response,
-    async erro => {
-      const originalRequest = erro.config as AxiosRequestConfig & { _retry?: boolean }
+    async (erro: AxiosError) => {
+      const originalRequest = erro.config as RequisicaoComRetry
+      const url = originalRequest.url ?? ''
+      const rotasPublicas = ['/autenticacao/login', '/autenticacao/refresh']
+      const ehRotaPublica = rotasPublicas.some(rota => url.includes(rota))
 
-      if (erro.response?.status === 401 && !originalRequest._retry) {
+      if (
+        erro.response?.status === 401 &&
+        !originalRequest._retry &&
+        !ehRotaPublica
+      ) {
         originalRequest._retry = true
 
         if (atualizandoToken) {
-          return new Promise(resolve => {
-            filaRequisicoes.push((token: string) => {
-              if (originalRequest.headers) {
-                originalRequest.headers.Authorization = `Bearer ${token}`
-              }
-              resolve(clienteHttp(originalRequest))
+          return new Promise((resolve, reject) => {
+            filaRequisicoes.push({
+              resolver: resolve,
+              rejeitar: reject,
+              config: originalRequest,
             })
           })
         }
@@ -56,10 +84,9 @@ export function configurarInterceptadorJwt() {
 
         try {
           const refreshToken = obterRefreshToken()
-          
+
           if (!refreshToken) {
-            limparTokens()
-            return Promise.reject('Refresh token ausente')
+            throw new Error('Refresh token ausente')
           }
 
           const resposta = await autenticacaoServico.refreshToken(refreshToken)
@@ -68,7 +95,7 @@ export function configurarInterceptadorJwt() {
 
           autenticacaoEstado.definirAutenticado(
             resposta.access_token,
-            resposta.refresh_token
+            resposta.refresh_token,
           )
 
           processarFila(resposta.access_token)
@@ -79,9 +106,14 @@ export function configurarInterceptadorJwt() {
           }
 
           return clienteHttp(originalRequest)
-        } catch {
+        } catch (erroRefresh) {
           limparTokens()
-          return Promise.reject(erro)
+          autenticacaoEstado.deslogar()
+          rejeitarFila(erroRefresh)
+
+          window.location.href = '/login'
+
+          return Promise.reject(erroRefresh)
         } finally {
           atualizandoToken = false
         }
