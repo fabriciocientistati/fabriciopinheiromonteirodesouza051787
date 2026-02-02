@@ -1,123 +1,69 @@
 import { Route } from 'react-router-dom'
 import { lazy } from 'react'
 import { RotaProtegida } from './RotaProtegida'
+import { LayoutPrivado } from '../layouts/LayoutPrivado'
 
-export const CriarPetPagina = lazy(() => 
+const CriarPetPagina = lazy(() =>
   import('../paginas/pets/CriarPet').then(modulo => ({
     default: modulo.CriarPet,
   })),
 )
 
-export const AtualizarPetPagina = lazy(() => 
-  import('../paginas/pets/AtualizarPet').then(modulo => ({ 
-    default: modulo.AtualizarPet, 
-  })), 
+const AtualizarPetPagina = lazy(() =>
+  import('../paginas/pets/AtualizarPet').then(modulo => ({
+    default: modulo.AtualizarPet,
+  })),
 )
 
-export const ListaPetsPagina = lazy(() =>
+const ListaPetsPagina = lazy(() =>
   import('../paginas/pets/ListaPets').then(modulo => ({
     default: modulo.ListaPets,
   })),
 )
 
-export const DetalhePetPagina = lazy(() =>
+const DetalhePetPagina = lazy(() =>
   import('../paginas/pets/DetalhePet').then(modulo => ({
     default: modulo.DetalhePet,
   })),
 )
 
-export const CriarTutorPagina = lazy(() =>
+const CriarTutorPagina = lazy(() =>
   import('../paginas/tutores/FormularioTutorPagina').then(modulo => ({
     default: modulo.FormularioTutorPagina,
   })),
 )
 
-export const DetalheTutorPagina = lazy(() =>
+const DetalheTutorPagina = lazy(() =>
   import('../paginas/tutores/DetalheTutorPagina').then(modulo => ({
     default: modulo.DetalheTutorPagina,
   })),
 )
 
-export const ListaTutoresPagina = lazy(() =>
+const ListaTutoresPagina = lazy(() =>
   import('../paginas/tutores/ListaTutoresPagina').then(modulo => ({
     default: modulo.ListaTutoresPagina,
   })),
 )
 
 export function RotasPrivadas() {
-    return (
-    <>
-        <Route
-          path="/pets/novo"
-          element={
-              <RotaProtegida>
-              <CriarPetPagina/>
-              </RotaProtegida>
-          }
-        />
+  return (
+    <Route
+      element={
+        <RotaProtegida>
+          <LayoutPrivado />
+        </RotaProtegida>
+      }
+    >
+      <Route path="/" element={<ListaPetsPagina />} />
 
-        <Route
-          path="/pets/:id/editar"
-          element={
-            <RotaProtegida>
-              <AtualizarPetPagina/>
-            </RotaProtegida>
-          }
-        />
+      <Route path="/pets/novo" element={<CriarPetPagina />} />
+      <Route path="/pets/:id/editar" element={<AtualizarPetPagina />} />
+      <Route path="/pets/:id" element={<DetalhePetPagina />} />
 
-        <Route
-          path="/"
-          element={
-              <RotaProtegida>
-                <ListaPetsPagina />
-              </RotaProtegida>
-          }
-        />
-
-        <Route
-          path="/pets/:id"
-          element={
-              <RotaProtegida>
-                <DetalhePetPagina />
-              </RotaProtegida>
-          }
-        />
-
-        <Route
-          path="/tutores/novo"
-          element={
-              <RotaProtegida>
-                <CriarTutorPagina />
-              </RotaProtegida>
-          }
-        />
-
-        <Route
-          path="/tutores/:id/editar"
-          element={
-              <RotaProtegida>
-                <CriarTutorPagina />
-              </RotaProtegida>
-          }
-        />
-
-        <Route
-          path="/tutores/:id"
-          element={
-              <RotaProtegida>
-                <DetalheTutorPagina />
-              </RotaProtegida>
-          }
-        />
-
-        <Route
-          path="/tutores"
-          element={
-              <RotaProtegida>
-                <ListaTutoresPagina />
-              </RotaProtegida>
-          }
-        />
-    </>
-    )
+      <Route path="/tutores" element={<ListaTutoresPagina />} />
+      <Route path="/tutores/novo" element={<CriarTutorPagina />} />
+      <Route path="/tutores/:id/editar" element={<CriarTutorPagina />} />
+      <Route path="/tutores/:id" element={<DetalheTutorPagina />} />
+    </Route>
+  )
 }
