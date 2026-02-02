@@ -77,6 +77,20 @@ O carregamento das páginas é feito sob demanda com React.lazy.
 
     Correção no fluxo de edição de tutores: botão de editar direciona para a rota correta e o formulário carrega os dados do tutor para alteração, incluindo CPF e foto.
 
+    ### Ajustes no fluxo de Login 
+
+    O fluxo de autenticação foi refatorado para seguir o mesmo padrão arquitetural do restante da aplicação.
+
+    Principais ajustes:
+    - Desacoplamento entre página e formulário de login
+    - Centralização da lógica de autenticação na Facade
+    - Estado reativo responsável por loading, erro e autenticação
+    - Correção do controle de carregamento para evitar estados travados
+    - UI de login estilizada com TailwindCSS, mantendo consistência visual
+
+    Esses ajustes garantem previsibilidade, baixo acoplamento e melhor experiência do usuário.
+
+
 ## Gerenciamento de Estado (Pets e Tutores)
 
 Cada módulo possui um estado reativo baseado em BehaviorSubject, mantendo:
