@@ -5,7 +5,7 @@ import { useTutoresEstado } from '../../hooks/useTutoresEstado'
 import { Titulo } from '../../componentes/ui/Titulo'
 import { Input } from '../../componentes/ui/Input'
 import { Botao } from '../../componentes/ui/Botao'
-import { ListaTutores } from './componentes/ListarTutores'
+import { ListaTutores } from './componentes/ListaTutores'
 
 const TEMPO_DEBOUNCE = 400
 
