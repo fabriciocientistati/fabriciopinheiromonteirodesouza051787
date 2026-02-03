@@ -102,7 +102,7 @@ export class TutoresServico {
     async listarPets(nome?: string) {
         const resposta = await clienteHttp.get('/v1/pets', {
             params: {
-            name: nome || undefined
+            nome: nome || undefined
             }
         })
 

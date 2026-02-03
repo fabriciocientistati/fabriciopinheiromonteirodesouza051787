@@ -106,6 +106,12 @@ docker run --rm -p 8080:80 frontend-pets-tutores
 
 Abra no navegador: `http://localhost:8080`
 
+## Health Checks (Liveness/Readiness)
+
+Disponíveis no container Nginx:
+- Liveness: `GET /healthz` ou `GET /saude` → `200 ok`
+- Readiness: `GET /readyz` ou `GET /pronto` → `200 ready`
+
 ## Arquitetura da Aplicação
 A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
 
@@ -204,6 +210,7 @@ Após um refresh bem-sucedido, as telas de listagem, detalhe e edição refazem 
 - Autenticação com refresh token e rotas protegidas.
 - Padrão Facade e estado reativo com BehaviorSubject.
 - Testes unitários básicos de componentes e serviços.
+- Health checks (liveness/readiness) via Nginx.
 
 ## Notas e Pendências
 
