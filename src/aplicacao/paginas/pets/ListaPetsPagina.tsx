@@ -6,6 +6,7 @@ import { Input } from '../../componentes/ui/Input'
 import { Botao } from '../../componentes/ui/Botao'
 import { ListaPets } from './componentes/ListaPets'
 import { usePetsEstado } from '../../hooks/usePetsEstado'
+import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 const TEMPO_DEBOUNCE = 400
 
@@ -15,6 +16,7 @@ export function ListaPetsPagina() {
 
   const { itens, carregando, erro, pagina, total, tamanhoPagina } =
     usePetsEstado()
+  const { versaoToken, autenticado } = useAutenticacao()
 
   const paginaAtual = pagina + 1
   const totalPaginas =
@@ -40,6 +42,11 @@ export function ListaPetsPagina() {
   useEffect(() => {
     petsFacade.definirBusca('')
   }, [])
+
+  useEffect(() => {
+    if (!autenticado || versaoToken === 0) return
+    void petsFacade.carregarPagina()
+  }, [autenticado, versaoToken])
 
   useEffect(() => {
     if (primeiraBuscaRef.current) {

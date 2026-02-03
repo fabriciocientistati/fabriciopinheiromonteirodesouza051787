@@ -6,11 +6,13 @@ export type EstadoAutenticacao = {
     erro?: string
     token?: string
     refreshToken?: string
+    versaoToken: number
 }
 
 const estadoInicial: EstadoAutenticacao = {
     carregando: false,
     autenticado: false,
+    versaoToken: 0,
 }
 
 class GerenteAutenticacaoEstado {
@@ -31,11 +33,19 @@ class GerenteAutenticacaoEstado {
 
     definirAutenticado(token: string, refreshToken: string) {
         this.estadoInterno$.next({
+            ...this.estadoInterno$.value,
             carregando: false,
             autenticado: true,
             token,
             refreshToken,
             erro: undefined,
+        })
+    }
+
+    registrarAtualizacaoToken() {
+        this.estadoInterno$.next({
+            ...this.estadoInterno$.value,
+            versaoToken: this.estadoInterno$.value.versaoToken + 1,
         })
     }
 

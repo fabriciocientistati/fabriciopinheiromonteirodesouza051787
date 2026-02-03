@@ -4,10 +4,12 @@ import { useObservable } from "../../hooks/useObservable";
 import { useEffect } from "react";
 import { DetalheTutor } from "./componentes/DetalheTutor";
 import { Botao } from "../../componentes/ui/Botao";
+import { useAutenticacao } from "../../hooks/useAutenticacao";
 
 export function DetalheTutorPagina() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { versaoToken } = useAutenticacao();
 
   const estado = useObservable(
     tutoresFacade.estado$,
@@ -18,7 +20,7 @@ export function DetalheTutorPagina() {
     if (id) {
       tutoresFacade.carregarDetalhe(Number(id));
     }
-  }, [id]);
+  }, [id, versaoToken]);
 
   if (estado.carregando || !estado.tutorSelecionado) {
     return <p className="px-4 py-6 sm:p-8">Carregando tutor...</p>;

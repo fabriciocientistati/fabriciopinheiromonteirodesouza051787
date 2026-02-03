@@ -97,6 +97,7 @@ export function configurarInterceptadorJwt() {
             resposta.access_token,
             resposta.refresh_token,
           )
+          autenticacaoEstado.registrarAtualizacaoToken()
 
           processarFila(resposta.access_token)
 

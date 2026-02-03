@@ -5,6 +5,7 @@ import { useTutoresEstado } from '../../hooks/useTutoresEstado'
 import { tutoresFacade } from '../../facades/TutoresFacade'
 import { Titulo } from '../../componentes/ui/Titulo'
 import { FormularioTutor } from './componentes/FormularioTutor'
+import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 type FormularioTutorDados = {
   nome: string
@@ -19,6 +20,7 @@ export function FormularioTutorPagina() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { tutorSelecionado, carregando, erro } = useTutoresEstado()
+  const { versaoToken } = useAutenticacao()
 
   const edicao = Boolean(id)
   const carregandoEdicao = edicao && (carregando || !tutorSelecionado)
@@ -27,7 +29,7 @@ export function FormularioTutorPagina() {
     if (edicao && id) {
       tutoresFacade.buscarPorId(Number(id))
     }
-  }, [edicao, id])
+  }, [edicao, id, versaoToken])
 
   function montarDadosPersistencia(
     dados: FormularioTutorDados,

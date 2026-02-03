@@ -51,6 +51,7 @@ class TutoresFacade {
         tutoresEstado.finalizarCarregamento()
         return
       }
+        tutoresEstado.definirErro('Erro ao carregar tutores')
     }
   }
 

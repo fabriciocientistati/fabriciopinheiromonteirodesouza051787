@@ -50,6 +50,7 @@ class PetsFacade {
         petsEstado.finalizarCarregamento()
         return
       }
+        petsEstado.definirErro('Erro ao carregar pets')
     }
   }
 

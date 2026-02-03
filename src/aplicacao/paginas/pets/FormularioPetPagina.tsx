@@ -5,6 +5,7 @@ import { usePetsEstado } from '../../hooks/usePetsEstado'
 import { petsFacade } from '../../facades/PetsFacade'
 import { Titulo } from '../../componentes/ui/Titulo'
 import { FormularioPet } from './componentes/FormularioPet'
+import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 type FormularioPetDados = {
   nome: string
@@ -17,6 +18,7 @@ export function FormularioPetPagina() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { petSelecionado, carregando, erro } = usePetsEstado()
+  const { versaoToken } = useAutenticacao()
 
   const edicao = Boolean(id)
   const carregandoEdicao = edicao && (carregando || !petSelecionado)
@@ -25,7 +27,7 @@ export function FormularioPetPagina() {
     if (edicao && id) {
       petsFacade.buscarPorId(Number(id))
     }
-  }, [edicao, id])
+  }, [edicao, id, versaoToken])
 
   function montarDadosPersistencia(
     dados: FormularioPetDados,

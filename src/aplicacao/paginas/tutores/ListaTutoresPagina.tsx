@@ -6,6 +6,7 @@ import { Titulo } from '../../componentes/ui/Titulo'
 import { Input } from '../../componentes/ui/Input'
 import { Botao } from '../../componentes/ui/Botao'
 import { ListaTutores } from './componentes/ListaTutores'
+import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 const TEMPO_DEBOUNCE = 400
 
@@ -13,6 +14,7 @@ export function ListaTutoresPagina() {
   const navigate = useNavigate()
   const location = useLocation()
   const { itens, carregando, erro, pagina, total, tamanhoPagina } = useTutoresEstado()
+  const { versaoToken, autenticado } = useAutenticacao()
 
   const paginaAtual = pagina + 1
   const totalPaginas = tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
@@ -36,6 +38,11 @@ export function ListaTutoresPagina() {
   useEffect(() => {
     tutoresFacade.definirBusca('')
   }, [])
+
+  useEffect(() => {
+    if (!autenticado || versaoToken === 0) return
+    void tutoresFacade.carregarPagina()
+  }, [autenticado, versaoToken])
 
   useEffect(() => {
     if (primeiraBuscaRef.current) {

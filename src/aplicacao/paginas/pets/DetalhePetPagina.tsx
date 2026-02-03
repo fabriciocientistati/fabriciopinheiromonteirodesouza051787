@@ -4,10 +4,12 @@ import { useObservable } from '../../hooks/useObservable'
 import { useEffect } from 'react'
 import { Botao } from '../../componentes/ui/Botao'
 import { DetalhePet } from './componentes/DetalhePet'
+import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 export function DetalhePetPagina() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { versaoToken } = useAutenticacao()
 
   const estado = useObservable(
     petsFacade.estado$,
@@ -18,7 +20,7 @@ export function DetalhePetPagina() {
     if (id) {
       petsFacade.buscarPorId(Number(id))
     }
-  }, [id])
+  }, [id, versaoToken])
 
   if (estado.carregando || !estado.petSelecionado) {
     return <p className="px-4 py-6 sm:p-8">Carregando pet...</p>
