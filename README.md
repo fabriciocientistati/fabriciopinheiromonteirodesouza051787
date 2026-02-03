@@ -1,4 +1,4 @@
-# Pet e Tutores – Front-End
+# Pet e Tutores - Front-End
 
 ## Visão Geral do Projeto
 
@@ -10,15 +10,43 @@ Trata-se de uma Single Page Application (SPA), com navegação client-side, rota
 
 ---
 
+## Dados da Inscrição
+
+- Nome: Fabricio Pinheiro Monteiro de Souza
+- E-mail: fabricio.cientistati@hotmail.com
+- Vaga: Engenheiro da computação - sênior
+- Inscrição: 16423
+
+## API Pública
+
+- Base URL: `https://pet-manager-api.geia.vip` (endpoints em `/v1`)
+- Swagger: `https://pet-manager-api.geia.vip/q/swagger-ui/`
+
+## Credenciais de Acesso
+
+- Usuário: admin
+- Senha: admin
+
+Observação: use as credenciais fornecidas pelo edital/ambiente de testes.
+
 ## Tecnologias Utilizadas
 
-- React 18
+- React 19
 - TypeScript
 - Vite
 - Tailwind CSS
 - Axios
-- React Router DOM
+- React Router DOM 7
 - RxJS (BehaviorSubject)
+
+## Pré-requisitos
+
+- Node.js (LTS recomendado) e npm
+- Docker (opcional, para build/execução em container)
+
+## Variáveis de Ambiente
+
+- Não há variáveis obrigatórias. A base da API está definida em `src/infraestrutura/http/clienteHttp.ts`.
 
 ---
 
@@ -28,6 +56,39 @@ Trata-se de uma Single Page Application (SPA), com navegação client-side, rota
 npm install
 npm run dev
 ```
+
+Observação: `npm install` também instala as dependências de testes (devDependencies).
+
+## Build e Preview
+
+```bash
+npm run build
+npm run preview
+```
+
+## Testes
+
+Os testes usam Vitest + Testing Library (ambiente `jsdom`).
+
+### Cobertura de Testes
+- Componentes: `CardListagem`, `ListaTutores`, `ListaPets`
+- Serviços: `PetsServico.listar`, `TutoresServico.listar`
+
+```bash
+npm run test
+```
+
+Para rodar em modo CI:
+
+```bash
+npm run test:run
+```
+
+## Dados de Teste
+
+- CPF: deve ser válido (11 dígitos com validação).
+- Telefone: 10 ou 11 dígitos com DDD (apenas números).
+- Use dados fictícios válidos para passar nas validações.
 
 ## SPA (Single Page Application)
 
@@ -109,6 +170,10 @@ Fluxo:
 
 O fluxo é transparente para o usuário e garante persistência da sessão em uma SPA.
 
+Quando o token expira, o refresh é feito em background sem exibir erro na UI. Em falha de refresh, o usuário é redirecionado para `/login` com mensagem de sessão expirada.
+
+Após um refresh bem-sucedido, as telas de listagem, detalhe e edição refazem automaticamente a carga de dados com base na versão do token, garantindo que a UI não fique "travada" por falta de nova ação do usuário.
+
 ## Fluxos Implementados
 
     Pets
@@ -130,6 +195,20 @@ O fluxo é transparente para o usuário e garante persistência da sessão em um
 
     O carregamento das páginas é feito sob demanda com React.lazy.
 
+## Requisitos do Edital (Resumo)
+
+- SPA com React + TypeScript e rotas lazy-loaded por módulo (Pets/Tutores).
+- Consumo de API em tempo real via Axios.
+- Layout responsivo com Tailwind.
+- Paginação (10 itens por página) e busca por nome.
+- Autenticação com refresh token e rotas protegidas.
+- Padrão Facade e estado reativo com BehaviorSubject.
+- Testes unitários básicos de componentes e serviços.
+
+## Notas e Pendências
+
+- O campo espécie não está disponível na API atual; a UI usa raça e idade conforme o contrato recebido.
+
 ## Listagens (Pets e Tutores)
 
 Os fluxos de listagem seguem o mesmo padrão arquitetural:
@@ -142,6 +221,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 
 ## Ajustes Recentes (Busca e Paginação)
 
+- Testes unitários básicos para componentes e serviços.
 - Busca com debounce e carregamento contextual 
 - Facades centralizam busca/paginação para evitar chamadas duplicadas.
 - Modais de vínculo seguem o mesmo padrão de busca e paginação.
