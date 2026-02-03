@@ -90,18 +90,16 @@ async buscarPorId(id: number) {
 async definirBusca(busca: string) {
       const buscaNormalizada = busca.trim()
 
-      petsEstado.definirPagina(0)
-
       petsEstado.definirBusca(buscaNormalizada === '' ? '' : buscaNormalizada)
 
-      petsFacade.carregarPagina(0)
+      await this.irParaPagina(0)
     }
 
     proximaPagina() {
     const estadoAtual = petsEstado.obterSnapshot()
 
     const proxima = estadoAtual.pagina + 1
-    petsFacade.carregarPagina(proxima)
+    void this.irParaPagina(proxima)
   }
 
   paginaAnterior() {
@@ -110,7 +108,7 @@ async definirBusca(busca: string) {
     if (estadoAtual.pagina === 0) return
 
     const anterior = estadoAtual.pagina - 1
-    petsFacade.carregarPagina(anterior)
+    void this.irParaPagina(anterior)
   }
 
 

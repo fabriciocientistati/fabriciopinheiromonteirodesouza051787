@@ -140,7 +140,7 @@ export function VincularTutorModal({
           <Botao
             variante="secundario"
             disabled={!podeIrAnterior}
-            onClick={() => tutoresFacade.carregarPagina(0)}
+            onClick={() => tutoresFacade.irParaPagina(0)}
           >
             «
           </Botao>
@@ -148,7 +148,7 @@ export function VincularTutorModal({
           <Botao
             variante="secundario"
             disabled={!podeIrAnterior}
-            onClick={() => tutoresFacade.carregarPagina(estadoTutores.pagina - 1)}
+            onClick={() => tutoresFacade.irParaPagina(estadoTutores.pagina - 1)}
           >
             ‹
           </Botao>
@@ -161,7 +161,7 @@ export function VincularTutorModal({
           <Botao
             variante="secundario"
             disabled={!podeIrProxima}
-            onClick={() => tutoresFacade.carregarPagina(estadoTutores.pagina + 1)}
+            onClick={() => tutoresFacade.irParaPagina(estadoTutores.pagina + 1)}
           >
             ›
           </Botao>
@@ -170,7 +170,7 @@ export function VincularTutorModal({
             variante="secundario"
             disabled={!podeIrProxima}
             onClick={() =>
-              tutoresFacade.carregarPagina(estadoTutores.contadorPagina - 1)
+              tutoresFacade.irParaPagina(estadoTutores.contadorPagina - 1)
             }
           >
             »

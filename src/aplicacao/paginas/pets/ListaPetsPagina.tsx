@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { petsFacade } from '../../facades/PetsFacade'
 import { Titulo } from '../../componentes/ui/Titulo'
@@ -21,6 +21,7 @@ export function ListaPetsPagina() {
     tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
 
   const [busca, setBusca] = useState('')
+  const primeiraBuscaRef = useRef(true)
 
   const mensagemSucesso =
     (location.state as { mensagemSucesso?: string } | null)
@@ -38,31 +39,32 @@ export function ListaPetsPagina() {
 
   useEffect(() => {
     petsFacade.definirBusca('')
-    petsFacade.irParaPagina(0)
-    petsFacade.carregarPagina()
   }, [])
 
   useEffect(() => {
+    if (primeiraBuscaRef.current) {
+      primeiraBuscaRef.current = false
+      return
+    }
+
     const timeout = setTimeout(() => {
       petsFacade.definirBusca(busca.trim())
-      petsFacade.irParaPagina(0)
-      petsFacade.carregarPagina()
     }, TEMPO_DEBOUNCE)
 
     return () => clearTimeout(timeout)
   }, [busca])
-
-  if (carregando)
-    return <p className="text-gray-600 text-sm">Carregando pets...</p>
-
-  if (erro)
-    return <p className="text-red-600 text-sm">{erro}</p>
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
       {mensagemSucesso && (
         <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3">
           {mensagemSucesso}
+        </div>
+      )}
+
+      {erro && (
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+          {erro}
         </div>
       )}
 
@@ -91,16 +93,23 @@ export function ListaPetsPagina() {
 
       <section className="bg-white border rounded-lg shadow-sm p-4">
         {itens.length === 0 ? (
-          <p className="text-center text-gray-600">
-            Não há pets cadastrados.
+          <p className="text-center text-gray-600 py-4">
+            {carregando ? 'Carregando pets...' : 'Não há pets cadastrados.'}
           </p>
         ) : (
-          <ListaPets
-            pets={itens}
-            onSelecionar={id => navigate(`/pets/${id}`)}
-            onEditar={id => navigate(`/pets/${id}/editar`)}
-            onExcluir={petsFacade.removerPet}
-          />
+          <>
+            {carregando && (
+              <p className="text-gray-500 text-sm px-2 pb-2">
+                Atualizando lista...
+              </p>
+            )}
+            <ListaPets
+              pets={itens}
+              onSelecionar={id => navigate(`/pets/${id}`)}
+              onEditar={id => navigate(`/pets/${id}/editar`)}
+              onExcluir={petsFacade.removerPet}
+            />
+          </>
         )}
       </section>
 

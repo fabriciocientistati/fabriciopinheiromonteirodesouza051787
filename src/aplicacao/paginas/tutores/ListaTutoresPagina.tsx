@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { tutoresFacade } from '../../facades/TutoresFacade'
 import { useTutoresEstado } from '../../hooks/useTutoresEstado'
@@ -18,6 +18,7 @@ export function ListaTutoresPagina() {
   const totalPaginas = tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
 
   const [busca, setBusca] = useState('')
+  const primeiraBuscaRef = useRef(true)
   const mensagemSucesso =
     (location.state as { mensagemSucesso?: string } | null)
       ?.mensagemSucesso ?? null
@@ -34,31 +35,32 @@ export function ListaTutoresPagina() {
 
   useEffect(() => {
     tutoresFacade.definirBusca('')
-    tutoresFacade.irParaPagina(0)
-    tutoresFacade.carregarPagina()
   }, [])
 
   useEffect(() => {
+    if (primeiraBuscaRef.current) {
+      primeiraBuscaRef.current = false
+      return
+    }
+
     const timeout = setTimeout(() => {
       tutoresFacade.definirBusca(busca.trim())
-      tutoresFacade.irParaPagina(0)
-      tutoresFacade.carregarPagina()
     }, TEMPO_DEBOUNCE)
 
     return () => clearTimeout(timeout)
   }, [busca])
-
-  if (carregando)
-    return <p className="text-gray-600 text-sm">Carregando tutores...</p>
-
-  if (erro)
-    return <p className="text-red-600 text-sm">{erro}</p>
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
       {mensagemSucesso && (
         <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3 text-center sm:text-left">
           {mensagemSucesso}
+        </div>
+      )}
+
+      {erro && (
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3 text-center sm:text-left">
+          {erro}
         </div>
       )}
 
@@ -94,16 +96,23 @@ export function ListaTutoresPagina() {
       <section className="space-y-2">
         <div className="bg-white border rounded-lg shadow-sm p-2 sm:p-4">
           {itens.length === 0 ? (
-            <p className="text-center text-gray-600">
-              Não há tutores cadastrados.
+            <p className="text-center text-gray-600 py-4">
+              {carregando ? 'Carregando tutores...' : 'Não há tutores cadastrados.'}
             </p>
           ) : (
-          <ListaTutores
-            tutores={itens}
-            onSelecionar={id => navigate(`/tutores/${id}`)}
-            onEditar={id => navigate(`/tutores/${id}/editar`)}
-            onExcluir={tutoresFacade.removerTutor}
-          />
+            <>
+              {carregando && (
+                <p className="text-gray-500 text-sm px-2 pb-2">
+                  Atualizando lista...
+                </p>
+              )}
+              <ListaTutores
+                tutores={itens}
+                onSelecionar={id => navigate(`/tutores/${id}`)}
+                onEditar={id => navigate(`/tutores/${id}/editar`)}
+                onExcluir={tutoresFacade.removerTutor}
+              />
+            </>
           )}
         </div>
       </section>

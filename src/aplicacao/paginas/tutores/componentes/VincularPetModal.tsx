@@ -38,7 +38,6 @@ export function VincularPetModal({
 
     const timeout = setTimeout(() => {
       petsFacade.definirBusca(busca.trim());
-      petsFacade.irParaPagina(0);
     }, TEMPO_DEBOUNCE_MS);
 
     return () => clearTimeout(timeout);
@@ -58,7 +57,6 @@ export function VincularPetModal({
     }, 2000);
     setBusca("");
     petsFacade.definirBusca("");
-    petsFacade.irParaPagina(0);
   }
 
   function fecharModal() {
@@ -69,7 +67,6 @@ export function VincularPetModal({
     setMensagemSucesso("");
     setBusca("");
     petsFacade.definirBusca("");
-    petsFacade.irParaPagina(0);
     onFechar();
   }
 

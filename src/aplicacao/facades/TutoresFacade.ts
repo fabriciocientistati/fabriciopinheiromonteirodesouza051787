@@ -11,8 +11,9 @@ class TutoresFacade {
     return tutoresEstado.obterSnapshot()
   }
 
-  irParaPagina(pagina: number) {
+  async irParaPagina(pagina: number) {
     tutoresEstado.definirPagina(pagina)
+    await this.carregarPagina(pagina)
   }
 
   async carregarPagina(pagina?: number) {
@@ -49,21 +50,17 @@ class TutoresFacade {
     }
   }
 
-    definirBusca(busca: string) {
-      const buscaNormalizada = busca.trim()
-
-      tutoresEstado.definirPagina(0)
-
-      tutoresEstado.definirBusca(buscaNormalizada === '' ? '' : buscaNormalizada)
-
-      tutoresFacade.carregarPagina(0)
-    }
+  definirBusca(busca: string) {
+    const buscaNormalizada = busca.trim()
+    tutoresEstado.definirBusca(buscaNormalizada === '' ? '' : buscaNormalizada)
+    void this.irParaPagina(0)
+  }
 
     proximaPagina() {
     const estadoAtual = tutoresEstado.obterSnapshot()
 
     const proxima = estadoAtual.pagina + 1
-    tutoresFacade.carregarPagina(proxima)
+    void this.irParaPagina(proxima)
   }
 
   paginaAnterior() {
@@ -72,7 +69,7 @@ class TutoresFacade {
     if (estadoAtual.pagina === 0) return
 
     const anterior = estadoAtual.pagina - 1
-    tutoresFacade.carregarPagina(anterior)
+    void this.irParaPagina(anterior)
   }
 
   async buscarPorId(id: number) {

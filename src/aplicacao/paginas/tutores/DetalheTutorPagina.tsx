@@ -31,7 +31,7 @@ export function DetalheTutorPagina() {
         pets={estado.petsVinculados}
       />
       <div className="flex justify-center sm:justify-start">
-        <Botao variante="perigo" onClick={() => navigate("/tutores")}>
+        <Botao variante="primario" onClick={() => navigate("/tutores")}>
           Voltar para lista
         </Botao>
       </div>
