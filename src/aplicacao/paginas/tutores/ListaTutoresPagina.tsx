@@ -94,18 +94,18 @@ export function ListaTutoresPagina() {
       </section>
 
       <section className="space-y-2">
-        <div className="bg-white border rounded-lg shadow-sm p-2 sm:p-4">
+        <div className="bg-white border rounded-lg shadow-sm p-2 sm:p-4 relative">
+          {carregando && itens.length > 0 && (
+            <div className="absolute right-3 top-3 text-xs text-gray-500 bg-white/90 px-2 py-1 rounded">
+              Atualizando lista...
+            </div>
+          )}
           {itens.length === 0 ? (
             <p className="text-center text-gray-600 py-4">
               {carregando ? 'Carregando tutores...' : 'Não há tutores cadastrados.'}
             </p>
           ) : (
             <>
-              {carregando && (
-                <p className="text-gray-500 text-sm px-2 pb-2">
-                  Atualizando lista...
-                </p>
-              )}
               <ListaTutores
                 tutores={itens}
                 onSelecionar={id => navigate(`/tutores/${id}`)}

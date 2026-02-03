@@ -5,6 +5,7 @@ import { useObservable } from '../../../hooks/useObservable'
 import { Card } from '../../../componentes/ui/Card'
 import { Botao } from '../../../componentes/ui/Botao'
 import { Input } from '../../../componentes/ui/Input'
+import { formatarTelefone } from '../../../utils/validacoes'
 
 const TEMPO_DEBOUNCE_MS = 300
 
@@ -119,7 +120,9 @@ export function VincularTutorModal({
 
                   <div className="text-center sm:text-left">
                     <p className="font-semibold">{tutor.nome}</p>
-                    <p className="text-sm text-gray-600">{tutor.email}</p>
+                    <p className="text-sm text-gray-600">
+                      {formatarTelefone(tutor.telefone)}
+                    </p>
                   </div>
                 </div>
 
