@@ -145,6 +145,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Busca com debounce e carregamento contextual 
 - Facades centralizam busca/paginação para evitar chamadas duplicadas.
 - Modais de vínculo seguem o mesmo padrão de busca e paginação.
+- Cards de listagem padronizados e com key estável nos mapas.
 
 
 Telas de Detalhe (Pets e Tutores)
