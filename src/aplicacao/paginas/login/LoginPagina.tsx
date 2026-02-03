@@ -8,6 +8,8 @@ import { FormularioLogin } from "./compomentes/FormularioLogin";
 export function LoginPagina() {
   const navigate = useNavigate();
   const location = useLocation();
+  const mensagemSessao =
+    (location.state as { mensagem?: string } | null)?.mensagem ?? null;
 
   const estado = useObservable(
     autenticacaoEstado.estado$,
@@ -28,21 +30,27 @@ export function LoginPagina() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <FormularioLogin
-        username={usuario}
-        password={senha}
-        carregando={estado.carregando}
-        erro={estado.erro}
-        onUsernameChange={setUsuario}
-        onPasswordChange={setSenha}
-        onSubmit={() =>
-          autenticacaoFacade.login({
-            username: usuario,
-            password: senha,
-          })
-        }
-      />
+      <div className="w-full max-w-sm space-y-4">
+        {mensagemSessao && (
+          <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-md px-4 py-3 text-center">
+            {mensagemSessao}
+          </div>
+        )}
+        <FormularioLogin
+          username={usuario}
+          password={senha}
+          carregando={estado.carregando}
+          erro={estado.erro}
+          onUsernameChange={setUsuario}
+          onPasswordChange={setSenha}
+          onSubmit={() =>
+            autenticacaoFacade.login({
+              username: usuario,
+              password: senha,
+            })
+          }
+        />
+      </div>
     </div>
   );
 }
-

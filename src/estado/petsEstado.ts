@@ -43,6 +43,14 @@ class PetsEstado {
     })
   }
 
+  finalizarCarregamento() {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      carregando: false,
+      erro: undefined,
+    })
+  }
+
   definirCriando() {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,

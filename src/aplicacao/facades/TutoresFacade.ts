@@ -2,6 +2,7 @@
 import type { Tutor } from '../../dominio/modelos/Tutor'
 import { tutoresEstado } from '../../estado/tutoresEstado'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
+import { erroEh401 } from '../utils/errosHttp'
 
 class TutoresFacade {
 
@@ -45,8 +46,11 @@ class TutoresFacade {
       )
       
 
-    } catch {
-      tutoresEstado.definirErro('Erro ao carregar tutores')
+    } catch (erro) {
+      if (erroEh401(erro)) {
+        tutoresEstado.finalizarCarregamento()
+        return
+      }
     }
   }
 

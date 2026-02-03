@@ -1,6 +1,7 @@
 import { petsEstado } from '../../estado/petsEstado'
 import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
 import type { Pet } from '../../dominio/modelos/Pet'
+import { erroEh401 } from '../utils/errosHttp'
 
 const petsServico = new PetsServico()
 
@@ -44,8 +45,11 @@ class PetsFacade {
       )
       
 
-    } catch {
-      petsEstado.definirErro('Erro ao carregar tutores')
+    } catch (erro) {
+      if (erroEh401(erro)) {
+        petsEstado.finalizarCarregamento()
+        return
+      }
     }
   }
 

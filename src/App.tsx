@@ -6,7 +6,11 @@ export default function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const onLogout = () => navigate('/login', { replace: true })
+    const onLogout = () =>
+      navigate('/login', {
+        replace: true,
+        state: { mensagem: 'Sessão expirada. Faça login novamente.' },
+      })
 
     window.addEventListener('auth:logout', onLogout)
     return () => window.removeEventListener('auth:logout', onLogout)

@@ -49,6 +49,14 @@ class TutoresEstado {
     })
   }
 
+  finalizarCarregamento() {
+    this.estadoInterno$.next({
+      ...this.estadoInterno$.value,
+      carregando: false,
+      erro: null,
+    })
+  }
+
   definirPetsDisponiveis(pets: PetVinculado[]) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
