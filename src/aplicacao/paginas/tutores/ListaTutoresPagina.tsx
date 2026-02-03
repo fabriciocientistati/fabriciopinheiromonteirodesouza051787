@@ -101,11 +101,11 @@ export function ListaTutoresPagina() {
             </p>
           ) : (
             <>
-              {/* {carregando && (
+              {carregando && (
                 <p className="text-gray-500 text-sm px-2 pb-2">
                   Atualizando lista...
                 </p>
-              )} */}
+              )}
               <ListaTutores
                 tutores={itens}
                 onSelecionar={id => navigate(`/tutores/${id}`)}

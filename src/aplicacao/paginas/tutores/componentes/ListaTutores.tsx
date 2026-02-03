@@ -3,6 +3,7 @@ import type { Tutor } from '../../../../dominio/modelos/Tutor'
 import { Botao } from '../../../componentes/ui/Botao'
 import { CardListagem } from '../../../componentes/ui/CardListagem'
 import { ConfirmacaoModal } from '../../../componentes/ui/ConfirmacaoModal'
+import { formatarTelefone } from '../../../utils/validacoes'
 
 interface ListaTutoresProps {
   tutores: Tutor[]
@@ -22,36 +23,40 @@ export function ListaTutores({
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tutores.map(tutor => (
-          <CardListagem
-            key={tutor.id}
-            titulo={tutor.nome}
-            linhas={[tutor.email, tutor.telefone]}
-            imagemUrl={tutor.foto?.url}
-            imagemAlt={`Foto do tutor ${tutor.nome}`}
-            acoes={
-              <>
-                <Botao onClick={() => onSelecionar(tutor.id)} className="w-full">
-                  Detalhar
-                </Botao>
-                <Botao
-                  variante="laranja"
-                  onClick={() => onEditar(tutor.id)}
-                  className="w-full"
-                >
-                  Editar
-                </Botao>
-                <Botao
-                  variante="perigo"
-                  onClick={() => setTutorParaExcluir(tutor)}
-                  className="w-full"
-                >
-                  Excluir
-                </Botao>
-              </>
-            }
-          />
-        ))}
+        {tutores.map(tutor => {
+          const telefoneFormatado = formatarTelefone(tutor.telefone)
+
+          return (
+            <CardListagem
+              key={tutor.id}
+              titulo={tutor.nome}
+              linhas={[telefoneFormatado]}
+              imagemUrl={tutor.foto?.url}
+              imagemAlt={`Foto do tutor ${tutor.nome}`}
+              acoes={
+                <>
+                  <Botao onClick={() => onSelecionar(tutor.id)} className="w-full">
+                    Detalhar
+                  </Botao>
+                  <Botao
+                    variante="laranja"
+                    onClick={() => onEditar(tutor.id)}
+                    className="w-full"
+                  >
+                    Editar
+                  </Botao>
+                  <Botao
+                    variante="perigo"
+                    onClick={() => setTutorParaExcluir(tutor)}
+                    className="w-full"
+                  >
+                    Excluir
+                  </Botao>
+                </>
+              }
+            />
+          )
+        })}
       </div>
 
       <ConfirmacaoModal

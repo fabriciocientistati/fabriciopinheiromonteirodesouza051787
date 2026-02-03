@@ -98,11 +98,11 @@ export function ListaPetsPagina() {
           </p>
         ) : (
           <>
-            {/* {carregando && (
+            {carregando && (
               <p className="text-gray-500 text-sm px-2 pb-2">
                 Atualizando lista...
               </p>
-            )} */}
+            )}
             <ListaPets
               pets={itens}
               onSelecionar={id => navigate(`/pets/${id}`)}

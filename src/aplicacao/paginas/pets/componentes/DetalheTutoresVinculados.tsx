@@ -7,6 +7,7 @@ import { Modal } from '../../../componentes/ui/Modal'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { petsFacade } from '../../../facades/PetsFacade'
 import { VincularTutorModal } from './VincularTutorModal'
+import { formatarTelefone } from '../../../utils/validacoes'
 
 interface Props {
   petId: number
@@ -49,8 +50,9 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
 
               <div className="flex-1 text-center sm:text-left">
                 <p className="font-medium">{tutor.nome}</p>
-                <p className="text-sm text-gray-600">{tutor.email}</p>
-                <p className="text-sm text-gray-600">{tutor.telefone}</p>
+                <p className="text-sm text-gray-600">
+                  {formatarTelefone(tutor.telefone)}
+                </p>
               </div>
 
               <Botao

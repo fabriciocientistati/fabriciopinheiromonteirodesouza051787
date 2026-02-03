@@ -4,6 +4,7 @@ import { Input } from '../../../componentes/ui/Input'
 import { Botao } from '../../../componentes/ui/Botao'
 import { UploadFoto } from '../../../componentes/ui/UploadFoto'
 import { useNavigate } from 'react-router-dom'
+import { validarNumeroPositivo, validarObrigatorio } from '../../../utils/validacoes'
 
 interface FormularioPetProps {
   petInicial?: Pet
@@ -38,9 +39,9 @@ export function FormularioPet({
   function validar() {
     const novoErros: typeof erros = {}
 
-    if (!nome.trim()) novoErros.nome = 'O nome é obrigatório.'
-    if (!raca.trim()) novoErros.raca = 'A raça é obrigatória.'
-    if (idade === '' || idade <= 0)
+    if (!validarObrigatorio(nome)) novoErros.nome = 'O nome é obrigatório.'
+    if (!validarObrigatorio(raca)) novoErros.raca = 'A raça é obrigatória.'
+    if (!validarNumeroPositivo(idade))
       novoErros.idade = 'A idade deve ser maior que zero.'
 
     setErros(novoErros)
