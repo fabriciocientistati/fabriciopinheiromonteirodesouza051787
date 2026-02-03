@@ -1,18 +1,19 @@
-import { Route } from 'react-router-dom'
+import { Route, Navigate } from 'react-router-dom'
 import { lazy } from 'react'
 import { LayoutPublico } from '../layouts/LayoutPublico'
-import { LoginPagina } from '../paginas/login/LoginPagina'
 
-export const Login = lazy(() => 
+const LoginPagina = lazy(() =>
   import('../paginas/login/LoginPagina').then(modulo => ({
     default: modulo.LoginPagina,
   })),
 )
 
 export function RotasPublicas() {
-    return (
+  return (
     <Route element={<LayoutPublico />}>
-        <Route path="/login" element={<LoginPagina  />} />
+      <Route path="/login" element={<LoginPagina />} />
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Route>
-    )
+  )
 }

@@ -111,7 +111,7 @@ export function configurarInterceptadorJwt() {
           autenticacaoEstado.deslogar()
           rejeitarFila(erroRefresh)
 
-          window.location.href = '/login'
+          window.dispatchEvent(new CustomEvent('auth:logout'))
 
           return Promise.reject(erroRefresh)
         } finally {
