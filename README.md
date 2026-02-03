@@ -140,6 +140,12 @@ Os fluxos de listagem seguem o mesmo padrão arquitetural:
 
 Esse desenho garante consistência, reutilização e facilidade de manutenção.
 
+## Ajustes Recentes (Busca e Paginação)
+
+- Busca com debounce e carregamento contextual 
+- Facades centralizam busca/paginação para evitar chamadas duplicadas.
+- Modais de vínculo seguem o mesmo padrão de busca e paginação.
+
 
 Telas de Detalhe (Pets e Tutores)
 
