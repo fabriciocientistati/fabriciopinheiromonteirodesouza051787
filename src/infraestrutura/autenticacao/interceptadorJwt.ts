@@ -109,7 +109,9 @@ export function configurarInterceptadorJwt() {
           return clienteHttp(originalRequest)
         } catch (erroRefresh) {
           limparTokens()
-          autenticacaoEstado.deslogar()
+          autenticacaoEstado.definirErro(
+            'Sessão expirada. Faça login novamente.',
+          )
           rejeitarFila(erroRefresh)
 
           window.dispatchEvent(new CustomEvent('auth:logout'))
