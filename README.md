@@ -147,7 +147,8 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Modais de vínculo seguem o mesmo padrão de busca e paginação.
 - Cards de listagem padronizados e com key estável nos mapas.
 - Padronização de nomenclatura de componentes (ex.: ListaTutores) e alinhamento entre Pets/Tutores.
-- Componente comum de card para listagens e modal de confirmacao reutilizavel.
+- Componente comum de card para listagens e modal de confirmação reutilizável.
+- Normalização de mensagens e acentuação em textos de UI.
 
 
 Telas de Detalhe (Pets e Tutores)

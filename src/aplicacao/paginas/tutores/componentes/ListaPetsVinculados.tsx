@@ -22,7 +22,7 @@ export function ListaPetsVinculados({
           <div>
             <p className="font-semibold">{pet.nome}</p>
             <p className="text-sm text-gray-600">
-              {pet.raca} â€” {pet.idade} anos
+              {pet.raca} • {pet.idade} anos
             </p>
           </div>
 

@@ -154,7 +154,7 @@ export function VincularTutorModal({
           </Botao>
 
           <span className="text-sm text-gray-700">
-            Pagina <strong>{estadoTutores.pagina + 1}</strong> de{' '}
+            Página <strong>{estadoTutores.pagina + 1}</strong> de{' '}
             <strong>{estadoTutores.contadorPagina}</strong>
           </span>
 

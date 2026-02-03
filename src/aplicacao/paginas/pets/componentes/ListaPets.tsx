@@ -23,10 +23,10 @@ export function ListaPets({
     <>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {pets.map(pet => {
-          const racaTexto = pet.raca ?? 'Sem raca'
+          const racaTexto = pet.raca ?? 'Sem raça'
           const idadeTexto =
-            pet.idade != null ? `${pet.idade} anos` : 'Idade nao informada'
-          const detalhes = `${racaTexto} - ${idadeTexto}`
+            pet.idade != null ? `${pet.idade} anos` : 'Idade não informada'
+          const detalhes = `${racaTexto} • ${idadeTexto}`
 
           return (
             <CardListagem
