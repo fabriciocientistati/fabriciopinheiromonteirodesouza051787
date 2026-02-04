@@ -143,7 +143,7 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
             tutorParaDesvincular.id,
             petId
           )
-          await petsFacade.buscarPorId(petId)
+          await petsFacade.recarregarDetalheSilencioso(petId)
           setTutorParaDesvincular(null)
         }}
       >
@@ -156,7 +156,7 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
         onFechar={() => setVincularAberto(false)}
         onVincular={async idTutor => {
           await tutoresFacade.vincularPet(idTutor, petId)
-          await petsFacade.buscarPorId(petId)
+          await petsFacade.recarregarDetalheSilencioso(petId)
         }}
         tutoresVinculados={tutores}
       />

@@ -1,95 +1,92 @@
-﻿import { useEffect, useMemo, useRef, useState } from "react";
-import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado";
-import { petsFacade } from "../../../facades/PetsFacade";
-import { useObservable } from "../../../hooks/useObservable";
-import { Card } from "../../../componentes/ui/Card";
-import { Botao } from "../../../componentes/ui/Botao";
-import { Input } from "../../../componentes/ui/Input";
+import { useEffect, useMemo, useState } from 'react'
+import type { PetVinculado } from '../../../../dominio/modelos/PetVinculado'
+import { petsFacade } from '../../../facades/PetsFacade'
+import { useObservable } from '../../../hooks/useObservable'
+import { Card } from '../../../componentes/ui/Card'
+import { Botao } from '../../../componentes/ui/Botao'
+import { Input } from '../../../componentes/ui/Input'
+import { Toast } from '../../../componentes/ui/Toast'
 
-const TEMPO_DEBOUNCE_MS = 300;
+const TEMPO_DEBOUNCE_MS = 300
+
+interface Props {
+  aberto: boolean
+  onFechar: () => void
+  onVincular: (idPet: number) => Promise<void>
+  petsVinculados?: PetVinculado[]
+}
 
 export function VincularPetModal({
   aberto,
   onFechar,
   onVincular,
   petsVinculados = [],
-}: {
-  aberto: boolean;
-  onFechar: () => void;
-  onVincular: (idPet: number) => Promise<void>;
-  petsVinculados?: PetVinculado[];
-}) {
+}: Props) {
   const estadoPets = useObservable(
     petsFacade.estado$,
     petsFacade.obterSnapshot(),
-  );
+  )
 
-  const [busca, setBusca] = useState("");
-  const [mensagemSucesso, setMensagemSucesso] = useState("");
-  const timeoutSucessoRef = useRef<number | null>(null);
+  const [busca, setBusca] = useState('')
+  const [mensagemSucesso, setMensagemSucesso] = useState('')
 
   const petsVinculadosIds = useMemo(
-    () => new Set(petsVinculados.map((pet) => pet.id)),
+    () => new Set(petsVinculados.map(pet => pet.id)),
     [petsVinculados],
-  );
-  
+  )
+
   useEffect(() => {
-    if (!aberto) return;
+    if (!aberto) return
 
     const timeout = setTimeout(() => {
-      petsFacade.definirBusca(busca.trim());
-    }, TEMPO_DEBOUNCE_MS);
+      petsFacade.definirBusca(busca.trim())
+    }, TEMPO_DEBOUNCE_MS)
 
-    return () => clearTimeout(timeout);
-  }, [busca, aberto]);
+    return () => clearTimeout(timeout)
+  }, [busca, aberto])
 
   async function vincularPet(idPet: number) {
-    if (petsVinculadosIds.has(idPet)) return;
+    if (petsVinculadosIds.has(idPet)) return
 
-    await onVincular(idPet);
-    setMensagemSucesso("Pet vinculado com sucesso.");
-    if (timeoutSucessoRef.current) {
-      window.clearTimeout(timeoutSucessoRef.current);
-    }
-    timeoutSucessoRef.current = window.setTimeout(() => {
-      setMensagemSucesso("");
-      timeoutSucessoRef.current = null;
-    }, 2000);
-    setBusca("");
-    petsFacade.definirBusca("");
+    await onVincular(idPet)
+    setMensagemSucesso('Pet vinculado com sucesso.')
+
+    setBusca('')
+    petsFacade.definirBusca('')
   }
 
   function fecharModal() {
-    if (timeoutSucessoRef.current) {
-      window.clearTimeout(timeoutSucessoRef.current);
-      timeoutSucessoRef.current = null;
-    }
-    setMensagemSucesso("");
-    setBusca("");
-    petsFacade.definirBusca("");
-    onFechar();
+    setMensagemSucesso('')
+    setBusca('')
+    petsFacade.definirBusca('')
+    onFechar()
   }
 
-  if (!aberto) return null;
-  
+  if (!aberto) return null
 
-  const podeIrAnterior = estadoPets.pagina > 0;
-  const podeIrProxima = estadoPets.pagina + 1 < estadoPets.contadorPagina;
+  const podeIrAnterior = estadoPets.pagina > 0
+  const podeIrProxima = estadoPets.pagina + 1 < estadoPets.contadorPagina
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg lg:max-w-2xl xl:max-w-3xl p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-hidden">
+      <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg lg:max-w-2xl xl:max-w-3xl p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-hidden">
         <h2 className="text-lg font-semibold">Vincular Pet</h2>
 
         <Input
           placeholder="Buscar pets..."
           value={busca}
-          onChange={(e) => setBusca(e.target.value)}
+          onChange={e => setBusca(e.target.value)}
           className="w-full"
         />
 
         {mensagemSucesso && (
-          <p className="text-emerald-600 text-sm">{mensagemSucesso}</p>
+          <Toast
+            mensagem={mensagemSucesso}
+            tipo="sucesso"
+            tempoMs={2000}
+            onFechar={() => setMensagemSucesso('')}
+            posicao="modal"
+          />
         )}
 
         {estadoPets.carregando && (
@@ -98,8 +95,8 @@ export function VincularPetModal({
         {estadoPets.erro && <p className="text-red-600">{estadoPets.erro}</p>}
 
         <ul className="space-y-2 max-h-64 sm:max-h-72 lg:max-h-80 overflow-y-auto">
-          {estadoPets.itens.map((pet) => {
-            const vinculado = petsVinculadosIds.has(pet.id);
+          {estadoPets.itens.map(pet => {
+            const vinculado = petsVinculadosIds.has(pet.id)
 
             return (
               <Card
@@ -108,7 +105,7 @@ export function VincularPetModal({
               >
                 <div className="flex items-center gap-3 sm:gap-4">
                   <img
-                    src={pet.foto?.url || "/sem-foto.png"}
+                    src={pet.foto?.url || '/sem-foto.png'}
                     alt={pet.nome}
                     className="w-12 h-12 rounded-full object-cover border"
                   />
@@ -118,7 +115,7 @@ export function VincularPetModal({
                       {pet.nome}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {pet.raca ?? "Sem raça"}
+                      {pet.raca ?? 'Sem raca'}
                     </p>
                   </div>
                 </div>
@@ -129,10 +126,10 @@ export function VincularPetModal({
                   onClick={() => vincularPet(pet.id)}
                   className="w-full sm:w-auto"
                 >
-                  {vinculado ? "Vinculado" : "Vincular"}
+                  {vinculado ? 'Vinculado' : 'Vincular'}
                 </Botao>
               </Card>
-            );
+            )
           })}
         </ul>
 
@@ -142,7 +139,7 @@ export function VincularPetModal({
             disabled={!podeIrAnterior}
             onClick={() => petsFacade.irParaPagina(0)}
           >
-            «
+            &lt;&lt;
           </Botao>
 
           <Botao
@@ -150,11 +147,11 @@ export function VincularPetModal({
             disabled={!podeIrAnterior}
             onClick={() => petsFacade.irParaPagina(estadoPets.pagina - 1)}
           >
-            ‹
+            &lt;
           </Botao>
 
           <span className="text-sm text-gray-700">
-            Página <strong>{estadoPets.pagina + 1}</strong> de{" "}
+            Pagina <strong>{estadoPets.pagina + 1}</strong> de{' '}
             <strong>{estadoPets.contadorPagina}</strong>
           </span>
 
@@ -163,24 +160,26 @@ export function VincularPetModal({
             disabled={!podeIrProxima}
             onClick={() => petsFacade.irParaPagina(estadoPets.pagina + 1)}
           >
-            ›
+            &gt;
           </Botao>
 
           <Botao
             variante="secundario"
             disabled={!podeIrProxima}
-            onClick={() =>
-              petsFacade.irParaPagina(estadoPets.contadorPagina - 1)
-            }
+            onClick={() => petsFacade.irParaPagina(estadoPets.contadorPagina - 1)}
           >
-            »
+            &gt;&gt;
           </Botao>
         </div>
 
-        <Botao variante="perigo" onClick={fecharModal} className="w-full sm:w-auto sm:self-end">
+        <Botao
+          variante="perigo"
+          onClick={fecharModal}
+          className="w-full sm:w-auto sm:self-end"
+        >
           Fechar
         </Botao>
       </div>
     </div>
-  );
+  )
 }

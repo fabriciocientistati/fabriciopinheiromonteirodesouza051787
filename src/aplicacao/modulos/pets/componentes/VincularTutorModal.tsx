@@ -1,10 +1,11 @@
-﻿import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Tutor } from '../../../../dominio/modelos/Tutor'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { useObservable } from '../../../hooks/useObservable'
 import { Card } from '../../../componentes/ui/Card'
 import { Botao } from '../../../componentes/ui/Botao'
 import { Input } from '../../../componentes/ui/Input'
+import { Toast } from '../../../componentes/ui/Toast'
 import { formatarTelefone } from '../../../utils/validacoes'
 
 const TEMPO_DEBOUNCE_MS = 300
@@ -29,7 +30,6 @@ export function VincularTutorModal({
 
   const [busca, setBusca] = useState('')
   const [mensagemSucesso, setMensagemSucesso] = useState('')
-  const timeoutSucessoRef = useRef<number | null>(null)
 
   const tutoresVinculadosIds = useMemo(
     () => new Set(tutoresVinculados.map(tutor => tutor.id)),
@@ -50,25 +50,11 @@ export function VincularTutorModal({
     await onVincular(idTutor)
     setMensagemSucesso('Tutor vinculado com sucesso.')
 
-    if (timeoutSucessoRef.current) {
-      window.clearTimeout(timeoutSucessoRef.current)
-    }
-
-    timeoutSucessoRef.current = window.setTimeout(() => {
-      setMensagemSucesso('')
-      timeoutSucessoRef.current = null
-    }, 2000)
-
     setBusca('')
     tutoresFacade.definirBusca('')
   }
 
   function fecharModal() {
-    if (timeoutSucessoRef.current) {
-      window.clearTimeout(timeoutSucessoRef.current)
-      timeoutSucessoRef.current = null
-    }
-
     setMensagemSucesso('')
     setBusca('')
     tutoresFacade.definirBusca('')
@@ -82,7 +68,7 @@ export function VincularTutorModal({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg lg:max-w-2xl xl:max-w-3xl p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-hidden">
+      <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg lg:max-w-2xl xl:max-w-3xl p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-hidden">
         <h2 className="text-lg font-semibold">Vincular Tutor</h2>
 
         <Input
@@ -93,7 +79,13 @@ export function VincularTutorModal({
         />
 
         {mensagemSucesso && (
-          <p className="text-emerald-600 text-sm">{mensagemSucesso}</p>
+          <Toast
+            mensagem={mensagemSucesso}
+            tipo="sucesso"
+            tempoMs={2000}
+            onFechar={() => setMensagemSucesso('')}
+            posicao="modal"
+          />
         )}
 
         {estadoTutores.carregando && (
@@ -147,7 +139,7 @@ export function VincularTutorModal({
             disabled={!podeIrAnterior}
             onClick={() => tutoresFacade.irParaPagina(0)}
           >
-            «
+            &lt;&lt;
           </Botao>
 
           <Botao
@@ -155,11 +147,11 @@ export function VincularTutorModal({
             disabled={!podeIrAnterior}
             onClick={() => tutoresFacade.irParaPagina(estadoTutores.pagina - 1)}
           >
-            ‹
+            &lt;
           </Botao>
 
           <span className="text-sm text-gray-700">
-            Página <strong>{estadoTutores.pagina + 1}</strong> de{' '}
+            Pagina <strong>{estadoTutores.pagina + 1}</strong> de{' '}
             <strong>{estadoTutores.contadorPagina}</strong>
           </span>
 
@@ -168,7 +160,7 @@ export function VincularTutorModal({
             disabled={!podeIrProxima}
             onClick={() => tutoresFacade.irParaPagina(estadoTutores.pagina + 1)}
           >
-            ›
+            &gt;
           </Botao>
 
           <Botao
@@ -178,7 +170,7 @@ export function VincularTutorModal({
               tutoresFacade.irParaPagina(estadoTutores.contadorPagina - 1)
             }
           >
-            »
+            &gt;&gt;
           </Botao>
         </div>
 

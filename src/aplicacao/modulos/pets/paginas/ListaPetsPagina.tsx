@@ -4,6 +4,7 @@ import { petsFacade } from '../../../facades/PetsFacade'
 import { Titulo } from '../../../componentes/ui/Titulo'
 import { Input } from '../../../componentes/ui/Input'
 import { Botao } from '../../../componentes/ui/Botao'
+import { Toast } from '../../../componentes/ui/Toast'
 import { ListaPets } from '../componentes/ListaPets'
 import { usePetsEstado } from '../hooks/usePetsEstado'
 import { useAutenticacao } from '../../../hooks/useAutenticacao'
@@ -30,16 +31,6 @@ export function ListaPetsPagina() {
       ?.mensagemSucesso ?? null
 
   useEffect(() => {
-    if (!mensagemSucesso) return
-
-    const timeout = setTimeout(() => {
-      navigate(location.pathname, { replace: true, state: null })
-    }, 3000)
-
-    return () => clearTimeout(timeout)
-  }, [mensagemSucesso, location.pathname, navigate])
-
-  useEffect(() => {
     petsFacade.definirBusca('')
   }, [])
 
@@ -64,9 +55,14 @@ export function ListaPetsPagina() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
       {mensagemSucesso && (
-        <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3 text-center sm:text-left">
-          {mensagemSucesso}
-        </div>
+        <Toast
+          mensagem={mensagemSucesso}
+          tipo="sucesso"
+          tempoMs={3000}
+          onFechar={() =>
+            navigate(location.pathname, { replace: true, state: null })
+          }
+        />
       )}
 
       {erro && (

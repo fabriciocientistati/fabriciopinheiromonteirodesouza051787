@@ -286,6 +286,8 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Padronização visual das listagens (Pets/Tutores), filtros e navegação, com indicador de rota ativa no sidebar.
 - Máscaras e validações reutilizáveis para telefone.
 - Máscaras aplicadas também no detalhamento de tutor.
+- Toasts de sucesso para criação/edição e vínculos (modais) com feedback leve.
+- Vinculações em detalhe usam recarregamento silencioso para não fechar o modal.
 - Cadastro de tutor e pet permite pré-vincular itens via modal (antes de salvar).
 - Listas de pré-vínculo exibem imagem, nome e detalhes básicos.
 - Destaque visual dos nomes em listagens, detalhes e modais de vínculo (pets e tutores).

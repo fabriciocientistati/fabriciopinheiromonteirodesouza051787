@@ -366,7 +366,7 @@ class TutoresFacade {
       tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
 
     } catch {
-      tutoresEstado.definirErro('Erro ao remover vÃ­nculo do pet')
+      tutoresEstado.definirErro('Erro ao remover vínculo do pet')
     }
   }
 

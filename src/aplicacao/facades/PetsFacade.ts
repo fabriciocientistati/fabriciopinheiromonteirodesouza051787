@@ -149,6 +149,15 @@ async buscarPorId(id: number) {
   } 
 }  
 
+  async recarregarDetalheSilencioso(id: number) {
+    try {
+      const pet = await petsServico.buscarPorId(id)
+      petsEstado.definirDetalhe(pet)
+    } catch {
+      petsEstado.definirErro('Erro ao carregar detalhes do pet')
+    }
+  }
+
 async definirBusca(busca: string) {
       const buscaNormalizada = busca.trim()
 
