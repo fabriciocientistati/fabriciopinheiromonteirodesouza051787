@@ -40,7 +40,7 @@ export function FormularioPet({
     const novoErros: typeof erros = {}
 
     if (!validarObrigatorio(nome)) novoErros.nome = 'O nome é obrigatório.'
-    if (!validarObrigatorio(raca)) novoErros.raca = 'A raça é obrigatória.'
+    if (!validarObrigatorio(raca)) novoErros.raca = 'A espécie é obrigatória.'
     if (!validarNumeroPositivo(idade))
       novoErros.idade = 'A idade deve ser maior que zero.'
 
@@ -81,7 +81,7 @@ export function FormularioPet({
         />
 
         <Input
-          label="Raça"
+          label="Espécie"
           value={raca}
           onChange={e => setRaca(e.target.value)}
           required

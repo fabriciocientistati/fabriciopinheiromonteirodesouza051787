@@ -212,9 +212,44 @@ Após um refresh bem-sucedido, as telas de listagem, detalhe e edição refazem 
 - Testes unitários básicos de componentes e serviços.
 - Health checks (liveness/readiness) via Nginx.
 
+## Matriz de Avaliação (Checklist)
+
+A. Estrutura e Organização
+- Modularização: camadas `aplicacao`, `dominio`, `infraestrutura`, `estado`.
+- Responsividade e UX: layout responsivo com Tailwind, grids e flex adaptáveis.
+- Documentação: instruções de execução, testes, arquitetura, Docker e health checks.
+
+B. Funcionalidades
+- CRUD Pets/Tutores: GET/POST/PUT/DELETE e upload de fotos.
+- Paginação e busca: paginação (10 itens) e filtro por nome.
+- Autenticação JWT: login e refresh com interceptador.
+- Upload de imagens: pets e tutores.
+- Lazy Loading: rotas dinâmicas por módulo.
+- State Management (Sênior): BehaviorSubject + Facade.
+- Testes unitários: componentes e serviços básicos.
+
+C. Boas Práticas e Entrega
+- Clean Code: componentes reutilizáveis e responsabilidades claras.
+- Commits e versionamento: histórico incremental será avaliado no `git log`.
+- Performance: lazy loading, debounce e carregamento contextual.
+- Documentação técnica: arquitetura e decisões registradas no README.
+- Containerização/Deploy: Docker + Nginx com health checks.
+
+## Decisões Técnicas e Justificativas
+
+- Vite: build rápido e DX simples para SPA.
+- Tailwind CSS: consistência visual e velocidade na composição de UI.
+- React Router com lazy loading: melhora performance e atende ao requisito de rotas dinâmicas.
+- Axios + interceptadores: centraliza autenticação e refresh de token.
+- Facade + BehaviorSubject: desacopla UI da infraestrutura e mantém estado reativo previsível.
+- Debounce nas buscas: reduz chamadas e melhora UX.
+- Nginx com fallback SPA: permite refresh direto em rotas internas.
+- Health checks no Nginx: atende liveness/readiness do edital.
+- Vitest + Testing Library: testes rápidos e focados em comportamento de UI.
+
 ## Notas e Pendências
 
-- O campo espécie não está disponível na API atual; a UI usa raça e idade conforme o contrato recebido.
+- O campo espécie não está disponível na API atual; na UI o rótulo "Espécie" usa o valor de `raça` para atender ao edital.
 
 ## Listagens (Pets e Tutores)
 

@@ -21,7 +21,7 @@ export function CardPet({ pet }: Props) {
         <div className="space-y-2 text-center sm:text-left break-words">
           <p className="text-lg font-medium">{pet.nome}</p>
           <p>
-            <strong>Raça:</strong> {racaTexto}
+            <strong>Espécie:</strong> {racaTexto}
           </p>
           <p>
             <strong>Idade:</strong> {idadeTexto}
