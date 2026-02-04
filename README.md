@@ -285,6 +285,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Listas de pré-vínculo exibem imagem, nome e detalhes básicos.
 - Remoção de foto em edição sincroniza listagem e detalhe (pets e tutores).
 - Troca/remoção de foto atualiza preview e evita reaparecer imagem anterior.
+- Logout e sessão expirada tratados pelo estado de autenticação (sem eventos globais).
 
 
 Telas de Detalhe (Pets e Tutores)

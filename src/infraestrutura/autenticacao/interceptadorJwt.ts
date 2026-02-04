@@ -1,4 +1,4 @@
-
+﻿
 import type { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { clienteHttp } from '../http/clienteHttp'
 import { autenticacaoServico } from '../servicos/AutenticacaoServico'
@@ -126,3 +126,4 @@ export function configurarInterceptadorJwt() {
     },
   )
 }
+
