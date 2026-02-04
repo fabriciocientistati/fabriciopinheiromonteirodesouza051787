@@ -12,6 +12,7 @@ import {
 
 class AutenticacaoFacade {
   async login(credenciais: CredenciaisLogin) {
+    autenticacaoEstado.limparErro()
     autenticacaoEstado.definirCarregando();
 
     try {

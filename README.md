@@ -289,6 +289,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Falha no login limpa tokens antigos para evitar refresh indevido.
 - Logout limpa estados de Pets/Tutores para evitar dados residuais.
 - Logout manual não preserva rota; sessão expirada mantém retorno para a rota anterior.
+- Mensagem de sessão expirada vem do estado de autenticação (sem location.state).
 
 
 Telas de Detalhe (Pets e Tutores)

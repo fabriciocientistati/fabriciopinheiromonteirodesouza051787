@@ -8,14 +8,14 @@ import { FormularioLogin } from "./compomentes/FormularioLogin";
 export function LoginPagina() {
   const navigate = useNavigate();
   const location = useLocation();
-  const mensagemSessao =
-    (location.state as { mensagem?: string } | null)?.mensagem ?? null;
 
   const estado = useObservable(
     autenticacaoEstado.estado$,
     autenticacaoFacade.obterSnapshot()
   );
-  const erroLogin = mensagemSessao ? undefined : estado.erro;
+  const erroSessao =
+    estado.erro && estado.erro.includes("Sessão expirada") ? estado.erro : null;
+  const erroLogin = erroSessao ? undefined : estado.erro;
 
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
@@ -23,7 +23,7 @@ export function LoginPagina() {
   useEffect(() => {
     if (estado.autenticado) {
       const state = location.state as { from?: { pathname: string } } | null;
-      const destino = state?.from?.pathname ?? "/";
+      const destino = state?.from?.pathname ?? "/pets";
 
       navigate(destino, { replace: true });
     }
@@ -32,9 +32,9 @@ export function LoginPagina() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f3f5fb] px-4">
       <div className="w-full max-w-sm space-y-4">
-        {mensagemSessao && (
+        {erroSessao && (
           <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-md px-4 py-3 text-center">
-            {mensagemSessao}
+            {erroSessao}
           </div>
         )}
         <FormularioLogin
@@ -44,12 +44,12 @@ export function LoginPagina() {
           erro={erroLogin}
           onUsernameChange={setUsuario}
           onPasswordChange={setSenha}
-          onSubmit={() =>
+          onSubmit={() => {
             autenticacaoFacade.login({
               username: usuario,
               password: senha,
             })
-          }
+          }}
         />
       </div>
     </div>

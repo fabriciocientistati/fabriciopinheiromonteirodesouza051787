@@ -5,9 +5,7 @@ import { FullPageFallback } from '../componentes/FullPageFallback'
 export function RotaProtegida() {
   const estado = useAutenticacao()
   const location = useLocation()
-  const mensagemSessao = estado.erro?.includes('Sessão expirada')
-    ? estado.erro
-    : undefined
+  const erroSessaoExpirada = estado.erro?.includes('Sessão expirada')
 
   if (estado.carregando) {
     return <FullPageFallback />
@@ -18,9 +16,7 @@ export function RotaProtegida() {
       <Navigate
         to="/login"
         replace
-        state={
-          mensagemSessao ? { from: location, mensagem: mensagemSessao } : undefined
-        }
+        state={erroSessaoExpirada ? { from: location } : undefined}
       />
     )
   }

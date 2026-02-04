@@ -42,6 +42,13 @@ class GerenteAutenticacaoEstado {
         })
     }
 
+    limparErro() {
+        this.estadoInterno$.next({
+            ...this.estadoInterno$.value,
+            erro: undefined,
+        })
+    }
+
     registrarAtualizacaoToken() {
         this.estadoInterno$.next({
             ...this.estadoInterno$.value,
