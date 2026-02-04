@@ -64,13 +64,13 @@ export function ListaPetsPagina() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
       {mensagemSucesso && (
-        <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3">
+        <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3 text-center sm:text-left">
           {mensagemSucesso}
         </div>
       )}
 
       {erro && (
-        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3 text-center sm:text-left">
           {erro}
         </div>
       )}
@@ -87,18 +87,22 @@ export function ListaPetsPagina() {
       </div>
 
       <section className="space-y-4">
-        <h3 className="text-sm font-semibold text-gray-700 uppercase">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide text-center sm:text-left">
           Filtro de Busca
         </h3>
-
-        <Input
-          placeholder="Buscar pet por nome"
-          value={busca}
-          onChange={e => setBusca(e.target.value)}
-        />
+        <div className="flex justify-center sm:justify-start">
+          <div className="w-full max-w-2xl">
+            <Input
+              placeholder="Buscar pet por nome"
+              value={busca}
+              onChange={e => setBusca(e.target.value)}
+              className="w-full"
+            />
+          </div>
+        </div>
       </section>
 
-      <section className="bg-white border rounded-lg shadow-sm p-4 relative">
+      <section className="bg-white border rounded-lg shadow-sm p-2 sm:p-4 relative">
         {carregando && itens.length > 0 && (
           <div className="absolute right-3 top-3 text-xs text-gray-500 bg-white/90 px-2 py-1 rounded">
             Atualizando lista...
@@ -120,31 +124,37 @@ export function ListaPetsPagina() {
         )}
       </section>
 
-      <section className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 p-4 rounded-lg border max-w-xl">
-        <Botao
-          disabled={pagina === 0}
-          variante="secundario"
-          onClick={() => petsFacade.paginaAnterior()}
-        >
-          Anterior
-        </Botao>
+      <section className="space-y-2">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide text-center sm:text-left">
+          Navegação
+        </h3>
 
-        <span>
-          Página <strong>{paginaAtual}</strong> de{' '}
-          <strong>{totalPaginas}</strong>
-        </span>
+        <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4 text-sm bg-gray-50 p-4 rounded-lg border max-w-xl">
+          <Botao
+            disabled={pagina === 0}
+            variante="secundario"
+            onClick={() => petsFacade.paginaAnterior()}
+          >
+            Anterior
+          </Botao>
 
-        <Botao
-          disabled={paginaAtual >= totalPaginas}
-          variante="secundario"
-          onClick={() => petsFacade.proximaPagina()}
-        >
-          Próxima
-        </Botao>
+          <span className="text-gray-700">
+            Página <strong>{paginaAtual}</strong> de{' '}
+            <strong>{totalPaginas}</strong>
+          </span>
 
-        <span className="ml-2 text-gray-600">
-          Total de pets: {total}
-        </span>
+          <Botao
+            disabled={paginaAtual >= totalPaginas}
+            variante="secundario"
+            onClick={() => petsFacade.proximaPagina()}
+          >
+            Próxima
+          </Botao>
+
+          <span className="ml-2 text-gray-600">
+            Total de pets: {total}
+          </span>
+        </div>
       </section>
     </div>
   )

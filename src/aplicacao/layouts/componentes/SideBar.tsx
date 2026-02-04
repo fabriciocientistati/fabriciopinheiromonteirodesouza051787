@@ -7,15 +7,14 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Botão mobile */}
       <button
         onClick={() => setAberta(true)}
+        aria-label="Abrir menu"
         className="md:hidden fixed top-4 left-4 z-30 bg-[#193282] text-white p-2 rounded-lg shadow-lg border border-[#193282] hover:bg-[#1f3da0]"
       >
         ☰
       </button>
 
-      {/* Overlay */}
       {aberta && (
         <div
           onClick={() => setAberta(false)}
@@ -23,7 +22,6 @@ export function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-30 w-64 bg-[#193282] text-white flex flex-col
@@ -32,7 +30,6 @@ export function Sidebar() {
           md:translate-x-0 md:static
         `}
       >
-        {/* Header */}
         <div className="h-16 flex items-center px-6 border-b border-[#1f3da0] justify-between">
           <span className="text-lg font-semibold tracking-wide">
             Pets & Tutores
@@ -40,21 +37,21 @@ export function Sidebar() {
 
           <button
             onClick={() => setAberta(false)}
+            aria-label="Fechar menu"
             className="md:hidden text-white/80 hover:text-white"
           >
             ✕
           </button>
         </div>
 
-        {/* Navegação */}
         <nav className="flex-1 px-4 py-6 space-y-2">
           <NavLink
             to="/tutores"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded px-4 py-2 transition ${
+              `flex items-center gap-3 rounded pr-4 pl-3 py-2 border-l-4 transition ${
                 isActive
-                  ? "bg-[#1f3da0] text-white"
-                  : "hover:bg-[#1f3da0] text-white/90"
+                  ? "bg-[#1f3da0] text-white border-emerald-500"
+                  : "border-transparent hover:bg-[#1f3da0] text-white/90"
               }`
             }
             onClick={() => setAberta(false)}
@@ -65,10 +62,10 @@ export function Sidebar() {
           <NavLink
             to="/pets"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded px-4 py-2 transition ${
+              `flex items-center gap-3 rounded pr-4 pl-3 py-2 border-l-4 transition ${
                 isActive
-                  ? "bg-[#1f3da0] text-white"
-                  : "hover:bg-[#1f3da0] text-white/90"
+                  ? "bg-[#1f3da0] text-white border-emerald-500"
+                  : "border-transparent hover:bg-[#1f3da0] text-white/90"
               }`
             }
             onClick={() => setAberta(false)}
@@ -77,7 +74,6 @@ export function Sidebar() {
           </NavLink>
         </nav>
 
-        {/* Rodapé */}
         <div className="px-4 py-4 border-t border-[#1f3da0]">
           <button
             onClick={() => autenticacaoFacade.logout()}

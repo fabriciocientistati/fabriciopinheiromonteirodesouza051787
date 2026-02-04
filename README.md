@@ -280,6 +280,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Normalização de mensagens e acentuação em textos de UI.
 - Upload de foto com label neutro.
 - Paleta de cores padronizada a partir do sidebar, com botões alinhados por ação.
+- Padronização visual das listagens (Pets/Tutores), filtros e navegação, com indicador de rota ativa no sidebar.
 - Máscaras e validações reutilizáveis para telefone/CPF/email.
 - Máscaras aplicadas também no detalhamento de tutor.
 - Validação para evitar cadastro de tutor com CPF já existente.
