@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 
 interface FormularioLoginProps {
   username: string;
@@ -19,7 +19,10 @@ export function FormularioLogin({
   onPasswordChange,
   onSubmit,
 }: FormularioLoginProps) {
-  const [erros, setErros] = useState<{ username?: string; password?: string }>({});
+  const [erros, setErros] = useState<{
+    username?: string;
+    password?: string;
+  }>({});
 
   function validar() {
     const novoErros: typeof erros = {};
@@ -38,24 +41,34 @@ export function FormularioLogin({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm space-y-6 border border-gray-200"
-    >
-      <h1 className="text-2xl font-semibold text-gray-800 text-center">
-        Acessar Sistema
-      </h1>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+          Autenticação
+        </p>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">
+          Bem-vindo de volta
+        </h1>
+        <p className="text-sm text-slate-500">
+          Informe suas credenciais para continuar.
+        </p>
+      </div>
 
       <div className="space-y-4">
         <div>
+          <label className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Usuário
+          </label>
           <input
             value={username}
             onChange={(e) => onUsernameChange(e.target.value)}
-            placeholder="Usuário"
-            className={`
-              w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:outline-none
-              ${erros.username ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#1f3da0]"}
-            `}
+            placeholder="admin"
+            className={
+              `mt-2 w-full px-4 py-3 rounded-xl border bg-white/90 shadow-sm focus:ring-2 focus:outline-none transition ` +
+              (erros.username
+                ? "border-red-500 focus:ring-red-200"
+                : "border-slate-200 focus:ring-[#1f3da0]/30")
+            }
           />
           {erros.username && (
             <p className="text-red-600 text-sm mt-1">{erros.username}</p>
@@ -63,15 +76,20 @@ export function FormularioLogin({
         </div>
 
         <div>
+          <label className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Senha
+          </label>
           <input
             type="password"
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
-            placeholder="Senha"
-            className={`
-              w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:outline-none
-              ${erros.password ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#1f3da0]"}
-            `}
+            placeholder="admin"
+            className={
+              `mt-2 w-full px-4 py-3 rounded-xl border bg-white/90 shadow-sm focus:ring-2 focus:outline-none transition ` +
+              (erros.password
+                ? "border-red-500 focus:ring-red-200"
+                : "border-slate-200 focus:ring-[#1f3da0]/30")
+            }
           />
           {erros.password && (
             <p className="text-red-600 text-sm mt-1">{erros.password}</p>
@@ -80,18 +98,16 @@ export function FormularioLogin({
       </div>
 
       {erro && (
-        <p className="text-red-600 text-sm text-center font-medium">
-          {erro}
-        </p>
+        <p className="text-red-600 text-sm text-center font-medium">{erro}</p>
       )}
 
       <button
         type="submit"
         disabled={carregando}
-        className={`
-          w-full py-2 rounded-lg text-white font-medium transition
-          ${carregando ? "bg-[#9fb2d9]" : "bg-[#193282] hover:bg-[#1f3da0]"}
-        `}
+        className={
+          `w-full py-3 rounded-xl text-white font-medium transition shadow-lg shadow-[#193282]/20 ` +
+          (carregando ? "bg-[#9fb2d9]" : "bg-[#193282] hover:bg-[#1f3da0]")
+        }
       >
         {carregando ? "Entrando..." : "Entrar"}
       </button>
