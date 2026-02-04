@@ -10,6 +10,19 @@ export interface RespostaPaginada<T> {
     paginaContador: number
 }
 
+export interface RespostaPaginadaApi<T> extends Partial<RespostaPaginada<T>> {
+    page?: number
+    size?: number
+    total?: number
+    pageCount?: number
+    totalPages?: number
+    totalElements?: number
+    number?: number
+    itens?: T[]
+    items?: T[]
+    data?: T[]
+}
+
 export class TutoresServico {
     async listar(
         pagina: number,
@@ -17,33 +30,30 @@ export class TutoresServico {
         busca?: string
     ): Promise<RespostaPaginada<Tutor>> {
 
-        const resposta = await clienteHttp.get<RespostaPaginada<Tutor>>('/v1/tutores', {
+        const filtro = busca?.trim() || undefined
+        const resposta = await clienteHttp.get<RespostaPaginadaApi<Tutor> | Tutor[]>('/v1/tutores', {
         params: {
             page: pagina,
             size: tamanhoPagina,
-            nome: busca || undefined
+            nome: filtro,
         }
         })
 
-        const data = resposta.data as Partial<RespostaPaginada<Tutor>> & {
-        page?: number
-        size?: number
-        totalPages?: number
-        totalElements?: number
-        number?: number
-        itens?: Tutor[]
-        }
+        const raw = resposta.data
+        const data: RespostaPaginadaApi<Tutor> = Array.isArray(raw) ? { content: raw } : raw
+        const content = data.content ?? data.itens ?? data.items ?? data.data ?? []
 
         const paginaAtual = data.pagina ?? data.page ?? data.number ?? 0
-        const tamanhoAtual = data.tamanhoPagina ?? data.size ?? 0
-        const total = data.total ?? data.totalElements ?? 0
+        const tamanhoAtual = data.tamanhoPagina ?? data.size ?? content.length
+        const total = data.total ?? data.totalElements ?? content.length
         const paginaContador =
+        data.pageCount ??
         data.paginaContador ??
         data.totalPages ??
         (tamanhoAtual > 0 ? Math.ceil(total / tamanhoAtual) : 0)
 
         return {
-        content: data.content ?? data.itens ?? [],
+        content,
         pagina: paginaAtual,
         tamanhoPagina: tamanhoAtual,
         total,

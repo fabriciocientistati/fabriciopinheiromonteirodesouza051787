@@ -1,19 +1,89 @@
 ﻿
 import type { Tutor } from '../../dominio/modelos/Tutor'
+import type { Pet } from '../../dominio/modelos/Pet'
+import type { PetVinculado } from '../../dominio/modelos/PetVinculado'
 import { tutoresEstado } from '../../estado/tutoresEstado'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
+import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
 import { erroEh401 } from '../utils/errosHttp'
 import { normalizarCpf } from '../utils/validacoes'
 
 const ERRO_CPF_DUPLICADO = 'CPF já cadastrado.'
 const ERRO_CPF_VALIDACAO = 'Não foi possível validar o CPF.'
+const petsServico = new PetsServico()
 
 class TutoresFacade {
 
   readonly estado$ = tutoresEstado.estado$
+  private readonly cachePets = new Map<number, PetVinculado>()
+  private readonly cachePetsPromise = new Map<number, Promise<PetVinculado>>()
 
   obterSnapshot() {
     return tutoresEstado.obterSnapshot()
+  }
+
+  private mapearParaPetVinculado(pet: Pet): PetVinculado {
+    return {
+      id: pet.id,
+      nome: pet.nome,
+      raca: pet.raca ?? '',
+      idade: pet.idade ?? 0,
+      foto: pet.foto,
+    }
+  }
+
+  private obterPetDetalhe(id: number): Promise<PetVinculado> {
+    const emCache = this.cachePets.get(id)
+    if (emCache) {
+      return Promise.resolve(emCache)
+    }
+
+    const emAndamento = this.cachePetsPromise.get(id)
+    if (emAndamento) {
+      return emAndamento
+    }
+
+    const promessa = petsServico
+      .buscarPorId(id)
+      .then(pet => {
+        const vinculado = this.mapearParaPetVinculado(pet)
+        this.cachePets.set(id, vinculado)
+        return vinculado
+      })
+      .finally(() => {
+        this.cachePetsPromise.delete(id)
+      })
+
+    this.cachePetsPromise.set(id, promessa)
+    return promessa
+  }
+
+  async carregarPetsDetalhe(pets: PetVinculado[]): Promise<{
+    pets: PetVinculado[]
+    falhaIds: number[]
+  }> {
+    if (pets.length === 0) {
+      return { pets: [], falhaIds: [] }
+    }
+
+    const idsUnicos = Array.from(new Set(pets.map(pet => pet.id)))
+    const resultados = await Promise.allSettled(
+      idsUnicos.map(async id => {
+        await this.obterPetDetalhe(id)
+        return id
+      }),
+    )
+
+    const falhaIds = resultados.flatMap((resultado, indice) =>
+      resultado.status === 'rejected' ? [idsUnicos[indice]] : [],
+    )
+
+    const petsOrdenados = pets.map(pet => {
+      const detalhado = this.cachePets.get(pet.id)
+      return detalhado ?? pet
+    })
+
+    return { pets: petsOrdenados, falhaIds }
   }
 
   async irParaPagina(pagina: number) {
@@ -302,6 +372,8 @@ class TutoresFacade {
 
   limparEstado() {
     tutoresEstado.limpar()
+    this.cachePets.clear()
+    this.cachePetsPromise.clear()
   }
 
   private async cpfJaExiste(cpf: string, idIgnorado?: number): Promise<boolean> {
