@@ -1,6 +1,8 @@
 ﻿import { autenticacaoEstado } from '../../estado/autenticacaoEstado'
 import type { CredenciaisLogin } from '../../dominio/modelos/Autenticacao'
 import { autenticacaoServico } from '../../infraestrutura/servicos/AutenticacaoServico'
+import { petsFacade } from './PetsFacade'
+import { tutoresFacade } from './TutoresFacade'
 import {
   limparTokens,
   obterAccessToken,
@@ -41,6 +43,8 @@ class AutenticacaoFacade {
   logout() {
     limparTokens()
     autenticacaoEstado.deslogar()
+    petsFacade.limpar()
+    tutoresFacade.limparEstado()
   }
 
   obterSnapshot() {
@@ -49,4 +53,3 @@ class AutenticacaoFacade {
 }
 
 export const autenticacaoFacade = new AutenticacaoFacade()
-

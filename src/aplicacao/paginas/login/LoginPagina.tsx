@@ -15,6 +15,7 @@ export function LoginPagina() {
     autenticacaoEstado.estado$,
     autenticacaoFacade.obterSnapshot()
   );
+  const erroLogin = mensagemSessao ? undefined : estado.erro;
 
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
@@ -40,7 +41,7 @@ export function LoginPagina() {
           username={usuario}
           password={senha}
           carregando={estado.carregando}
-          erro={estado.erro}
+          erro={erroLogin}
           onUsernameChange={setUsuario}
           onPasswordChange={setSenha}
           onSubmit={() =>
