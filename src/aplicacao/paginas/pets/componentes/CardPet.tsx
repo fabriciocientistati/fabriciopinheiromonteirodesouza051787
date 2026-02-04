@@ -19,7 +19,9 @@ export function CardPet({ pet }: Props) {
         />
 
         <div className="space-y-2 text-center sm:text-left break-words">
-          <p className="text-lg font-medium">{pet.nome}</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+            {pet.nome}
+          </h2>
           <p>
             <strong>Espécie:</strong> {racaTexto}
           </p>

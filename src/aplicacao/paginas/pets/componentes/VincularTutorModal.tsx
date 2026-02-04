@@ -119,7 +119,9 @@ export function VincularTutorModal({
                   />
 
                   <div className="text-center sm:text-left">
-                    <p className="font-semibold">{tutor.nome}</p>
+                    <p className="text-base sm:text-lg font-semibold text-slate-900">
+                      {tutor.nome}
+                    </p>
                     <p className="text-sm text-gray-600">
                       {formatarTelefone(tutor.telefone)}
                     </p>

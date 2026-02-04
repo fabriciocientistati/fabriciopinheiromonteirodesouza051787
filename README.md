@@ -286,6 +286,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Validação de CPF duplicado também na edição (aviso sem ocultar o formulário).
 - Cadastro de tutor e pet permite pré-vincular itens via modal (antes de salvar).
 - Listas de pré-vínculo exibem imagem, nome e detalhes básicos.
+- Destaque visual dos nomes em listagens, detalhes e modais de vínculo (pets e tutores).
 - Remoção de foto em edição sincroniza listagem e detalhe (pets e tutores).
 - Troca/remoção de foto atualiza preview e evita reaparecer imagem anterior.
 - Logout e sessão expirada tratados pelo estado de autenticação (sem eventos globais).

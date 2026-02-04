@@ -112,7 +112,9 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
               />
 
               <div className="flex-1 text-center sm:text-left">
-                <p className="font-medium">{pet.nome}</p>
+                <p className="text-base sm:text-lg font-semibold text-slate-900">
+                  {pet.nome}
+                </p>
                 <p className="text-sm text-gray-600">{pet.raca}</p>
                 <p className="text-sm text-gray-600">
                   {pet.idade} anos

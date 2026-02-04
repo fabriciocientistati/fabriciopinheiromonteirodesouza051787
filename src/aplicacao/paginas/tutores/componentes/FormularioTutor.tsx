@@ -116,7 +116,7 @@ export function FormularioTutor({
     >
       <div className="space-y-4">
         <Input
-          label="Nome"
+          label="Nome completo"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           required

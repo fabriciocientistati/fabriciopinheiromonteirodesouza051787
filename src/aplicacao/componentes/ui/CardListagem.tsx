@@ -36,7 +36,7 @@ export function CardListagem({
         )}
 
         <div className="mt-3 space-y-1 w-full">
-          <h3 className="text-lg font-semibold text-gray-800 break-words">
+          <h3 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight break-words">
             {titulo}
           </h3>
           {linhasValidas.map((linha, index) => (

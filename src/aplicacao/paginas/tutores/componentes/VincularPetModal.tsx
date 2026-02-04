@@ -114,7 +114,9 @@ export function VincularPetModal({
                   />
 
                   <div className="text-center sm:text-left">
-                    <p className="font-semibold">{pet.nome}</p>
+                    <p className="text-base sm:text-lg font-semibold text-slate-900">
+                      {pet.nome}
+                    </p>
                     <p className="text-sm text-gray-600">
                       {pet.raca ?? "Sem raça"}
                     </p>

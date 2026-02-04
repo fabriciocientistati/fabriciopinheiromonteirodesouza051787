@@ -113,7 +113,9 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
               />
 
               <div className="flex-1 text-center sm:text-left">
-                <p className="font-medium">{tutor.nome}</p>
+                <p className="text-base sm:text-lg font-semibold text-slate-900">
+                  {tutor.nome}
+                </p>
                 <p className="text-sm text-gray-600">
                   {formatarTelefone(tutor.telefone ?? '')}
                 </p>
