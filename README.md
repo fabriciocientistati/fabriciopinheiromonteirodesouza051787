@@ -240,6 +240,8 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Padronização de nomenclatura de componentes (ex.: ListaTutores) e alinhamento entre Pets/Tutores.
 - Componente comum de card para listagens e modal de confirmação reutilizável.
 - Normalização de mensagens e acentuação em textos de UI.
+- Upload de foto com label neutro.
+- Paleta de cores padronizada a partir do sidebar, com botões alinhados por ação.
 - Máscaras e validações reutilizáveis para telefone/CPF/email.
 - Máscaras aplicadas também no detalhamento de tutor.
 

@@ -20,6 +20,6 @@ describe('ListaPets', () => {
     )
 
     expect(screen.getByText('Thor')).toBeInTheDocument()
-    expect(screen.getByText('Vira-premio • 2 anos')).toBeInTheDocument()
+    expect(screen.getByText('Vira-premio - 2 anos')).toBeInTheDocument()
   })
 })

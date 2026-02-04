@@ -22,25 +22,25 @@ export function Botao({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const estilos = {
     primario:
-      'bg-black text-white hover:bg-gray-800 active:bg-gray-900 transition',
+      'bg-[#193282] text-white hover:bg-[#1f3da0] active:bg-[#162a6a] transition',
 
     secundario:
-      'bg-gray-100 text-gray-800 hover:bg-gray-200 active:bg-gray-300 transition',
+      'bg-slate-100 text-slate-800 hover:bg-slate-200 active:bg-slate-300 transition',
 
     perigo:
-      'bg-red-500 text-white hover:bg-red-600 active:bg-red-700 transition',
+      'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 transition',
 
     texto:
-      'text-black hover:text-gray-600 active:text-gray-800 transition',
+      'text-[#193282] hover:text-[#1f3da0] active:text-[#162a6a] transition',
 
     'primario-azul':
-      'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 transition',
+      'bg-[#193282] text-white hover:bg-[#1f3da0] active:bg-[#162a6a] transition',
 
     laranja:
-      'bg-orange-500 text-white hover:bg-orange-600 active:bg-orange-700 transition',
+      'bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700 transition',
 
     sucesso:
-      'bg-green-600 text-white hover:bg-green-700 active:bg-green-800 transition',
+      'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 transition',
   }
 
   return (

@@ -3,10 +3,15 @@ import { Botao } from './Botao'
 
 interface UploadFotoProps {
   fotoAtual?: string
+  label?: string
   onUpload: (arquivo: File | null) => void
 }
 
-export function UploadFoto({ fotoAtual, onUpload }: UploadFotoProps) {
+export function UploadFoto({
+  fotoAtual,
+  label = 'Foto',
+  onUpload,
+}: UploadFotoProps) {
   const [previewLocal, setPreviewLocal] = useState<string | null>(fotoAtual ?? null)
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -32,7 +37,7 @@ export function UploadFoto({ fotoAtual, onUpload }: UploadFotoProps) {
   return (
     <div className="space-y-3">
       <label className="block text-sm font-medium text-gray-700">
-        Foto do Tutor
+        {label}
       </label>
 
       <div className="flex items-center gap-4">

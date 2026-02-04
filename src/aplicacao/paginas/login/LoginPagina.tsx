@@ -29,7 +29,7 @@ export function LoginPagina() {
   }, [estado.autenticado, navigate, location.state]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#f3f5fb] px-4">
       <div className="w-full max-w-sm space-y-4">
         {mensagemSessao && (
           <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-md px-4 py-3 text-center">

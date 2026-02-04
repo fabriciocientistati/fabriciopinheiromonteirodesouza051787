@@ -3,7 +3,7 @@ import { Sidebar } from "./componentes/SideBar";
 
 export function LayoutPrivado() {
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-[#f3f5fb]">
       <Sidebar />
 
       <main className="flex-1 p-6 overflow-auto">

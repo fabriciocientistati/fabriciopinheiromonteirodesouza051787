@@ -26,7 +26,7 @@ export function ListaPets({
           const racaTexto = pet.raca ?? 'Sem raça'
           const idadeTexto =
             pet.idade != null ? `${pet.idade} anos` : 'Idade não informada'
-          const detalhes = `${racaTexto} • ${idadeTexto}`
+          const detalhes = `${racaTexto} - ${idadeTexto}`
 
           return (
             <CardListagem

@@ -22,12 +22,13 @@ export function ListaPetsVinculados({
           <div>
             <p className="font-semibold">{pet.nome}</p>
             <p className="text-sm text-gray-600">
-              {pet.raca} • {pet.idade} anos
+              {pet.raca} - {pet.idade} anos
             </p>
           </div>
 
-          <button onClick={() => onRemover(pet.id)}
-            className="px-3 py-1 bg-red-500 text-white rounded"
+          <button
+            onClick={() => onRemover(pet.id)}
+            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 active:bg-red-800 transition"
           >
             Remover
           </button>

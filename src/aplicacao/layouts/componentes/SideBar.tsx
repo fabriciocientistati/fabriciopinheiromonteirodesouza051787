@@ -7,30 +7,33 @@ export function Sidebar() {
 
   return (
     <>
+      {/* Botão mobile */}
       <button
         onClick={() => setAberta(true)}
-        className="md:hidden fixed top-4 left-4 z-30 bg-[#6610f2] text-white p-2 rounded-lg shadow"
+        className="md:hidden fixed top-4 left-4 z-30 bg-[#193282] text-white p-2 rounded-lg shadow-lg border border-[#193282] hover:bg-[#1f3da0]"
       >
         ☰
       </button>
 
+      {/* Overlay */}
       {aberta && (
         <div
           onClick={() => setAberta(false)}
-          className="fixed inset-0 bg-black/50 z-20 md:hidden"
+          className="fixed inset-0 bg-black/60 z-20 md:hidden"
         />
       )}
 
+      {/* Sidebar */}
       <aside
         className={`
-          fixed inset-y-0 left-0 z-30
-          w-64 bg-[#6610f2] text-white flex flex-col
+          fixed inset-y-0 left-0 z-30 w-64 bg-[#193282] text-white flex flex-col
           transform transition-transform duration-300
           ${aberta ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 md:static
         `}
       >
-        <div className="h-16 flex items-center px-6 border-b border-[#4b0bb8] justify-between">
+        {/* Header */}
+        <div className="h-16 flex items-center px-6 border-b border-[#1f3da0] justify-between">
           <span className="text-lg font-semibold tracking-wide">
             Pets & Tutores
           </span>
@@ -43,43 +46,44 @@ export function Sidebar() {
           </button>
         </div>
 
+        {/* Navegação */}
         <nav className="flex-1 px-4 py-6 space-y-2">
           <NavLink
             to="/tutores"
             className={({ isActive }) =>
-              `
-              flex items-center gap-3 rounded px-4 py-2 transition
-              ${isActive ? "bg-[#4b0bb8]" : "hover:bg-[#5a0de0]"}
-            `
+              `flex items-center gap-3 rounded px-4 py-2 transition ${
+                isActive
+                  ? "bg-[#1f3da0] text-white"
+                  : "hover:bg-[#1f3da0] text-white/90"
+              }`
             }
             onClick={() => setAberta(false)}
           >
-            👤 <span>Tutores</span>
+            <span>Tutores</span>
           </NavLink>
 
           <NavLink
             to="/pets"
             className={({ isActive }) =>
-              `
-              flex items-center gap-3 rounded px-4 py-2 transition
-              ${isActive ? "bg-[#4b0bb8]" : "hover:bg-[#5a0de0]"}
-            `
+              `flex items-center gap-3 rounded px-4 py-2 transition ${
+                isActive
+                  ? "bg-[#1f3da0] text-white"
+                  : "hover:bg-[#1f3da0] text-white/90"
+              }`
             }
             onClick={() => setAberta(false)}
           >
-            🐾 <span>Pets</span>
+            <span>Pets</span>
           </NavLink>
         </nav>
 
-        <div className="px-4 py-4 border-t border-[#4b0bb8]">
+        {/* Rodapé */}
+        <div className="px-4 py-4 border-t border-[#1f3da0]">
           <button
             onClick={() => autenticacaoFacade.logout()}
-            className="
-              w-full flex items-center gap-3 px-4 py-2 rounded
-              text-red-200 hover:bg-[#5a0de0] transition
-            "
+            className="w-full flex items-center gap-3 px-4 py-2 rounded text-red-200 hover:bg-[#1f3da0] transition"
           >
-            🚪 <span>Sair</span>
+            <span>Sair</span>
           </button>
         </div>
       </aside>

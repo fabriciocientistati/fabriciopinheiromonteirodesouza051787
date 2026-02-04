@@ -54,7 +54,7 @@ export function FormularioLogin({
             placeholder="Usuário"
             className={`
               w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:outline-none
-              ${erros.username ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-500"}
+              ${erros.username ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#1f3da0]"}
             `}
           />
           {erros.username && (
@@ -70,7 +70,7 @@ export function FormularioLogin({
             placeholder="Senha"
             className={`
               w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:outline-none
-              ${erros.password ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-500"}
+              ${erros.password ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-[#1f3da0]"}
             `}
           />
           {erros.password && (
@@ -90,7 +90,7 @@ export function FormularioLogin({
         disabled={carregando}
         className={`
           w-full py-2 rounded-lg text-white font-medium transition
-          ${carregando ? "bg-blue-300" : "bg-blue-600 hover:bg-blue-700"}
+          ${carregando ? "bg-[#9fb2d9]" : "bg-[#193282] hover:bg-[#1f3da0]"}
         `}
       >
         {carregando ? "Entrando..." : "Entrar"}
