@@ -145,6 +145,19 @@ async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
       await petsServico.removerFoto(id, fotoIdAnterior)
     }
 
+    const estadoAtual = petsEstado.obterSnapshot()
+    const itensAtualizados = estadoAtual.itens.map((pet) =>
+      pet.id === id ? { ...pet, foto: petAtualizado.foto } : pet,
+    )
+
+    petsEstado.definirDados(
+      itensAtualizados,
+      estadoAtual.pagina,
+      estadoAtual.total,
+      estadoAtual.tamanhoPagina,
+      estadoAtual.contadorPagina,
+    )
+
     petsEstado.definirDetalhe(petAtualizado)
     return petAtualizado
   } catch {
@@ -170,6 +183,25 @@ async removerPet(id: number) {
 async removerFoto(petId: number, fotoId: number) {
   try {
     await petsServico.removerFoto(petId, fotoId)
+    const estadoAtual = petsEstado.obterSnapshot()
+    const itensAtualizados = estadoAtual.itens.map((pet) =>
+      pet.id === petId ? { ...pet, foto: undefined } : pet,
+    )
+
+    petsEstado.definirDados(
+      itensAtualizados,
+      estadoAtual.pagina,
+      estadoAtual.total,
+      estadoAtual.tamanhoPagina,
+      estadoAtual.contadorPagina,
+    )
+
+    if (estadoAtual.petSelecionado?.id === petId) {
+      petsEstado.definirDetalhe({
+        ...estadoAtual.petSelecionado,
+        foto: undefined,
+      })
+    }
   } catch {
     petsEstado.definirErro('Erro ao remover foto')
     throw new Error('Erro ao remover foto')

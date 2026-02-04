@@ -17,6 +17,7 @@ type FormularioPetDados = {
   raca: string
   idade: number
   foto?: File | null
+  removerFoto?: boolean
 }
 
 export function FormularioPetPagina() {
@@ -62,6 +63,10 @@ export function FormularioPetPagina() {
         dados.foto,
         edicao ? petSelecionado?.foto?.id ?? null : null,
       )
+    }
+
+    if (edicao && dados.removerFoto && !dados.foto && petSelecionado?.foto?.id) {
+      await petsFacade.removerFoto(petSalvo.id, petSelecionado.foto.id)
     }
     if (!edicao && tutoresSelecionados.length > 0) {
       for (const tutor of tutoresSelecionados) {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Botao } from './Botao'
 
 interface UploadFotoProps {
@@ -12,7 +12,13 @@ export function UploadFoto({
   label = 'Foto',
   onUpload,
 }: UploadFotoProps) {
-  const [previewLocal, setPreviewLocal] = useState<string | null>(fotoAtual ?? null)
+  const [previewLocal, setPreviewLocal] = useState<string | null>(
+    fotoAtual ?? null,
+  )
+
+  useEffect(() => {
+    setPreviewLocal(fotoAtual ?? null)
+  }, [fotoAtual])
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const arquivo = event.target.files?.[0]

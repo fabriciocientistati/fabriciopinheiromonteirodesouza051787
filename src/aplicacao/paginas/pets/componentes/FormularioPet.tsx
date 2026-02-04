@@ -13,6 +13,7 @@ interface FormularioPetProps {
     raca: string
     idade: number
     foto?: File | null
+    removerFoto?: boolean
   }) => Promise<void>
   textoBotao?: string
 }
@@ -28,6 +29,7 @@ export function FormularioPet({
   const [raca, setRaca] = useState(petInicial?.raca ?? '')
   const [idade, setIdade] = useState<number | ''>(petInicial?.idade ?? '')
   const [foto, setFoto] = useState<File | null>(null)
+  const [fotoRemovida, setFotoRemovida] = useState(false)
   const [salvando, setSalvando] = useState(false)
 
   const [erros, setErros] = useState<{
@@ -59,6 +61,7 @@ export function FormularioPet({
         raca,
         idade: Number(idade),
         foto,
+        removerFoto: fotoRemovida,
       })
     } finally {
       setSalvando(false)
@@ -102,7 +105,13 @@ export function FormularioPet({
         />
       </div>
 
-      <UploadFoto fotoAtual={petInicial?.foto?.url} onUpload={setFoto} />
+      <UploadFoto
+        fotoAtual={petInicial?.foto?.url}
+        onUpload={(arquivo) => {
+          setFoto(arquivo)
+          setFotoRemovida(arquivo === null)
+        }}
+      />
 
       <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4">
         <Botao

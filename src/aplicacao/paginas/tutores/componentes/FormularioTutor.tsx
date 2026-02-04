@@ -23,6 +23,7 @@ interface FormularioTutorProps {
     endereco: string;
     cpf: string;
     foto?: File | null;
+    removerFoto?: boolean;
   }) => Promise<void>;
   textoBotao?: string;
 }
@@ -42,6 +43,7 @@ export function FormularioTutor({
   const [endereco, setEndereco] = useState(tutorInicial?.endereco ?? "");
   const [cpf, setCpf] = useState(normalizarCpf(tutorInicial?.cpf ?? ""));
   const [foto, setFoto] = useState<File | null>(null);
+  const [fotoRemovida, setFotoRemovida] = useState(false);
   const [salvando, setSalvando] = useState(false);
 
   const [erros, setErros] = useState<{
@@ -100,6 +102,7 @@ export function FormularioTutor({
         endereco,
         cpf: limparNumeros(cpf),
         foto,
+        removerFoto: fotoRemovida,
       });
     } finally {
       setSalvando(false);
@@ -161,7 +164,13 @@ export function FormularioTutor({
         />
       </div>
 
-      <UploadFoto fotoAtual={tutorInicial?.foto?.url} onUpload={setFoto} />
+      <UploadFoto
+        fotoAtual={tutorInicial?.foto?.url}
+        onUpload={(arquivo) => {
+          setFoto(arquivo);
+          setFotoRemovida(arquivo === null);
+        }}
+      />
 
       <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4">
         <Botao

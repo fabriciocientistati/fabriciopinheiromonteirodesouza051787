@@ -19,6 +19,7 @@ type FormularioTutorDados = {
   endereco: string
   cpf: string
   foto?: File | null
+  removerFoto?: boolean
 }
 
 export function FormularioTutorPagina() {
@@ -68,6 +69,10 @@ export function FormularioTutorPagina() {
         dados.foto,
         edicao ? tutorSelecionado?.foto?.id ?? null : null,
       )
+    }
+
+    if (edicao && dados.removerFoto && !dados.foto && tutorSelecionado?.foto?.id) {
+      await tutoresFacade.removerFoto(tutorSalvo.id, tutorSelecionado.foto.id)
     }
     if (!edicao && petsSelecionados.length > 0) {
       for (const pet of petsSelecionados) {

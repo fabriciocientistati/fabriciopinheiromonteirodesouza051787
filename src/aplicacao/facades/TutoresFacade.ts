@@ -207,13 +207,54 @@ class TutoresFacade {
       const tutorAtualizado = await tutoresServico.atualizarFoto(id, arquivo)
       const fotoNovaId = tutorAtualizado.foto?.id ?? null
 
-      if (fotoIdAnterior && fotoNovaId && fotoIdAnterior !== fotoNovaId) {
+      if (fotoIdAnterior && fotoIdAnterior !== fotoNovaId) {
         await tutoresServico.removerFoto(id, fotoIdAnterior)
       }
+
+      const estadoAtual = tutoresEstado.obterSnapshot()
+      const itensAtualizados = estadoAtual.itens.map((tutor) =>
+        tutor.id === id ? { ...tutor, foto: tutorAtualizado.foto } : tutor,
+      )
+
+      tutoresEstado.definirDados(
+        itensAtualizados,
+        estadoAtual.pagina,
+        estadoAtual.total,
+        estadoAtual.tamanhoPagina,
+        estadoAtual.contadorPagina,
+      )
 
       tutoresEstado.definirDetalhe(tutorAtualizado)
     } catch{
       tutoresEstado.definirErro('Erro ao enviar foto do tutor')
+    }
+  }
+
+  async removerFoto(tutorId: number, fotoId: number) {
+    try {
+      await tutoresServico.removerFoto(tutorId, fotoId)
+      const estadoAtual = tutoresEstado.obterSnapshot()
+      const itensAtualizados = estadoAtual.itens.map((tutor) =>
+        tutor.id === tutorId ? { ...tutor, foto: undefined } : tutor,
+      )
+
+      tutoresEstado.definirDados(
+        itensAtualizados,
+        estadoAtual.pagina,
+        estadoAtual.total,
+        estadoAtual.tamanhoPagina,
+        estadoAtual.contadorPagina,
+      )
+
+      if (estadoAtual.tutorSelecionado?.id === tutorId) {
+        tutoresEstado.definirDetalhe({
+          ...estadoAtual.tutorSelecionado,
+          foto: undefined,
+        })
+      }
+    } catch {
+      tutoresEstado.definirErro('Erro ao remover foto do tutor')
+      throw new Error('Erro ao remover foto do tutor')
     }
   }
 
@@ -292,6 +333,7 @@ class TutoresFacade {
 }
 
 export const tutoresFacade = new TutoresFacade()
+
 
 
 
