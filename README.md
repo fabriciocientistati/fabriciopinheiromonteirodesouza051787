@@ -286,6 +286,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Remoção de foto em edição sincroniza listagem e detalhe (pets e tutores).
 - Troca/remoção de foto atualiza preview e evita reaparecer imagem anterior.
 - Logout e sessão expirada tratados pelo estado de autenticação (sem eventos globais).
+- Falha no login limpa tokens antigos para evitar refresh indevido.
 
 
 Telas de Detalhe (Pets e Tutores)

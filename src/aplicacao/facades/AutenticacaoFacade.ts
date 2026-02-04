@@ -1,4 +1,4 @@
-import { autenticacaoEstado } from '../../estado/autenticacaoEstado'
+﻿import { autenticacaoEstado } from '../../estado/autenticacaoEstado'
 import type { CredenciaisLogin } from '../../dominio/modelos/Autenticacao'
 import { autenticacaoServico } from '../../infraestrutura/servicos/AutenticacaoServico'
 import {
@@ -22,6 +22,7 @@ class AutenticacaoFacade {
         resposta.refresh_token
       );
     } catch {
+      limparTokens()
       autenticacaoEstado.definirErro("Credenciais inválidas");
     } finally {
       autenticacaoEstado.finalizarCarregamento();
@@ -48,3 +49,4 @@ class AutenticacaoFacade {
 }
 
 export const autenticacaoFacade = new AutenticacaoFacade()
+
