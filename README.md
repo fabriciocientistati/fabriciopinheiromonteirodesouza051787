@@ -281,6 +281,8 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Máscaras aplicadas também no detalhamento de tutor.
 - Validação para evitar cadastro de tutor com CPF já existente.
 - Validação de CPF duplicado também na edição (aviso sem ocultar o formulário).
+- Cadastro de tutor e pet permite pré-vincular itens via modal (antes de salvar).
+- Listas de pré-vínculo exibem imagem, nome e detalhes básicos.
 
 
 Telas de Detalhe (Pets e Tutores)

@@ -1,35 +1,36 @@
-﻿import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado"
-import { Botao } from "../../../componentes/ui/Botao"
+﻿import type { Tutor } from '../../../../dominio/modelos/Tutor'
+import { Botao } from '../../../componentes/ui/Botao'
+import { formatarTelefone } from '../../../utils/validacoes'
 
-export function ListaPetsVinculados({
-  pets,
+export function ListaTutoresVinculados({
+  tutores,
   onRemover,
 }: {
-  pets: PetVinculado[]
-  onRemover: (idPet: number) => void
+  tutores: Tutor[]
+  onRemover: (idTutor: number) => void
 }) {
-  if (pets.length === 0) {
-    return <p className="text-gray-600">Nenhum pet vinculado.</p>
+  if (tutores.length === 0) {
+    return <p className="text-gray-600">Nenhum tutor vinculado.</p>
   }
 
   return (
     <ul className="space-y-2 mt-2">
-      {pets.map((pet) => (
+      {tutores.map((tutor) => (
         <li
-          key={pet.id}
+          key={tutor.id}
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border p-3 rounded"
         >
           <div className="flex items-center gap-3">
             <img
-              src={pet.foto?.url || "/sem-foto.png"}
-              alt={pet.nome}
+              src={tutor.foto?.url || '/sem-foto.png'}
+              alt={tutor.nome}
               className="w-12 h-12 rounded-full object-cover border"
             />
 
             <div>
-              <p className="font-semibold">{pet.nome}</p>
+              <p className="font-semibold">{tutor.nome}</p>
               <p className="text-sm text-gray-600">
-                {(pet.raca ?? 'Espécie não informada')} - {pet.idade} anos
+                {formatarTelefone(tutor.telefone)}
               </p>
             </div>
           </div>
@@ -37,7 +38,7 @@ export function ListaPetsVinculados({
           <Botao
             variante="perigo"
             type="button"
-            onClick={() => onRemover(pet.id)}
+            onClick={() => onRemover(tutor.id)}
             className="w-full sm:w-auto"
           >
             Remover

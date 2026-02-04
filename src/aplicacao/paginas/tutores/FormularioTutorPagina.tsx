@@ -1,10 +1,15 @@
 ﻿import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { Tutor } from '../../../dominio/modelos/Tutor'
+import type { PetVinculado } from '../../../dominio/modelos/PetVinculado'
 import { useTutoresEstado } from '../../hooks/useTutoresEstado'
 import { tutoresFacade } from '../../facades/TutoresFacade'
+import { petsFacade } from '../../facades/PetsFacade'
 import { Titulo } from '../../componentes/ui/Titulo'
+import { Botao } from '../../componentes/ui/Botao'
 import { FormularioTutor } from './componentes/FormularioTutor'
+import { ListaPetsVinculados } from './componentes/ListaPetsVinculados'
+import { VincularPetModal } from './componentes/VincularPetModal'
 import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 type FormularioTutorDados = {
@@ -24,6 +29,8 @@ export function FormularioTutorPagina() {
 
   const edicao = Boolean(id)
   const carregandoEdicao = edicao && (carregando || !tutorSelecionado)
+  const [vincularPetAberto, setVincularPetAberto] = useState(false)
+  const [petsSelecionados, setPetsSelecionados] = useState<PetVinculado[]>([])
 
   useEffect(() => {
     if (edicao && id) {
@@ -62,6 +69,11 @@ export function FormularioTutorPagina() {
         edicao ? tutorSelecionado?.foto?.id ?? null : null,
       )
     }
+    if (!edicao && petsSelecionados.length > 0) {
+      for (const pet of petsSelecionados) {
+        await tutoresFacade.vincularPet(tutorSalvo.id, pet.id)
+      }
+    }
 
     navigate('/tutores', {
       state: {
@@ -92,7 +104,62 @@ export function FormularioTutorPagina() {
           onSubmit={salvarTutor}
           textoBotao={edicao ? 'Atualizar' : 'Cadastrar'}
         />
+        {!edicao && (
+          <>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <h3 className="text-sm font-semibold text-gray-700">
+                Vincular pets (opcional)
+              </h3>
+              <Botao
+                variante="sucesso"
+                type="button"
+                onClick={() => setVincularPetAberto(true)}
+                className="w-full sm:w-auto"
+              >
+                Vincular Pet
+              </Botao>
+            </div>
+
+            <ListaPetsVinculados
+              pets={petsSelecionados}
+              onRemover={(idPet) =>
+                setPetsSelecionados((atual) =>
+                  atual.filter((pet) => pet.id !== idPet),
+                )
+              }
+            />
+
+            <VincularPetModal
+              aberto={vincularPetAberto}
+              onFechar={() => setVincularPetAberto(false)}
+              onVincular={async (idPet) => {
+                setPetsSelecionados((atual) => {
+                  if (atual.some((pet) => pet.id === idPet)) return atual
+
+                  const pet = petsFacade
+                    .obterSnapshot()
+                    .itens.find((item) => item.id === idPet)
+
+                  if (!pet) return atual
+
+                  return [
+                    ...atual,
+                    {
+                      id: pet.id,
+                      nome: pet.nome,
+                      raca: pet.raca ?? '',
+                      idade: pet.idade ?? 0,
+                      foto: pet.foto,
+                    },
+                  ]
+                })
+              }}
+              petsVinculados={petsSelecionados}
+            />
+          </>
+        )}
       </div>
     </div>
   )
 }
+
