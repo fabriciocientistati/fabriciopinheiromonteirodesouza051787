@@ -1,8 +1,12 @@
-
+﻿
 import type { Tutor } from '../../dominio/modelos/Tutor'
 import { tutoresEstado } from '../../estado/tutoresEstado'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
 import { erroEh401 } from '../utils/errosHttp'
+import { normalizarCpf } from '../utils/validacoes'
+
+const ERRO_CPF_DUPLICADO = 'CPF já cadastrado.'
+const ERRO_CPF_VALIDACAO = 'Não foi possível validar o CPF.'
 
 class TutoresFacade {
 
@@ -115,12 +119,37 @@ class TutoresFacade {
     try {
       tutoresEstado.definirCriando()
 
+      try {
+        const cpfDuplicado = await this.cpfJaExiste(tutor.cpf)
+        if (cpfDuplicado) {
+          tutoresEstado.definirCriado()
+          tutoresEstado.definirErro(ERRO_CPF_DUPLICADO)
+          throw new Error(ERRO_CPF_DUPLICADO)
+        }
+      } catch (erroValidacao) {
+        if (erroValidacao instanceof Error && erroValidacao.message === ERRO_CPF_DUPLICADO) {
+          throw erroValidacao
+        }
+
+        tutoresEstado.definirCriado()
+        tutoresEstado.definirErro(ERRO_CPF_VALIDACAO)
+        throw new Error(ERRO_CPF_VALIDACAO)
+      }
+
       const novoTutor = await tutoresServico.criar(tutor)
 
       tutoresEstado.definirCriado()
       return novoTutor
 
-    } catch {
+    } catch (erro) {
+      if (
+        erro instanceof Error &&
+        (erro.message === ERRO_CPF_DUPLICADO ||
+          erro.message === ERRO_CPF_VALIDACAO)
+      ) {
+        throw erro
+      }
+
       tutoresEstado.definirErro('Erro ao criar tutor')
       throw Error('Erro ao criar tutor')
     }
@@ -130,12 +159,40 @@ class TutoresFacade {
     try {
       tutoresEstado.definirCriando()
 
+      try {
+        const cpfDuplicado = await this.cpfJaExiste(tutor.cpf, id)
+        if (cpfDuplicado) {
+          tutoresEstado.definirCriado()
+          tutoresEstado.definirErro(ERRO_CPF_DUPLICADO)
+          throw new Error(ERRO_CPF_DUPLICADO)
+        }
+      } catch (erroValidacao) {
+        if (
+          erroValidacao instanceof Error &&
+          erroValidacao.message === ERRO_CPF_DUPLICADO
+        ) {
+          throw erroValidacao
+        }
+
+        tutoresEstado.definirCriado()
+        tutoresEstado.definirErro(ERRO_CPF_VALIDACAO)
+        throw new Error(ERRO_CPF_VALIDACAO)
+      }
+
       const atualizado = await tutoresServico.atualizar(id, tutor)
 
       tutoresEstado.definirCriado()
       return atualizado
 
-    } catch  {
+    } catch (erro) {
+      if (
+        erro instanceof Error &&
+        (erro.message === ERRO_CPF_DUPLICADO ||
+          erro.message === ERRO_CPF_VALIDACAO)
+      ) {
+        throw erro
+      }
+
       tutoresEstado.definirErro('Erro ao atualizar tutor')
       throw new Error('Erro ao atualizar tutor')
     }
@@ -198,13 +255,44 @@ class TutoresFacade {
       tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
 
     } catch {
-      tutoresEstado.definirErro('Erro ao remover vínculo do pet')
+      tutoresEstado.definirErro('Erro ao remover vÃ­nculo do pet')
     }
   }
 
   limparEstado() {
     tutoresEstado.limpar()
   }
+
+  private async cpfJaExiste(cpf: string, idIgnorado?: number): Promise<boolean> {
+    const cpfNormalizado = normalizarCpf(cpf)
+    if (!cpfNormalizado) return false
+
+    const tamanhoPagina = 50
+    let pagina = 0
+    let totalPaginas = 1
+
+    while (pagina < totalPaginas) {
+      const resposta = await tutoresServico.listar(pagina, tamanhoPagina)
+      const existe = resposta.content.some(
+        tutor =>
+          normalizarCpf(tutor.cpf) === cpfNormalizado &&
+          tutor.id !== idIgnorado,
+      )
+
+      if (existe) return true
+
+      totalPaginas = resposta.paginaContador || totalPaginas
+      pagina += 1
+
+      if (resposta.content.length === 0) break
+    }
+
+    return false
+  }
 }
 
 export const tutoresFacade = new TutoresFacade()
+
+
+
+

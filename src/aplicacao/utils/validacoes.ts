@@ -2,6 +2,14 @@ export function limparNumeros(valor: unknown): string {
   return String(valor ?? '').replace(/\D/g, '')
 }
 
+export function normalizarCpf(valor: unknown): string {
+  const digits = limparNumeros(valor).slice(0, 11)
+
+  if (!digits) return ''
+
+  return digits.padStart(11, '0')
+}
+
 export function formatarCpf(valor: string): string {
   const digits = limparNumeros(valor).slice(0, 11)
 

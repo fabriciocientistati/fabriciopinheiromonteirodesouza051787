@@ -14,7 +14,7 @@ Trata-se de uma Single Page Application (SPA), com navegação client-side, rota
 
 - Nome: Fabricio Pinheiro Monteiro de Souza
 - E-mail: fabricio.cientistati@hotmail.com
-- Vaga: Engenheiro da computação - sênior
+- Vaga: Analista de Tecnologia da Informação - Perfil Engenheiro da Computação (Sênior)
 - Inscrição: 16423
 
 ## API Pública
@@ -279,6 +279,8 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Paleta de cores padronizada a partir do sidebar, com botões alinhados por ação.
 - Máscaras e validações reutilizáveis para telefone/CPF/email.
 - Máscaras aplicadas também no detalhamento de tutor.
+- Validação para evitar cadastro de tutor com CPF já existente.
+- Validação de CPF duplicado também na edição (aviso sem ocultar o formulário).
 
 
 Telas de Detalhe (Pets e Tutores)

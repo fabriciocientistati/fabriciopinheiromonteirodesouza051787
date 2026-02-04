@@ -72,10 +72,6 @@ export function FormularioTutorPagina() {
     })
   }
 
-  if (edicao && erro) {
-    return <p className="text-red-600 text-sm">{erro}</p>
-  }
-
   if (carregandoEdicao) {
     return <p>Carregando tutor...</p>
   }
@@ -83,6 +79,12 @@ export function FormularioTutorPagina() {
   return (
     <div className="px-4 py-6">
       <div className="max-w-2xl mx-auto space-y-6">
+        {erro && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+            {erro}
+          </div>
+        )}
+
         <Titulo>{edicao ? 'Editar Tutor' : 'Inserir Tutor'}</Titulo>
 
         <FormularioTutor 

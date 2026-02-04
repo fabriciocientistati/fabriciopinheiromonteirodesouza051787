@@ -8,6 +8,7 @@ import {
   formatarCpf,
   formatarTelefone,
   limparNumeros,
+  normalizarCpf,
   validarCpf,
   validarEmail,
   validarTelefone,
@@ -39,7 +40,7 @@ export function FormularioTutor({
     limparNumeros(tutorInicial?.telefone ?? ""),
   );
   const [endereco, setEndereco] = useState(tutorInicial?.endereco ?? "");
-  const [cpf, setCpf] = useState(limparNumeros(tutorInicial?.cpf ?? ""));
+  const [cpf, setCpf] = useState(normalizarCpf(tutorInicial?.cpf ?? ""));
   const [foto, setFoto] = useState<File | null>(null);
   const [salvando, setSalvando] = useState(false);
 
