@@ -112,10 +112,11 @@ Disponíveis no container Nginx:
 - Readiness: `GET /readyz` ou `GET /pronto` → `200 ready`
 
 ## Arquitetura da Aplicação
-A aplicação utiliza um arquitetura em camadas para separar responsabilidades:
+A aplicação utiliza uma arquitetura em camadas para separar responsabilidades:
 
 src/
-    - `aplicacao/`: Páginas, componentes, rotas e facades (UI)
+    - `aplicacao/`: Camada de UI (rotas, facades e componentes compartilhados)
+    - `aplicacao/modulos/`: Módulos por feature (pets, tutores) com `paginas`, `componentes` e `hooks`
     - `dominio/`: Modelos e contratos de negócio
     - `infraestrutura/`: Serviços HTTP, autenticação e integrações
     - `estado/`: Gerenciamento de estado com BehaviorSubject
@@ -202,7 +203,7 @@ Após um refresh bem-sucedido, as telas de listagem, detalhe e edição refazem 
 
 ## Requisitos do Edital (Resumo)
 
-- SPA com React + TypeScript e rotas lazy-loaded por módulo (Pets/Tutores).
+- SPA com React + TypeScript, módulos por feature em `aplicacao/modulos` e rotas lazy-loaded (Pets/Tutores).
 - Consumo de API em tempo real via Axios.
 - Layout responsivo com Tailwind.
 - Paginação (10 itens por página) e busca por nome.
@@ -214,7 +215,7 @@ Após um refresh bem-sucedido, as telas de listagem, detalhe e edição refazem 
 ## Matriz de Avaliação (Checklist)
 
 A. Estrutura e Organização
-- Modularização: camadas `aplicacao`, `dominio`, `infraestrutura`, `estado`.
+- Modularização: camadas `aplicacao`, `dominio`, `infraestrutura`, `estado` + módulos em `aplicacao/modulos`.
 - Responsividade e UX: layout responsivo com Tailwind, grids e flex adaptáveis.
 - Documentação: instruções de execução, testes, arquitetura, Docker e health checks.
 
@@ -241,6 +242,7 @@ C. Boas Práticas e Entrega
 - React Router com lazy loading: melhora performance e atende ao requisito de rotas dinâmicas.
 - Axios + interceptadores: centraliza autenticação e refresh de token.
 - Facade + BehaviorSubject: desacopla UI da infraestrutura e mantém estado reativo previsível.
+- Modularização por feature: organização de Pets/Tutores em `aplicacao/modulos` com páginas, componentes e hooks dedicados.
 - Debounce nas buscas: reduz chamadas e melhora UX.
 - Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
 - Campo "Espécie": a API não fornece o campo espécie; por isso a UI usa o valor de `raça` como rótulo "Espécie" para atender ao edital.

@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { tutoresFacade } from "../../facades/TutoresFacade";
-import { useObservable } from "../../hooks/useObservable";
+import { tutoresFacade } from "../../../facades/TutoresFacade";
+import { useObservable } from "../../../hooks/useObservable";
 import { useEffect } from "react";
-import { DetalheTutor } from "./componentes/DetalheTutor";
-import { Botao } from "../../componentes/ui/Botao";
-import { useAutenticacao } from "../../hooks/useAutenticacao";
+import { DetalheTutor } from "../componentes/DetalheTutor";
+import { Botao } from "../../../componentes/ui/Botao";
+import { useAutenticacao } from "../../../hooks/useAutenticacao";
 
 export function DetalheTutorPagina() {
   const { id } = useParams();

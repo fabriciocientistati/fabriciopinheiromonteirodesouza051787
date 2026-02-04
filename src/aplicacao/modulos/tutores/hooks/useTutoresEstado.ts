@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { tutoresEstado, type TutoresViewEstado } from '../../estado/tutoresEstado'
+import { tutoresEstado, type TutoresViewEstado } from '../../../../estado/tutoresEstado'
 
 
 export function useTutoresEstado(): TutoresViewEstado {

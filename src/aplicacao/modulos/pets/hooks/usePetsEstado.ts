@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { petsEstado, type PetsViewEstado } from '../../estado/petsEstado'
+import { petsEstado, type PetsViewEstado } from '../../../../estado/petsEstado'
 
 
 export function usePetsEstado(): PetsViewEstado {

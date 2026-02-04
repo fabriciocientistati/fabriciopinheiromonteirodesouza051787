@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { petsFacade } from '../../facades/PetsFacade'
-import { useObservable } from '../../hooks/useObservable'
+import { petsFacade } from '../../../facades/PetsFacade'
+import { useObservable } from '../../../hooks/useObservable'
 import { useEffect } from 'react'
-import { Botao } from '../../componentes/ui/Botao'
-import { DetalhePet } from './componentes/DetalhePet'
-import { useAutenticacao } from '../../hooks/useAutenticacao'
+import { Botao } from '../../../componentes/ui/Botao'
+import { DetalhePet } from '../componentes/DetalhePet'
+import { useAutenticacao } from '../../../hooks/useAutenticacao'
 
 export function DetalhePetPagina() {
   const { id } = useParams()

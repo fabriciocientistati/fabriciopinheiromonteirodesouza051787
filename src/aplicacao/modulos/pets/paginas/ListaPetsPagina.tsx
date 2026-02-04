@@ -1,26 +1,30 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { tutoresFacade } from '../../facades/TutoresFacade'
-import { useTutoresEstado } from '../../hooks/useTutoresEstado'
-import { Titulo } from '../../componentes/ui/Titulo'
-import { Input } from '../../componentes/ui/Input'
-import { Botao } from '../../componentes/ui/Botao'
-import { ListaTutores } from './componentes/ListaTutores'
-import { useAutenticacao } from '../../hooks/useAutenticacao'
+import { petsFacade } from '../../../facades/PetsFacade'
+import { Titulo } from '../../../componentes/ui/Titulo'
+import { Input } from '../../../componentes/ui/Input'
+import { Botao } from '../../../componentes/ui/Botao'
+import { ListaPets } from '../componentes/ListaPets'
+import { usePetsEstado } from '../hooks/usePetsEstado'
+import { useAutenticacao } from '../../../hooks/useAutenticacao'
 
 const TEMPO_DEBOUNCE = 400
 
-export function ListaTutoresPagina() {
+export function ListaPetsPagina() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { itens, carregando, erro, pagina, total, tamanhoPagina } = useTutoresEstado()
+
+  const { itens, carregando, erro, pagina, total, tamanhoPagina } =
+    usePetsEstado()
   const { versaoToken, autenticado } = useAutenticacao()
 
   const paginaAtual = pagina + 1
-  const totalPaginas = tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
+  const totalPaginas =
+    tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
 
   const [busca, setBusca] = useState('')
   const primeiraBuscaRef = useRef(true)
+
   const mensagemSucesso =
     (location.state as { mensagemSucesso?: string } | null)
       ?.mensagemSucesso ?? null
@@ -36,12 +40,12 @@ export function ListaTutoresPagina() {
   }, [mensagemSucesso, location.pathname, navigate])
 
   useEffect(() => {
-    tutoresFacade.definirBusca('')
+    petsFacade.definirBusca('')
   }, [])
 
   useEffect(() => {
     if (!autenticado || versaoToken === 0) return
-    void tutoresFacade.carregarPagina()
+    void petsFacade.carregarPagina()
   }, [autenticado, versaoToken])
 
   useEffect(() => {
@@ -51,7 +55,7 @@ export function ListaTutoresPagina() {
     }
 
     const timeout = setTimeout(() => {
-      tutoresFacade.definirBusca(busca.trim())
+      petsFacade.definirBusca(busca.trim())
     }, TEMPO_DEBOUNCE)
 
     return () => clearTimeout(timeout)
@@ -72,14 +76,13 @@ export function ListaTutoresPagina() {
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <Titulo>Lista de Tutores</Titulo>
+        <Titulo>Lista de Pets</Titulo>
 
         <Botao
           variante="sucesso"
-          onClick={() => navigate('/tutores/novo')}
-          className="w-full sm:w-auto"
+          onClick={() => navigate('/pets/novo')}
         >
-          Novo Tutor
+          Novo Pet
         </Botao>
       </div>
 
@@ -87,11 +90,10 @@ export function ListaTutoresPagina() {
         <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide text-center sm:text-left">
           Filtro de Busca
         </h3>
-
         <div className="flex justify-center sm:justify-start">
           <div className="w-full max-w-2xl">
             <Input
-              placeholder="Buscar tutor por nome"
+              placeholder="Buscar pet por nome"
               value={busca}
               onChange={e => setBusca(e.target.value)}
               className="w-full"
@@ -100,28 +102,26 @@ export function ListaTutoresPagina() {
         </div>
       </section>
 
-      <section className="space-y-2">
-        <div className="bg-white border rounded-lg shadow-sm p-2 sm:p-4 relative">
-          {carregando && itens.length > 0 && (
-            <div className="absolute right-3 top-3 text-xs text-gray-500 bg-white/90 px-2 py-1 rounded">
-              Atualizando lista...
-            </div>
-          )}
-          {itens.length === 0 ? (
-            <p className="text-center text-gray-600 py-4">
-              {carregando ? 'Carregando tutores...' : 'Não há tutores cadastrados.'}
-            </p>
-          ) : (
-            <>
-              <ListaTutores
-                tutores={itens}
-                onSelecionar={id => navigate(`/tutores/${id}`)}
-                onEditar={id => navigate(`/tutores/${id}/editar`)}
-                onExcluir={tutoresFacade.removerTutor}
-              />
-            </>
-          )}
-        </div>
+      <section className="bg-white border rounded-lg shadow-sm p-2 sm:p-4 relative">
+        {carregando && itens.length > 0 && (
+          <div className="absolute right-3 top-3 text-xs text-gray-500 bg-white/90 px-2 py-1 rounded">
+            Atualizando lista...
+          </div>
+        )}
+        {itens.length === 0 ? (
+          <p className="text-center text-gray-600 py-4">
+            {carregando ? 'Carregando pets...' : 'Não há pets cadastrados.'}
+          </p>
+        ) : (
+          <>
+            <ListaPets
+              pets={itens}
+              onSelecionar={id => navigate(`/pets/${id}`)}
+              onEditar={id => navigate(`/pets/${id}/editar`)}
+              onExcluir={petsFacade.removerPet}
+            />
+          </>
+        )}
       </section>
 
       <section className="space-y-2">
@@ -132,26 +132,27 @@ export function ListaTutoresPagina() {
         <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4 text-sm bg-gray-50 p-4 rounded-lg border max-w-xl">
           <Botao
             disabled={pagina === 0}
-            onClick={() => tutoresFacade.paginaAnterior()}
             variante="secundario"
+            onClick={() => petsFacade.paginaAnterior()}
           >
             Anterior
           </Botao>
 
           <span className="text-gray-700">
-            Página <strong>{paginaAtual}</strong> de <strong>{totalPaginas}</strong>
+            Página <strong>{paginaAtual}</strong> de{' '}
+            <strong>{totalPaginas}</strong>
           </span>
 
           <Botao
             disabled={paginaAtual >= totalPaginas}
-            onClick={() => tutoresFacade.proximaPagina()}
             variante="secundario"
+            onClick={() => petsFacade.proximaPagina()}
           >
             Próxima
           </Botao>
 
           <span className="ml-2 text-gray-600">
-            Total de tutores: {total}
+            Total de pets: {total}
           </span>
         </div>
       </section>

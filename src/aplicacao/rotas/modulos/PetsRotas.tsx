@@ -2,19 +2,19 @@ import { Routes, Route } from 'react-router-dom'
 import { lazy } from 'react'
 
 const ListaPetsPagina = lazy(() =>
-  import('../../paginas/pets/ListaPetsPagina').then(m => ({
+  import('../../modulos/pets/paginas/ListaPetsPagina').then(m => ({
     default: m.ListaPetsPagina,
   })),
 )
 
 const FormularioPetPagina = lazy(() =>
-  import('../../paginas/pets/FormularioPetPagina').then(m => ({
+  import('../../modulos/pets/paginas/FormularioPetPagina').then(m => ({
     default: m.FormularioPetPagina,
   })),
 )
 
 const DetalhePetPagina = lazy(() =>
-  import('../../paginas/pets/DetalhePetPagina').then(m => ({
+  import('../../modulos/pets/paginas/DetalhePetPagina').then(m => ({
     default: m.DetalhePetPagina,
   })),
 )
