@@ -246,6 +246,7 @@ C. Boas Práticas e Entrega
 - Campo "Espécie": a API não fornece o campo espécie; por isso a UI usa o valor de `raça` como rótulo "Espécie" para atender ao edital.
 - Detalhe de tutores: a UI mantém o `GET /v1/tutores/{id}` e, quando necessário, busca detalhes dos pets via `GET /v1/pets/{id}` com cache em memória no `TutoresFacade` para padronizar o fluxo e evitar chamadas repetidas.
 - Cadastro de tutor: a UI segue o edital com campos nome completo, telefone e endereço; e‑mail e CPF foram removidos da interface porque a API aceita `email`/`cpf` nulos.
+- Limpeza de estado por módulo: ao trocar entre Pets/Tutores, o estado anterior é limpo via hook (`useLimparEstadoPorModulo`) para evitar dados desatualizados ao retornar.
 - Nginx com fallback SPA: permite refresh direto em rotas internas.
 - Health checks no Nginx: atende liveness/readiness do edital.
 - Vitest + Testing Library: testes rápidos e focados em comportamento de UI.
