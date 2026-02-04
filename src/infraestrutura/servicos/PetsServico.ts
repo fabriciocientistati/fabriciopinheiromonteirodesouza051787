@@ -12,6 +12,8 @@ export interface RespostaPaginada<T> {
 export interface RespostaPaginadaApi<T> extends Partial<RespostaPaginada<T>> {
   page?: number
   size?: number
+  total?: number
+  pageCount?: number
   totalPages?: number
   totalElements?: number
   number?: number
@@ -31,12 +33,7 @@ export class PetsServico {
       params: {
         page: pagina,
         size: tamanhoPagina,
-        pagina: pagina,
-        tamanhoPagina: tamanhoPagina,
-        busca: filtro,
         nome: filtro,
-        name: filtro,
-        q: filtro,
       },
     })
 
@@ -48,6 +45,7 @@ export class PetsServico {
     const tamanhoAtual = data.tamanhoPagina ?? data.size ?? content.length
     const total = data.total ?? data.totalElements ?? content.length
     const paginaContador =
+      data.pageCount ??
       data.paginaContador ??
       data.totalPages ??
       (tamanhoAtual > 0 ? Math.ceil(total / tamanhoAtual) : 0)

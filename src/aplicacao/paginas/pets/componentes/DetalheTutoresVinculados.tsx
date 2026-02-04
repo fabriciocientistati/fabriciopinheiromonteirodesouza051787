@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Tutor } from '../../../../dominio/modelos/Tutor'
 import { Card } from '../../../componentes/ui/Card'
 import { Secao } from '../../../componentes/ui/Secao'
@@ -18,9 +18,73 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
   const [vincularAberto, setVincularAberto] = useState(false)
   const [tutorParaDesvincular, setTutorParaDesvincular] =
     useState<Tutor | null>(null)
+  const [tutoresDetalhe, setTutoresDetalhe] = useState<Tutor[] | null>(null)
+  const [carregandoDetalhes, setCarregandoDetalhes] = useState(false)
+  const [erroDetalhes, setErroDetalhes] = useState<string | null>(null)
+
+  const idsTutores = useMemo(
+    () => tutores.map(tutor => tutor.id).join(','),
+    [tutores],
+  )
+
+  useEffect(() => {
+    let ativo = true
+
+    if (tutores.length === 0) {
+      setTutoresDetalhe([])
+      setCarregandoDetalhes(false)
+      setErroDetalhes(null)
+      return
+    }
+
+    setCarregandoDetalhes(true)
+    setErroDetalhes(null)
+
+    const carregarDetalhes = async () => {
+      try {
+        const { tutores: detalhes, falhaIds } =
+          await petsFacade.carregarTutoresDetalhe(tutores)
+
+        if (!ativo) return
+
+        setTutoresDetalhe(detalhes)
+        if (falhaIds.length > 0) {
+          setErroDetalhes(
+            'Não foi possível carregar os dados completos de alguns tutores.',
+          )
+        }
+      } catch {
+        if (!ativo) return
+        setErroDetalhes('Não foi possível carregar os dados dos tutores.')
+        setTutoresDetalhe(tutores)
+      } finally {
+        if (ativo) {
+          setCarregandoDetalhes(false)
+        }
+      }
+    }
+
+    void carregarDetalhes()
+
+    return () => {
+      ativo = false
+    }
+  }, [petId, idsTutores, tutores])
+
+  const tutoresExibidos = tutoresDetalhe ?? tutores
 
   return (
     <Secao titulo="Tutores Vinculados">
+      {carregandoDetalhes && (
+        <p className="text-sm text-gray-500">
+          Carregando dados dos tutores...
+        </p>
+      )}
+
+      {erroDetalhes && (
+        <p className="text-sm text-red-600">{erroDetalhes}</p>
+      )}
+
       <div className="flex justify-center sm:justify-end">
         <Botao
           variante="sucesso"
@@ -31,13 +95,13 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
         </Botao>
       </div>
 
-      {tutores.length === 0 ? (
+      {tutoresExibidos.length === 0 ? (
         <p className="text-gray-500">
           Nenhum tutor vinculado a este pet.
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {tutores.map(tutor => (
+          {tutoresExibidos.map(tutor => (
             <Card
               key={tutor.id}
               className="flex flex-col sm:flex-row sm:items-center gap-4 p-4"
@@ -51,7 +115,7 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
               <div className="flex-1 text-center sm:text-left">
                 <p className="font-medium">{tutor.nome}</p>
                 <p className="text-sm text-gray-600">
-                  {formatarTelefone(tutor.telefone)}
+                  {formatarTelefone(tutor.telefone ?? '')}
                 </p>
               </div>
 

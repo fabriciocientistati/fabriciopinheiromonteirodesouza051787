@@ -1,15 +1,72 @@
 import { petsEstado } from '../../estado/petsEstado'
 import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
 import type { Pet } from '../../dominio/modelos/Pet'
+import type { Tutor } from '../../dominio/modelos/Tutor'
+import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
 import { erroEh401 } from '../utils/errosHttp'
 
 const petsServico = new PetsServico()
 
 class PetsFacade {
   readonly estado$ = petsEstado.estado$
+  private readonly cacheTutores = new Map<number, Tutor>()
+  private readonly cacheTutoresPromise = new Map<number, Promise<Tutor>>()
 
   obterSnapshot() {
     return petsEstado.obterSnapshot()
+  }
+
+  private obterTutorDetalhe(id: number): Promise<Tutor> {
+    const emCache = this.cacheTutores.get(id)
+    if (emCache) {
+      return Promise.resolve(emCache)
+    }
+
+    const emAndamento = this.cacheTutoresPromise.get(id)
+    if (emAndamento) {
+      return emAndamento
+    }
+
+    const promessa = tutoresServico
+      .buscarPorId(id)
+      .then(tutor => {
+        this.cacheTutores.set(id, tutor)
+        return tutor
+      })
+      .finally(() => {
+        this.cacheTutoresPromise.delete(id)
+      })
+
+    this.cacheTutoresPromise.set(id, promessa)
+    return promessa
+  }
+
+  async carregarTutoresDetalhe(tutores: Tutor[]): Promise<{
+    tutores: Tutor[]
+    falhaIds: number[]
+  }> {
+    if (tutores.length === 0) {
+      return { tutores: [], falhaIds: [] }
+    }
+
+    const idsUnicos = Array.from(new Set(tutores.map(tutor => tutor.id)))
+    const resultados = await Promise.allSettled(
+      idsUnicos.map(async id => {
+        await this.obterTutorDetalhe(id)
+        return id
+      }),
+    )
+
+    const falhaIds = resultados.flatMap((resultado, indice) =>
+      resultado.status === 'rejected' ? [idsUnicos[indice]] : [],
+    )
+
+    const tutoresOrdenados = tutores.map(tutor => {
+      const detalhado = this.cacheTutores.get(tutor.id)
+      return detalhado ?? tutor
+    })
+
+    return { tutores: tutoresOrdenados, falhaIds }
   }
 
   async irParaPagina(pagina: number) {
@@ -210,6 +267,8 @@ async removerFoto(petId: number, fotoId: number) {
 
   limpar() {
     petsEstado.limpar()
+    this.cacheTutores.clear()
+    this.cacheTutoresPromise.clear()
   }
 }
 

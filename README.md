@@ -243,6 +243,8 @@ C. Boas Práticas e Entrega
 - Axios + interceptadores: centraliza autenticação e refresh de token.
 - Facade + BehaviorSubject: desacopla UI da infraestrutura e mantém estado reativo previsível.
 - Debounce nas buscas: reduz chamadas e melhora UX.
+- Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
+- Campo "Espécie": a API não fornece o campo espécie; por isso a UI usa o valor de `raça` como rótulo "Espécie" para atender ao edital.
 - Nginx com fallback SPA: permite refresh direto em rotas internas.
 - Health checks no Nginx: atende liveness/readiness do edital.
 - Vitest + Testing Library: testes rápidos e focados em comportamento de UI.
