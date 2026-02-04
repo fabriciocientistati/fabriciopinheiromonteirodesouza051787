@@ -1,6 +1,6 @@
 import type { Tutor } from "../../../../dominio/modelos/Tutor";
 import { Card } from "../../../componentes/ui/Card";
-import { formatarCpf, formatarTelefone, normalizarCpf } from "../../../utils/validacoes";
+import { formatarTelefone } from "../../../utils/validacoes";
 
 interface Props {
   tutor: Tutor;
@@ -8,7 +8,6 @@ interface Props {
 
 export function CardTutor({ tutor }: Props) {
   const telefoneFormatado = formatarTelefone(tutor.telefone);
-  const cpfFormatado = formatarCpf(normalizarCpf(tutor.cpf));
 
   return (
     <Card className="p-6">
@@ -23,10 +22,8 @@ export function CardTutor({ tutor }: Props) {
           <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
             {tutor.nome}
           </h2>
-          <p><strong>Email:</strong> {tutor.email}</p>
           <p><strong>Telefone:</strong> {telefoneFormatado}</p>
           <p><strong>Endereço:</strong> {tutor.endereco}</p>
-          <p><strong>CPF:</strong> {cpfFormatado}</p>
         </div>
       </div>
     </Card>

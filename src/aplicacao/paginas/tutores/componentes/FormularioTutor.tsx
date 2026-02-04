@@ -5,12 +5,8 @@ import { Botao } from "../../../componentes/ui/Botao";
 import { UploadFoto } from "../../../componentes/ui/UploadFoto";
 import { useNavigate } from "react-router-dom";
 import {
-  formatarCpf,
   formatarTelefone,
   limparNumeros,
-  normalizarCpf,
-  validarCpf,
-  validarEmail,
   validarTelefone,
 } from "../../../utils/validacoes";
 
@@ -18,10 +14,8 @@ interface FormularioTutorProps {
   tutorInicial?: Tutor;
   onSubmit: (dados: {
     nome: string;
-    email: string;
     telefone: string;
     endereco: string;
-    cpf: string;
     foto?: File | null;
     removerFoto?: boolean;
   }) => Promise<void>;
@@ -36,37 +30,26 @@ export function FormularioTutor({
   const navigate = useNavigate();
 
   const [nome, setNome] = useState(tutorInicial?.nome ?? "");
-  const [email, setEmail] = useState(tutorInicial?.email ?? "");
   const [telefone, setTelefone] = useState(
     limparNumeros(tutorInicial?.telefone ?? ""),
   );
   const [endereco, setEndereco] = useState(tutorInicial?.endereco ?? "");
-  const [cpf, setCpf] = useState(normalizarCpf(tutorInicial?.cpf ?? ""));
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoRemovida, setFotoRemovida] = useState(false);
   const [salvando, setSalvando] = useState(false);
 
   const [erros, setErros] = useState<{
     nome?: string;
-    email?: string;
     telefone?: string;
     endereco?: string;
-    cpf?: string;
   }>({});
 
   const telefoneFormatado = formatarTelefone(telefone);
-  const cpfFormatado = formatarCpf(cpf);
 
   function validar() {
     const novoErros: typeof erros = {};
 
     if (!nome.trim()) novoErros.nome = "O nome é obrigatório.";
-
-    if (!email.trim()) {
-      novoErros.email = "O email é obrigatório.";
-    } else if (!validarEmail(email)) {
-      novoErros.email = "Email inválido.";
-    }
 
     if (!telefone.trim()) {
       novoErros.telefone = "O telefone é obrigatório.";
@@ -76,12 +59,6 @@ export function FormularioTutor({
 
     if (!endereco.trim()) {
       novoErros.endereco = "O endereço é obrigatório.";
-    }
-
-    if (!cpf.trim()) {
-      novoErros.cpf = "O CPF é obrigatório.";
-    } else if (!validarCpf(cpf)) {
-      novoErros.cpf = "CPF inválido.";
     }
 
     setErros(novoErros);
@@ -97,10 +74,8 @@ export function FormularioTutor({
     try {
       await onSubmit({
         nome,
-        email,
         telefone: limparNumeros(telefone),
         endereco,
-        cpf: limparNumeros(cpf),
         foto,
         removerFoto: fotoRemovida,
       });
@@ -125,15 +100,6 @@ export function FormularioTutor({
         />
 
         <Input
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full"
-          erro={erros.email}
-        />
-
-        <Input
           label="Telefone"
           type="tel"
           inputMode="numeric"
@@ -151,16 +117,6 @@ export function FormularioTutor({
           required
           className="w-full"
           erro={erros.endereco}
-        />
-
-        <Input
-          label="CPF"
-          inputMode="numeric"
-          value={cpfFormatado}
-          onChange={(e) => setCpf(limparNumeros(e.target.value))}
-          required
-          className="w-full"
-          erro={erros.cpf}
         />
       </div>
 

@@ -376,7 +376,7 @@ class TutoresFacade {
     this.cachePetsPromise.clear()
   }
 
-  private async cpfJaExiste(cpf: string, idIgnorado?: number): Promise<boolean> {
+  private async cpfJaExiste(cpf?: string | null, idIgnorado?: number): Promise<boolean> {
     const cpfNormalizado = normalizarCpf(cpf)
     if (!cpfNormalizado) return false
 

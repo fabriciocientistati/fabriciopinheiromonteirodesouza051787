@@ -9,7 +9,6 @@ describe('ListaTutores', () => {
           {
             id: 1,
             nome: 'Fabricio',
-            email: 'fabricio.cientistati@hotmail.comm',
             telefone: '65993086401',
             endereco: 'Rua A',
             cpf: '05178722181',

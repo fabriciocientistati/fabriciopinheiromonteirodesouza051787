@@ -14,10 +14,8 @@ import { useAutenticacao } from '../../hooks/useAutenticacao'
 
 type FormularioTutorDados = {
   nome: string
-  email: string
   telefone: string
   endereco: string
-  cpf: string
   foto?: File | null
   removerFoto?: boolean
 }
@@ -42,14 +40,10 @@ export function FormularioTutorPagina() {
   function montarDadosPersistencia(
     dados: FormularioTutorDados,
   ): Omit<Tutor, 'id' | 'foto'> {
-    const cpfNormalizado = dados.cpf.replace(/\D/g, '')
-
     return {
       nome: dados.nome,
-      email: dados.email,
       telefone: dados.telefone,
       endereco: dados.endereco,
-      cpf: cpfNormalizado,
     }
   }
 

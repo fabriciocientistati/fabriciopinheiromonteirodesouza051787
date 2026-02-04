@@ -86,7 +86,6 @@ npm run test:run
 
 ## Dados de Teste
 
-- CPF: deve ser válido (11 dígitos com validação).
 - Telefone: 10 ou 11 dígitos com DDD (apenas números).
 - Use dados fictícios válidos para passar nas validações.
 
@@ -246,6 +245,7 @@ C. Boas Práticas e Entrega
 - Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
 - Campo "Espécie": a API não fornece o campo espécie; por isso a UI usa o valor de `raça` como rótulo "Espécie" para atender ao edital.
 - Detalhe de tutores: a UI mantém o `GET /v1/tutores/{id}` e, quando necessário, busca detalhes dos pets via `GET /v1/pets/{id}` com cache em memória no `TutoresFacade` para padronizar o fluxo e evitar chamadas repetidas.
+- Cadastro de tutor: a UI segue o edital com campos nome completo, telefone e endereço; e‑mail e CPF foram removidos da interface porque a API aceita `email`/`cpf` nulos.
 - Nginx com fallback SPA: permite refresh direto em rotas internas.
 - Health checks no Nginx: atende liveness/readiness do edital.
 - Vitest + Testing Library: testes rápidos e focados em comportamento de UI.
@@ -281,10 +281,8 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Upload de foto com label neutro.
 - Paleta de cores padronizada a partir do sidebar, com botões alinhados por ação.
 - Padronização visual das listagens (Pets/Tutores), filtros e navegação, com indicador de rota ativa no sidebar.
-- Máscaras e validações reutilizáveis para telefone/CPF/email.
+- Máscaras e validações reutilizáveis para telefone.
 - Máscaras aplicadas também no detalhamento de tutor.
-- Validação para evitar cadastro de tutor com CPF já existente.
-- Validação de CPF duplicado também na edição (aviso sem ocultar o formulário).
 - Cadastro de tutor e pet permite pré-vincular itens via modal (antes de salvar).
 - Listas de pré-vínculo exibem imagem, nome e detalhes básicos.
 - Destaque visual dos nomes em listagens, detalhes e modais de vínculo (pets e tutores).
