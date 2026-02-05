@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { autenticacaoFacade } from "../../facades/AutenticacaoFacade";
 
@@ -12,7 +12,7 @@ export function Sidebar() {
         aria-label="Abrir menu"
         className="md:hidden fixed top-4 left-4 z-30 bg-[#193282] text-white p-2 rounded-lg shadow-lg border border-[#193282] hover:bg-[#1f3da0]"
       >
-        ☰
+        Menu
       </button>
 
       {aberta && (
@@ -24,10 +24,10 @@ export function Sidebar() {
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-30 w-64 bg-[#193282] text-white flex flex-col
+          fixed inset-y-0 left-0 z-30 w-64 bg-[#193282] text-white flex flex-col overflow-hidden
           transform transition-transform duration-300
           ${aberta ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0 md:static
+          md:translate-x-0 md:sticky md:top-0 md:h-screen
         `}
       >
         <div className="h-16 flex items-center px-6 border-b border-[#1f3da0] justify-between">
@@ -40,11 +40,11 @@ export function Sidebar() {
             aria-label="Fechar menu"
             className="md:hidden text-white/80 hover:text-white"
           >
-            ✕
+            Fechar
           </button>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-2">
+        <nav className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-2">
           <NavLink
             to="/tutores"
             className={({ isActive }) =>
@@ -74,7 +74,7 @@ export function Sidebar() {
           </NavLink>
         </nav>
 
-        <div className="px-4 py-4 border-t border-[#1f3da0]">
+        <div className="px-4 py-4 border-t border-[#1f3da0] shrink-0 bg-[#193282]">
           <button
             onClick={() => autenticacaoFacade.logout()}
             className="w-full flex items-center gap-3 px-4 py-2 rounded text-red-200 hover:bg-[#1f3da0] transition"
@@ -86,3 +86,4 @@ export function Sidebar() {
     </>
   );
 }
+

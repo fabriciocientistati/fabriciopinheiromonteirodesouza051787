@@ -140,12 +140,24 @@ export function ListaTutoresPagina() {
 
         <div className="flex justify-center sm:justify-start">
           <div className="w-full max-w-2xl">
-            <Input
-              placeholder="Buscar tutor por nome"
-              value={busca}
-              onChange={e => setBusca(e.target.value)}
-              className="w-full"
-            />
+            <div className="relative">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-4 w-4"
+                >
+                  <path d="M12.9 14.32a8 8 0 1 1 1.414-1.414l3.387 3.387-1.414 1.414-3.387-3.387zM8 14a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+                </svg>
+              </span>
+              <Input
+                placeholder="Buscar tutor por nome"
+                value={busca}
+                onChange={e => setBusca(e.target.value)}
+                className="w-full pl-10 bg-white shadow-sm border-gray-200 focus:border-[#193282] focus:ring-[#193282]/20"
+              />
+            </div>
           </div>
         </div>
       </section>
