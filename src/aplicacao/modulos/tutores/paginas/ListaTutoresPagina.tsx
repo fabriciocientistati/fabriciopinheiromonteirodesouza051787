@@ -22,6 +22,7 @@ export function ListaTutoresPagina() {
 
   const [busca, setBusca] = useState(filtroBusca)
   const inicializouRef = useRef(false)
+  const filtroInicialRef = useRef(filtroBusca)
   const mensagemSucesso =
     (location.state as { mensagemSucesso?: string } | null)
       ?.mensagemSucesso ?? null
@@ -30,7 +31,7 @@ export function ListaTutoresPagina() {
     if (!autenticado) return
     if (!inicializouRef.current) {
       inicializouRef.current = true
-      if (filtroBusca.trim() === '') {
+      if (filtroInicialRef.current.trim() === '') {
         // Primeira carga: limpa busca e carrega pagina 0 uma unica vez.
         void tutoresFacade.definirBusca('')
         return
