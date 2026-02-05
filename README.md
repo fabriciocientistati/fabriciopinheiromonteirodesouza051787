@@ -1,4 +1,4 @@
-# Pet e Tutores - Front-End
+﻿# Pet e Tutores - Front-End
 
 ## Visão Geral do Projeto
 
@@ -86,11 +86,6 @@ npm run test:run
 
 ### Documentos de QA
 - Fluxo de testes: [TEST_FLOW.md](TEST_FLOW.md)
-
-## Dados de Teste
-
-- Telefone: 10 ou 11 dígitos com DDD (apenas números).
-- Use dados fictícios válidos para passar nas validações.
 
 ## SPA (Single Page Application)
 
@@ -285,7 +280,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Upload de foto com label neutro.
 - Paleta de cores padronizada a partir do sidebar, com botões alinhados por ação.
 - Padronização visual das listagens (Pets/Tutores), filtros e navegação, com indicador de rota ativa no sidebar.
-- Máscaras e validações reutilizáveis para telefone.
+- Máscaras reutilizáveis para telefone.
 - Máscaras aplicadas também no detalhamento de tutor.
 - Toasts de sucesso para criação/edição e vínculos (modais) com feedback leve.
 - Vinculações em detalhe usam recarregamento silencioso para não fechar o modal.
@@ -392,3 +387,4 @@ O projeto prioriza:
 - código limpo e manutenível
 
 O desenho adotado permite evolução futura sem necessidade de refatorações estruturais.
+

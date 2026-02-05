@@ -15,7 +15,7 @@ export function ListaPetsPagina() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { itens, carregando, erro, pagina, total, tamanhoPagina } =
+  const { itens, carregando, erro, pagina, total, tamanhoPagina, filtroBusca } =
     usePetsEstado()
   const { versaoToken, autenticado } = useAutenticacao()
 
@@ -23,34 +23,40 @@ export function ListaPetsPagina() {
   const totalPaginas =
     tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
 
-  const [busca, setBusca] = useState('')
-  const primeiraBuscaRef = useRef(true)
+  const [busca, setBusca] = useState(filtroBusca)
+  const inicializouRef = useRef(false)
 
   const mensagemSucesso =
     (location.state as { mensagemSucesso?: string } | null)
       ?.mensagemSucesso ?? null
 
   useEffect(() => {
-    petsFacade.definirBusca('')
-  }, [])
-
-  useEffect(() => {
-    if (!autenticado || versaoToken === 0) return
+    if (!autenticado) return
+    if (!inicializouRef.current) {
+      inicializouRef.current = true
+      if (filtroBusca.trim() === '') {
+        // Primeira carga: limpa busca e carrega pagina 0 uma unica vez.
+        void petsFacade.definirBusca('')
+        return
+      }
+      // Primeira carga com filtro ativo: carrega pagina atual com filtro.
+      void petsFacade.carregarPagina()
+      return
+    }
+    // Recarrega dados quando o token muda, sem resetar a busca atual.
     void petsFacade.carregarPagina()
   }, [autenticado, versaoToken])
 
   useEffect(() => {
-    if (primeiraBuscaRef.current) {
-      primeiraBuscaRef.current = false
-      return
-    }
+    const buscaNormalizada = busca.trim()
+    if (buscaNormalizada === filtroBusca) return
 
     const timeout = setTimeout(() => {
-      petsFacade.definirBusca(busca.trim())
+      petsFacade.definirBusca(buscaNormalizada)
     }, TEMPO_DEBOUNCE)
 
     return () => clearTimeout(timeout)
-  }, [busca])
+  }, [busca, filtroBusca])
 
   const renderNavegacao = (compacto: boolean) => (
     <section className={compacto ? 'space-y-1' : 'space-y-2'}>
@@ -174,3 +180,6 @@ export function ListaPetsPagina() {
     </div>
   )
 }
+
+
+

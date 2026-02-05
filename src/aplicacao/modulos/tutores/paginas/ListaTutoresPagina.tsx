@@ -14,39 +14,45 @@ const TEMPO_DEBOUNCE = 400
 export function ListaTutoresPagina() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { itens, carregando, erro, pagina, total, tamanhoPagina } = useTutoresEstado()
+  const { itens, carregando, erro, pagina, total, tamanhoPagina, filtroBusca } = useTutoresEstado()
   const { versaoToken, autenticado } = useAutenticacao()
 
   const paginaAtual = pagina + 1
   const totalPaginas = tamanhoPagina > 0 ? Math.ceil(total / tamanhoPagina) : 1
 
-  const [busca, setBusca] = useState('')
-  const primeiraBuscaRef = useRef(true)
+  const [busca, setBusca] = useState(filtroBusca)
+  const inicializouRef = useRef(false)
   const mensagemSucesso =
     (location.state as { mensagemSucesso?: string } | null)
       ?.mensagemSucesso ?? null
 
   useEffect(() => {
-    tutoresFacade.definirBusca('')
-  }, [])
-
-  useEffect(() => {
-    if (!autenticado || versaoToken === 0) return
+    if (!autenticado) return
+    if (!inicializouRef.current) {
+      inicializouRef.current = true
+      if (filtroBusca.trim() === '') {
+        // Primeira carga: limpa busca e carrega pagina 0 uma unica vez.
+        void tutoresFacade.definirBusca('')
+        return
+      }
+      // Primeira carga com filtro ativo: carrega pagina atual com filtro.
+      void tutoresFacade.carregarPagina()
+      return
+    }
+    // Recarrega dados quando o token muda, sem resetar a busca atual.
     void tutoresFacade.carregarPagina()
   }, [autenticado, versaoToken])
 
   useEffect(() => {
-    if (primeiraBuscaRef.current) {
-      primeiraBuscaRef.current = false
-      return
-    }
+    const buscaNormalizada = busca.trim()
+    if (buscaNormalizada === filtroBusca) return
 
     const timeout = setTimeout(() => {
-      tutoresFacade.definirBusca(busca.trim())
+      tutoresFacade.definirBusca(buscaNormalizada)
     }, TEMPO_DEBOUNCE)
 
     return () => clearTimeout(timeout)
-  }, [busca])
+  }, [busca, filtroBusca])
 
   const renderNavegacao = (compacto: boolean) => (
     <section className={compacto ? 'space-y-1' : 'space-y-2'}>
@@ -173,3 +179,6 @@ export function ListaTutoresPagina() {
     </div>
   )
 }
+
+
+

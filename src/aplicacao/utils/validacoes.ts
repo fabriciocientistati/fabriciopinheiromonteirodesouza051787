@@ -50,11 +50,6 @@ export function validarNumeroPositivo(valor: number | ''): boolean {
   return typeof valor === 'number' && valor > 0
 }
 
-export function validarTelefone(telefone: string): boolean {
-  const digits = limparNumeros(telefone)
-  return digits.length >= 10 && digits.length <= 11
-}
-
 export function validarCpf(cpf: string): boolean {
   const digits = limparNumeros(cpf)
 

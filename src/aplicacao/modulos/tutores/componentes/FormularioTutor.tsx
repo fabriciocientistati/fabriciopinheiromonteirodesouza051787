@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import {
   formatarTelefone,
   limparNumeros,
-  validarTelefone,
 } from "../../../utils/validacoes";
 import { MENSAGENS_VALIDACAO } from "../../../utils/mensagensValidacao";
 
@@ -55,8 +54,6 @@ export function FormularioTutor({
 
     if (!telefone.trim()) {
       novoErros.telefone = MENSAGENS_VALIDACAO.TELEFONE_OBRIGATORIO;
-    } else if (!validarTelefone(telefone)) {
-      novoErros.telefone = MENSAGENS_VALIDACAO.TELEFONE_INVALIDO;
     }
 
     if (!endereco.trim()) {
