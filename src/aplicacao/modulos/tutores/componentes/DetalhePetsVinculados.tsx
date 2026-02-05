@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado";
 import { Card } from "../../../componentes/ui/Card";
 import { Secao } from "../../../componentes/ui/Secao";
@@ -6,7 +6,8 @@ import { Botao } from "../../../componentes/ui/Botao";
 import { Modal } from "../../../componentes/ui/Modal";
 import { tutoresFacade } from "../../../facades/TutoresFacade";
 import { VincularPetModal } from "./VincularPetModal";
-
+import { mensagemErro } from "../../../utils/errosHttp";
+import { MENSAGENS_ERRO } from "../../../utils/mensagensErro";
 
 interface Props {
   tutorId: number;
@@ -48,13 +49,13 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
 
         setPetsDetalhe(detalhes);
         if (falhaIds.length > 0) {
-          setErroDetalhes(
-            "Não foi possível carregar os dados completos de alguns pets.",
-          );
+          setErroDetalhes(MENSAGENS_ERRO.DETALHE_PETS_PARCIAL);
         }
-      } catch {
+      } catch (erro) {
         if (!ativo) return;
-        setErroDetalhes("Não foi possível carregar os dados dos pets.");
+        setErroDetalhes(
+          mensagemErro(erro, MENSAGENS_ERRO.DETALHE_PETS_DADOS),
+        );
         setPetsDetalhe(pets);
       } finally {
         if (ativo) {

@@ -242,6 +242,7 @@ C. Boas Práticas e Entrega
 - React Router com lazy loading: melhora performance e atende ao requisito de rotas dinâmicas.
 - Axios + interceptadores: centraliza autenticação e refresh de token.
 - Facade + BehaviorSubject: desacopla UI da infraestrutura e mantém estado reativo previsível.
+- Padronização de mensagens (erro/validação): centraliza textos em utilitários para consistência de UX, facilidade de manutenção e menor acoplamento entre UI e regras de mensagem.
 - Modularização por feature: organização de Pets/Tutores em `aplicacao/modulos` com páginas, componentes e hooks dedicados.
 - Debounce nas buscas: reduz chamadas e melhora UX.
 - Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
@@ -342,6 +343,35 @@ O gerenciamento de vínculos ocorre diretamente nas telas de detalhe:
 - Nenhuma lógica de UI nos serviços
 
 Os serviços possuem responsabilidade única e seguem o schema oficial da API pública.
+
+## Padronização de Erros (Front-End)
+
+O Swagger da API pública não define um modelo de erro consistente. Para manter previsibilidade, organização e mensagens uniformes na UI, o front-end utiliza um utilitário de normalização de erros em `src/aplicacao/utils/errosHttp.ts`.
+
+Funções principais:
+- `mensagemErro(erro, fallback)`: converte qualquer erro (Axios, Error, string) em mensagem exibível.
+- `normalizarErro(erro, fallback)`: retorna um objeto com `mensagem`, `status`, `codigo` e `detalhes` quando disponíveis.
+- `erroEh401(erro)`: identifica erro 401 para fluxos de sessão expirada.
+
+Onde usar (padrão recomendado):
+- Facades: sempre que houver `try/catch` e o estado exibe mensagens de erro.
+- Componentes com requisições locais e `try/catch` (ex.: carregamento de detalhes em modais/listas).
+- Hooks de dados (quando adicionados) que tratem erros de requisição.
+
+Princípios:
+- Preferir `mensagemErro` com fallback contextual (ex.: "Erro ao criar pet") para manter UX consistente.
+- Evitar strings soltas de erro em componentes quando a falha veio de HTTP.
+- Mensagens fixas ficam centralizadas em `src/aplicacao/utils/mensagensErro.ts`.
+- Mensagens de validação ficam centralizadas em `src/aplicacao/utils/mensagensValidacao.ts`.
+
+Exemplo (validação de formulário):
+```ts
+import { MENSAGENS_VALIDACAO } from 'src/aplicacao/utils/mensagensValidacao'
+
+if (!nome.trim()) {
+  novoErros.nome = MENSAGENS_VALIDACAO.NOME_OBRIGATORIO
+}
+```
 
 ## Modelos de Domínio
 

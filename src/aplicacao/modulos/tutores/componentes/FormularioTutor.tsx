@@ -9,6 +9,7 @@ import {
   limparNumeros,
   validarTelefone,
 } from "../../../utils/validacoes";
+import { MENSAGENS_VALIDACAO } from "../../../utils/mensagensValidacao";
 
 interface FormularioTutorProps {
   tutorInicial?: Tutor;
@@ -49,16 +50,17 @@ export function FormularioTutor({
   function validar() {
     const novoErros: typeof erros = {};
 
-    if (!nome.trim()) novoErros.nome = "O nome é obrigatório.";
+    if (!nome.trim())
+      novoErros.nome = MENSAGENS_VALIDACAO.NOME_OBRIGATORIO;
 
     if (!telefone.trim()) {
-      novoErros.telefone = "O telefone é obrigatório.";
+      novoErros.telefone = MENSAGENS_VALIDACAO.TELEFONE_OBRIGATORIO;
     } else if (!validarTelefone(telefone)) {
-      novoErros.telefone = "Telefone inválido.";
+      novoErros.telefone = MENSAGENS_VALIDACAO.TELEFONE_INVALIDO;
     }
 
     if (!endereco.trim()) {
-      novoErros.endereco = "O endereço é obrigatório.";
+      novoErros.endereco = MENSAGENS_VALIDACAO.ENDERECO_OBRIGATORIO;
     }
 
     setErros(novoErros);

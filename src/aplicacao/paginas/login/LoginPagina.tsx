@@ -4,6 +4,7 @@ import { useObservable } from "../../hooks/useObservable";
 import { autenticacaoFacade } from "../../facades/AutenticacaoFacade";
 import { autenticacaoEstado } from "../../../estado/autenticacaoEstado";
 import { FormularioLogin } from "./compomentes/FormularioLogin";
+import { MENSAGENS_ERRO } from "../../utils/mensagensErro";
 
 export function LoginPagina() {
   const navigate = useNavigate();
@@ -14,7 +15,9 @@ export function LoginPagina() {
     autenticacaoFacade.obterSnapshot()
   );
   const erroSessao =
-    estado.erro && estado.erro.includes("Sessão expirada") ? estado.erro : null;
+    estado.erro && estado.erro.includes(MENSAGENS_ERRO.SESSAO_EXPIRADA)
+      ? estado.erro
+      : null;
   const erroLogin = erroSessao ? undefined : estado.erro;
 
   const [usuario, setUsuario] = useState("");
@@ -91,4 +94,3 @@ export function LoginPagina() {
     </div>
   );
 }
-

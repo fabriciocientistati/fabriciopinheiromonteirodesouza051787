@@ -3,6 +3,8 @@ import type { CredenciaisLogin } from '../../dominio/modelos/Autenticacao'
 import { autenticacaoServico } from '../../infraestrutura/servicos/AutenticacaoServico'
 import { petsFacade } from './PetsFacade'
 import { tutoresFacade } from './TutoresFacade'
+import { mensagemErro } from '../utils/errosHttp'
+import { MENSAGENS_ERRO } from '../utils/mensagensErro'
 import {
   limparTokens,
   obterAccessToken,
@@ -24,9 +26,11 @@ class AutenticacaoFacade {
         resposta.access_token,
         resposta.refresh_token
       );
-    } catch {
+    } catch (erro) {
       limparTokens()
-      autenticacaoEstado.definirErro("Credenciais inválidas");
+      autenticacaoEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.CREDENCIAIS_INVALIDAS),
+      )
     } finally {
       autenticacaoEstado.finalizarCarregamento();
     }

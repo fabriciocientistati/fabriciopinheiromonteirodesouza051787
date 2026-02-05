@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import type { Tutor } from '../../../../dominio/modelos/Tutor'
 import { Card } from '../../../componentes/ui/Card'
 import { Secao } from '../../../componentes/ui/Secao'
@@ -8,6 +8,8 @@ import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { petsFacade } from '../../../facades/PetsFacade'
 import { VincularTutorModal } from './VincularTutorModal'
 import { formatarTelefone } from '../../../utils/validacoes'
+import { mensagemErro } from '../../../utils/errosHttp'
+import { MENSAGENS_ERRO } from '../../../utils/mensagensErro'
 
 interface Props {
   petId: number
@@ -49,13 +51,13 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
 
         setTutoresDetalhe(detalhes)
         if (falhaIds.length > 0) {
-          setErroDetalhes(
-            'Não foi possível carregar os dados completos de alguns tutores.',
-          )
+          setErroDetalhes(MENSAGENS_ERRO.DETALHE_TUTORES_PARCIAL)
         }
-      } catch {
+      } catch (erro) {
         if (!ativo) return
-        setErroDetalhes('Não foi possível carregar os dados dos tutores.')
+        setErroDetalhes(
+          mensagemErro(erro, MENSAGENS_ERRO.DETALHE_TUTORES_DADOS),
+        )
         setTutoresDetalhe(tutores)
       } finally {
         if (ativo) {

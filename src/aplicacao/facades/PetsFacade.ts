@@ -3,7 +3,8 @@ import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
 import type { Pet } from '../../dominio/modelos/Pet'
 import type { Tutor } from '../../dominio/modelos/Tutor'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
-import { erroEh401 } from '../utils/errosHttp'
+import { erroEh401, mensagemErro } from '../utils/errosHttp'
+import { MENSAGENS_ERRO } from '../utils/mensagensErro'
 
 const petsServico = new PetsServico()
 
@@ -107,7 +108,7 @@ class PetsFacade {
         petsEstado.finalizarCarregamento()
         return
       }
-        petsEstado.definirErro('Erro ao carregar pets')
+      petsEstado.definirErro(mensagemErro(erro, MENSAGENS_ERRO.PETS_CARREGAR))
     }
   }
 
@@ -119,9 +120,10 @@ async criar(dados: Omit<Pet, 'id'>) {
 
     petsEstado.definirCriado()
     return petCriado
-  } catch {
-    petsEstado.definirErro('Erro ao criar pet')
-    throw new Error('Erro ao criar pet')
+  } catch (erro) {
+    const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_CRIAR)
+    petsEstado.definirErro(mensagem)
+    throw new Error(mensagem)
   }
 }
 
@@ -131,9 +133,10 @@ async atualizar(id: number, dados: Partial<Pet>) {
     const pet = await petsServico.atualizar(id, dados)
     petsEstado.definirCriado()
     return pet
-  } catch {
-    petsEstado.definirErro('Erro ao atualizar pet')
-    throw new Error('Erro ao atualizar pet')
+  } catch (erro) {
+    const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_ATUALIZAR)
+    petsEstado.definirErro(mensagem)
+    throw new Error(mensagem)
   }
 }
 
@@ -144,8 +147,10 @@ async buscarPorId(id: number) {
     const pet = await petsServico.buscarPorId(id) 
     
     petsEstado.definirDetalhe(pet) 
-  } catch { 
-    petsEstado.definirErro('Erro ao carregar detalhes do pet') 
+  } catch (erro) { 
+    petsEstado.definirErro(
+      mensagemErro(erro, MENSAGENS_ERRO.PETS_DETALHE),
+    ) 
   } 
 }  
 
@@ -153,8 +158,10 @@ async buscarPorId(id: number) {
     try {
       const pet = await petsServico.buscarPorId(id)
       petsEstado.definirDetalhe(pet)
-    } catch {
-      petsEstado.definirErro('Erro ao carregar detalhes do pet')
+    } catch (erro) {
+      petsEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.PETS_DETALHE),
+      )
     }
   }
 
@@ -196,9 +203,10 @@ async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
     petsEstado.definirCriado()
 
     return petCriado
-  } catch {
-    petsEstado.definirErro('Erro ao criar pet')
-    throw new Error('Erro ao criar pet')
+  } catch (erro) {
+    const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_CRIAR)
+    petsEstado.definirErro(mensagem)
+    throw new Error(mensagem)
   }
 }
 
@@ -226,9 +234,10 @@ async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
 
     petsEstado.definirDetalhe(petAtualizado)
     return petAtualizado
-  } catch {
-    petsEstado.definirErro('Erro ao atualizar foto')
-    throw new Error('Erro ao atualizar foto')
+  } catch (erro) {
+    const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_ATUALIZAR_FOTO)
+    petsEstado.definirErro(mensagem)
+    throw new Error(mensagem)
   }
 }
 
@@ -240,9 +249,10 @@ async removerPet(id: number) {
 
     petsEstado.definirRemoverDaLista(id)
 
-  } catch {
-    petsEstado.definirErro('Erro ao remover pet')
-    throw new Error('Erro ao remover pet')
+  } catch (erro) {
+    const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_REMOVER)
+    petsEstado.definirErro(mensagem)
+    throw new Error(mensagem)
   }
 }
 
@@ -268,9 +278,10 @@ async removerFoto(petId: number, fotoId: number) {
         foto: undefined,
       })
     }
-  } catch {
-    petsEstado.definirErro('Erro ao remover foto')
-    throw new Error('Erro ao remover foto')
+  } catch (erro) {
+    const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_REMOVER_FOTO)
+    petsEstado.definirErro(mensagem)
+    throw new Error(mensagem)
   }
 }
 

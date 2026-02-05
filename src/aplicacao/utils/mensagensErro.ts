@@ -1,0 +1,43 @@
+export const MENSAGENS_ERRO = {
+  GENERICO: 'Ocorreu um erro inesperado.',
+  FALHA_REDE: 'Falha de conexão. Verifique sua internet e tente novamente.',
+  TIMEOUT: 'Tempo de resposta excedido. Tente novamente.',
+  SESSAO_EXPIRADA: 'Sessão expirada. Faça login novamente.',
+  CREDENCIAIS_INVALIDAS: 'Credenciais inválidas.',
+  CPF_DUPLICADO: 'CPF já cadastrado.',
+  CPF_VALIDACAO: 'Não foi possível validar o CPF.',
+  PETS_CARREGAR: 'Erro ao carregar pets',
+  PETS_CRIAR: 'Erro ao criar pet',
+  PETS_ATUALIZAR: 'Erro ao atualizar pet',
+  PETS_DETALHE: 'Erro ao carregar detalhes do pet',
+  PETS_ATUALIZAR_FOTO: 'Erro ao atualizar foto',
+  PETS_REMOVER: 'Erro ao remover pet',
+  PETS_REMOVER_FOTO: 'Erro ao remover foto',
+  TUTORES_CARREGAR: 'Erro ao carregar tutores',
+  TUTORES_DETALHE: 'Erro ao carregar detalhes do tutor',
+  TUTORES_CRIAR: 'Erro ao criar tutor',
+  TUTORES_ATUALIZAR: 'Erro ao atualizar tutor',
+  TUTORES_ATUALIZAR_FOTO: 'Erro ao enviar foto do tutor',
+  TUTORES_REMOVER_FOTO: 'Erro ao remover foto do tutor',
+  TUTORES_VINCULAR_PET: 'Erro ao vincular pet ao tutor',
+  TUTORES_REMOVER: 'Erro ao remover tutor',
+  TUTORES_REMOVER_VINCULO: 'Erro ao remover vínculo do pet',
+  DETALHE_TUTORES_PARCIAL:
+    'Não foi possível carregar os dados completos de alguns tutores.',
+  DETALHE_TUTORES_DADOS: 'Não foi possível carregar os dados dos tutores.',
+  DETALHE_PETS_PARCIAL:
+    'Não foi possível carregar os dados completos de alguns pets.',
+  DETALHE_PETS_DADOS: 'Não foi possível carregar os dados dos pets.',
+} as const
+
+export const MENSAGENS_STATUS_HTTP: Record<number, string> = {
+  400: 'Requisição inválida.',
+  401: MENSAGENS_ERRO.SESSAO_EXPIRADA,
+  403: 'Acesso não autorizado.',
+  404: 'Recurso não encontrado.',
+  409: 'Conflito de dados.',
+  422: 'Dados inválidos.',
+  429: 'Muitas requisições. Tente novamente em instantes.',
+  500: 'Erro no servidor.',
+  503: 'Serviço indisponível.',
+}

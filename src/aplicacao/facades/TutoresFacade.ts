@@ -5,11 +5,10 @@ import type { PetVinculado } from '../../dominio/modelos/PetVinculado'
 import { tutoresEstado } from '../../estado/tutoresEstado'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
 import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
-import { erroEh401 } from '../utils/errosHttp'
+import { erroEh401, mensagemErro } from '../utils/errosHttp'
+import { MENSAGENS_ERRO } from '../utils/mensagensErro'
 import { normalizarCpf } from '../utils/validacoes'
 
-const ERRO_CPF_DUPLICADO = 'CPF já cadastrado.'
-const ERRO_CPF_VALIDACAO = 'Não foi possível validar o CPF.'
 const petsServico = new PetsServico()
 
 class TutoresFacade {
@@ -125,7 +124,9 @@ class TutoresFacade {
         tutoresEstado.finalizarCarregamento()
         return
       }
-        tutoresEstado.definirErro('Erro ao carregar tutores')
+      tutoresEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.TUTORES_CARREGAR),
+      )
     }
   }
 
@@ -158,8 +159,10 @@ class TutoresFacade {
       const pet = await tutoresServico.buscarPorId(id) 
       
       tutoresEstado.definirDetalhe(pet) 
-    } catch { 
-      tutoresEstado.definirErro('Erro ao carregar detalhes do tutor') 
+    } catch (erro) { 
+      tutoresEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.TUTORES_DETALHE),
+      ) 
     } 
   }  
 
@@ -174,8 +177,10 @@ class TutoresFacade {
       const pets = tutor.pets ?? []
       tutoresEstado.definirPetsVinculados(pets)
 
-    } catch {
-      tutoresEstado.definirErro('Erro ao carregar detalhes do tutor')
+    } catch (erro) {
+      tutoresEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.TUTORES_DETALHE),
+      )
     }
   }
 
@@ -193,17 +198,20 @@ class TutoresFacade {
         const cpfDuplicado = await this.cpfJaExiste(tutor.cpf)
         if (cpfDuplicado) {
           tutoresEstado.definirCriado()
-          tutoresEstado.definirErro(ERRO_CPF_DUPLICADO)
-          throw new Error(ERRO_CPF_DUPLICADO)
+          tutoresEstado.definirErro(MENSAGENS_ERRO.CPF_DUPLICADO)
+          throw new Error(MENSAGENS_ERRO.CPF_DUPLICADO)
         }
       } catch (erroValidacao) {
-        if (erroValidacao instanceof Error && erroValidacao.message === ERRO_CPF_DUPLICADO) {
+        if (
+          erroValidacao instanceof Error &&
+          erroValidacao.message === MENSAGENS_ERRO.CPF_DUPLICADO
+        ) {
           throw erroValidacao
         }
 
         tutoresEstado.definirCriado()
-        tutoresEstado.definirErro(ERRO_CPF_VALIDACAO)
-        throw new Error(ERRO_CPF_VALIDACAO)
+        tutoresEstado.definirErro(MENSAGENS_ERRO.CPF_VALIDACAO)
+        throw new Error(MENSAGENS_ERRO.CPF_VALIDACAO)
       }
 
       const novoTutor = await tutoresServico.criar(tutor)
@@ -214,14 +222,15 @@ class TutoresFacade {
     } catch (erro) {
       if (
         erro instanceof Error &&
-        (erro.message === ERRO_CPF_DUPLICADO ||
-          erro.message === ERRO_CPF_VALIDACAO)
+        (erro.message === MENSAGENS_ERRO.CPF_DUPLICADO ||
+          erro.message === MENSAGENS_ERRO.CPF_VALIDACAO)
       ) {
         throw erro
       }
 
-      tutoresEstado.definirErro('Erro ao criar tutor')
-      throw Error('Erro ao criar tutor')
+      const mensagem = mensagemErro(erro, MENSAGENS_ERRO.TUTORES_CRIAR)
+      tutoresEstado.definirErro(mensagem)
+      throw new Error(mensagem)
     }
   }
 
@@ -233,20 +242,20 @@ class TutoresFacade {
         const cpfDuplicado = await this.cpfJaExiste(tutor.cpf, id)
         if (cpfDuplicado) {
           tutoresEstado.definirCriado()
-          tutoresEstado.definirErro(ERRO_CPF_DUPLICADO)
-          throw new Error(ERRO_CPF_DUPLICADO)
+          tutoresEstado.definirErro(MENSAGENS_ERRO.CPF_DUPLICADO)
+          throw new Error(MENSAGENS_ERRO.CPF_DUPLICADO)
         }
       } catch (erroValidacao) {
         if (
           erroValidacao instanceof Error &&
-          erroValidacao.message === ERRO_CPF_DUPLICADO
+          erroValidacao.message === MENSAGENS_ERRO.CPF_DUPLICADO
         ) {
           throw erroValidacao
         }
 
         tutoresEstado.definirCriado()
-        tutoresEstado.definirErro(ERRO_CPF_VALIDACAO)
-        throw new Error(ERRO_CPF_VALIDACAO)
+        tutoresEstado.definirErro(MENSAGENS_ERRO.CPF_VALIDACAO)
+        throw new Error(MENSAGENS_ERRO.CPF_VALIDACAO)
       }
 
       const atualizado = await tutoresServico.atualizar(id, tutor)
@@ -257,14 +266,15 @@ class TutoresFacade {
     } catch (erro) {
       if (
         erro instanceof Error &&
-        (erro.message === ERRO_CPF_DUPLICADO ||
-          erro.message === ERRO_CPF_VALIDACAO)
+        (erro.message === MENSAGENS_ERRO.CPF_DUPLICADO ||
+          erro.message === MENSAGENS_ERRO.CPF_VALIDACAO)
       ) {
         throw erro
       }
 
-      tutoresEstado.definirErro('Erro ao atualizar tutor')
-      throw new Error('Erro ao atualizar tutor')
+      const mensagem = mensagemErro(erro, MENSAGENS_ERRO.TUTORES_ATUALIZAR)
+      tutoresEstado.definirErro(mensagem)
+      throw new Error(mensagem)
     }
   }
 
@@ -295,8 +305,10 @@ class TutoresFacade {
       )
 
       tutoresEstado.definirDetalhe(tutorAtualizado)
-    } catch{
-      tutoresEstado.definirErro('Erro ao enviar foto do tutor')
+    } catch (erro) {
+      tutoresEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.TUTORES_ATUALIZAR_FOTO),
+      )
     }
   }
 
@@ -322,9 +334,13 @@ class TutoresFacade {
           foto: undefined,
         })
       }
-    } catch {
-      tutoresEstado.definirErro('Erro ao remover foto do tutor')
-      throw new Error('Erro ao remover foto do tutor')
+    } catch (erro) {
+      const mensagem = mensagemErro(
+        erro,
+        MENSAGENS_ERRO.TUTORES_REMOVER_FOTO,
+      )
+      tutoresEstado.definirErro(mensagem)
+      throw new Error(mensagem)
     }
   }
 
@@ -337,8 +353,10 @@ class TutoresFacade {
       tutoresEstado.definirDetalhe(tutorAtualizado)
       tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
 
-    } catch {
-      tutoresEstado.definirErro('Erro ao vincular pet ao tutor')
+    } catch (erro) {
+      tutoresEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.TUTORES_VINCULAR_PET),
+      )
     }
   }
 
@@ -350,9 +368,10 @@ class TutoresFacade {
 
       tutoresEstado.definirRemoverDaLista(id)
 
-    } catch {
-      tutoresEstado.definirErro('Erro ao remover tutor')
-      throw new Error('Erro ao remover tutor')
+    } catch (erro) {
+      const mensagem = mensagemErro(erro, MENSAGENS_ERRO.TUTORES_REMOVER)
+      tutoresEstado.definirErro(mensagem)
+      throw new Error(mensagem)
     }
   }
 
@@ -365,8 +384,10 @@ class TutoresFacade {
       tutoresEstado.definirDetalhe(tutorAtualizado) 
       tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
 
-    } catch {
-      tutoresEstado.definirErro('Erro ao remover vínculo do pet')
+    } catch (erro) {
+      tutoresEstado.definirErro(
+        mensagemErro(erro, MENSAGENS_ERRO.TUTORES_REMOVER_VINCULO),
+      )
     }
   }
 

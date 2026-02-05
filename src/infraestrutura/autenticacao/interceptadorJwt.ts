@@ -9,6 +9,7 @@ import {
   limparTokens,
 } from './armazenamentoToken'
 import { autenticacaoEstado } from '../../estado/autenticacaoEstado'
+import { MENSAGENS_ERRO } from '../../aplicacao/utils/mensagensErro'
 
 interface RequisicaoComRetry extends AxiosRequestConfig {
   _retry?: boolean
@@ -109,9 +110,7 @@ export function configurarInterceptadorJwt() {
           return clienteHttp(originalRequest)
         } catch (erroRefresh) {
           limparTokens()
-          autenticacaoEstado.definirErro(
-            'Sessão expirada. Faça login novamente.',
-          )
+          autenticacaoEstado.definirErro(MENSAGENS_ERRO.SESSAO_EXPIRADA)
           rejeitarFila(erroRefresh)
 
           window.dispatchEvent(new CustomEvent('auth:logout'))

@@ -1,4 +1,5 @@
 ﻿import { useState } from "react";
+import { MENSAGENS_VALIDACAO } from "../../../utils/mensagensValidacao";
 
 interface FormularioLoginProps {
   username: string;
@@ -27,8 +28,8 @@ export function FormularioLogin({
   function validar() {
     const novoErros: typeof erros = {};
 
-    if (!username.trim()) novoErros.username = "O usuário é obrigatório.";
-    if (!password.trim()) novoErros.password = "A senha é obrigatória.";
+    if (!username.trim()) novoErros.username = MENSAGENS_VALIDACAO.USUARIO_OBRIGATORIO;
+    if (!password.trim()) novoErros.password = MENSAGENS_VALIDACAO.SENHA_OBRIGATORIA;
 
     setErros(novoErros);
     return Object.keys(novoErros).length === 0;
