@@ -294,6 +294,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Destaque visual dos nomes em listagens, detalhes e modais de vínculo (pets e tutores).
 - Remoção de foto em edição sincroniza listagem e detalhe (pets e tutores).
 - Troca/remoção de foto atualiza preview e evita reaparecer imagem anterior.
+- Upload de foto reseta preview ao trocar de registro (key por id).
 - Logout e sessão expirada tratados pelo estado de autenticação (sem eventos globais).
 - Falha no login limpa tokens antigos para evitar refresh indevido.
 - Logout limpa estados de Pets/Tutores para evitar dados residuais.

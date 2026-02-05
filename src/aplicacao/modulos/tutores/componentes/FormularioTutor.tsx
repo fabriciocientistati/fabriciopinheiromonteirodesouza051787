@@ -123,6 +123,7 @@ export function FormularioTutor({
       </div>
 
       <UploadFoto
+        key={tutorInicial?.id ?? "novo"}
         fotoAtual={tutorInicial?.foto?.url}
         onUpload={(arquivo) => {
           setFoto(arquivo);

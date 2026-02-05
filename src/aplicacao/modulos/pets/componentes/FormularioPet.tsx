@@ -109,6 +109,7 @@ export function FormularioPet({
       </div>
 
       <UploadFoto
+        key={petInicial?.id ?? 'novo'}
         fotoAtual={petInicial?.foto?.url}
         onUpload={(arquivo) => {
           setFoto(arquivo)

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Botao } from './Botao'
 
 interface UploadFotoProps {
@@ -12,13 +12,10 @@ export function UploadFoto({
   label = 'Foto',
   onUpload,
 }: UploadFotoProps) {
-  const [previewLocal, setPreviewLocal] = useState<string | null>(
-    fotoAtual ?? null,
-  )
-
-  useEffect(() => {
-    setPreviewLocal(fotoAtual ?? null)
-  }, [fotoAtual])
+  const [previewOverride, setPreviewOverride] = useState<{
+    base: string | null
+    preview: string | null
+  } | null>(null)
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const arquivo = event.target.files?.[0]
@@ -28,17 +25,26 @@ export function UploadFoto({
 
     const reader = new FileReader()
     reader.onloadend = () => {
-      setPreviewLocal(reader.result as string)
+      setPreviewOverride({
+        base: fotoAtual ?? null,
+        preview: reader.result as string,
+      })
     }
     reader.readAsDataURL(arquivo)
   }
 
   function removerFoto() {
-    setPreviewLocal(null)
+    setPreviewOverride({
+      base: fotoAtual ?? null,
+      preview: null,
+    })
     onUpload(null)
   }
 
-  const preview = previewLocal ?? null
+  const preview =
+    previewOverride && previewOverride.base === (fotoAtual ?? null)
+      ? previewOverride.preview
+      : (fotoAtual ?? null)
 
   return (
     <div className="space-y-3">
