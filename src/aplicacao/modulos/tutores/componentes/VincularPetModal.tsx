@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { PetVinculado } from '../../../../dominio/modelos/PetVinculado'
+import type { PetVinculadoViewModel } from '../../../modelos'
 import { petsFacade } from '../../../facades/PetsFacade'
 import { useObservable } from '../../../hooks/useObservable'
 import { Card } from '../../../componentes/ui/Card'
@@ -13,7 +13,7 @@ interface Props {
   aberto: boolean
   onFechar: () => void
   onVincular: (idPet: number) => Promise<void>
-  petsVinculados?: PetVinculado[]
+  petsVinculados?: PetVinculadoViewModel[]
 }
 
 export function VincularPetModal({

@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import type { Pet } from '../../../../dominio/modelos/Pet'
+import type { PetViewModel } from '../../../modelos'
 import { Botao } from '../../../componentes/ui/Botao'
 import { CardListagem } from '../../../componentes/ui/CardListagem'
 import { ConfirmacaoModal } from '../../../componentes/ui/ConfirmacaoModal'
 
 interface ListaPetsProps {
-  pets: Pet[]
+  pets: PetViewModel[]
   onSelecionar: (id: number) => void
   onEditar: (id: number) => void
   onExcluir: (id: number) => Promise<void>
@@ -17,7 +17,7 @@ export function ListaPets({
   onEditar,
   onExcluir,
 }: ListaPetsProps) {
-  const [petParaExcluir, setPetParaExcluir] = useState<Pet | null>(null)
+  const [petParaExcluir, setPetParaExcluir] = useState<PetViewModel | null>(null)
 
   return (
     <>

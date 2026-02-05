@@ -1,4 +1,4 @@
-﻿import type { Tutor } from '../../../../dominio/modelos/Tutor'
+﻿import type { TutorViewModel } from '../../../modelos'
 import { Botao } from '../../../componentes/ui/Botao'
 import { formatarTelefone } from '../../../utils/validacoes'
 
@@ -6,7 +6,7 @@ export function ListaTutoresVinculados({
   tutores,
   onRemover,
 }: {
-  tutores: Tutor[]
+  tutores: TutorViewModel[]
   onRemover: (idTutor: number) => void
 }) {
   if (tutores.length === 0) {

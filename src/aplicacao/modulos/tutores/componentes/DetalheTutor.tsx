@@ -1,13 +1,12 @@
-import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado";
-import type { Tutor } from "../../../../dominio/modelos/Tutor";
+import type { PetVinculadoViewModel, TutorViewModel } from "../../../modelos";
 import { Titulo } from "../../../componentes/ui/Titulo";
 import { CardTutor } from "./CardTutor";
 import { DetalhePetsVinculados } from "./DetalhePetsVinculados";
 
 
 interface Props {
-  tutor: Tutor;
-  pets: PetVinculado[];
+  tutor: TutorViewModel;
+  pets: PetVinculadoViewModel[];
 }
 
 export function DetalheTutor({ tutor, pets }: Props) {

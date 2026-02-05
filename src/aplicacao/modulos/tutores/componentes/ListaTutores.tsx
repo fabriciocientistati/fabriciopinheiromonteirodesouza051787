@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import type { Tutor } from '../../../../dominio/modelos/Tutor'
+import type { TutorViewModel } from '../../../modelos'
 import { Botao } from '../../../componentes/ui/Botao'
 import { CardListagem } from '../../../componentes/ui/CardListagem'
 import { ConfirmacaoModal } from '../../../componentes/ui/ConfirmacaoModal'
 import { formatarTelefone } from '../../../utils/validacoes'
 
 interface ListaTutoresProps {
-  tutores: Tutor[]
+  tutores: TutorViewModel[]
   onSelecionar: (id: number) => void
   onEditar: (id: number) => void
   onExcluir: (id: number) => Promise<void>
@@ -18,7 +18,7 @@ export function ListaTutores({
   onEditar,
   onExcluir,
 }: ListaTutoresProps) {
-  const [tutorParaExcluir, setTutorParaExcluir] = useState<Tutor | null>(null)
+  const [tutorParaExcluir, setTutorParaExcluir] = useState<TutorViewModel | null>(null)
 
   return (
     <>

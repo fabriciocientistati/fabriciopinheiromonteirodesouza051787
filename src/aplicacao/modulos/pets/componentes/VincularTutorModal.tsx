@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { Tutor } from '../../../../dominio/modelos/Tutor'
+import type { TutorViewModel } from '../../../modelos'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { useObservable } from '../../../hooks/useObservable'
 import { Card } from '../../../componentes/ui/Card'
@@ -14,7 +14,7 @@ interface Props {
   aberto: boolean
   onFechar: () => void
   onVincular: (idTutor: number) => Promise<void>
-  tutoresVinculados?: Tutor[]
+  tutoresVinculados?: TutorViewModel[]
 }
 
 export function VincularTutorModal({

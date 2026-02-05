@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import type { Tutor } from "../../../../dominio/modelos/Tutor";
+import type { TutorViewModel } from "../../../modelos";
 import { Input } from "../../../componentes/ui/Input";
 import { Botao } from "../../../componentes/ui/Botao";
 import { UploadFoto } from "../../../componentes/ui/UploadFoto";
@@ -12,7 +12,7 @@ import {
 import { MENSAGENS_VALIDACAO } from "../../../utils/mensagensValidacao";
 
 interface FormularioTutorProps {
-  tutorInicial?: Tutor;
+  tutorInicial?: TutorViewModel;
   onSubmit: (dados: {
     nome: string;
     telefone: string;

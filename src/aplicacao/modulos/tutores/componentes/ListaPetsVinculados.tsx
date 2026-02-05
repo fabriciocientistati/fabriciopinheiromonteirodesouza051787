@@ -1,11 +1,11 @@
-﻿import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado"
+﻿import type { PetVinculadoViewModel } from "../../../modelos"
 import { Botao } from "../../../componentes/ui/Botao"
 
 export function ListaPetsVinculados({
   pets,
   onRemover,
 }: {
-  pets: PetVinculado[]
+  pets: PetVinculadoViewModel[]
   onRemover: (idPet: number) => void
 }) {
   if (pets.length === 0) {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Pet } from '../../../../dominio/modelos/Pet'
+import type { PetViewModel } from '../../../modelos'
 import { Input } from '../../../componentes/ui/Input'
 import { Botao } from '../../../componentes/ui/Botao'
 import { UploadFoto } from '../../../componentes/ui/UploadFoto'
@@ -8,7 +8,7 @@ import { validarNumeroPositivo, validarObrigatorio } from '../../../utils/valida
 import { MENSAGENS_VALIDACAO } from '../../../utils/mensagensValidacao'
 
 interface FormularioPetProps {
-  petInicial?: Pet
+  petInicial?: PetViewModel
   onSubmit: (dados: {
     nome: string
     raca: string

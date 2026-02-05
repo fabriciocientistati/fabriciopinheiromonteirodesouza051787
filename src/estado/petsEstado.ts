@@ -1,8 +1,8 @@
 import { BehaviorSubject } from 'rxjs'
-import type { Pet } from '../dominio/modelos/Pet'
+import type { PetViewModel } from '../aplicacao/modelos'
 
 export type PetsViewEstado = {
-  itens: Pet[]
+  itens: PetViewModel[]
   carregando: boolean
   criando?: boolean
   erro?: string
@@ -10,7 +10,7 @@ export type PetsViewEstado = {
   total: number
   tamanhoPagina: number
   contadorPagina: number
-  petSelecionado?: Pet | null
+  petSelecionado?: PetViewModel | null
   filtroBusca: string
 }
 
@@ -67,7 +67,13 @@ class PetsEstado {
   }
 
 
-  definirDados(itens: Pet[], pagina: number, total: number, tamanhoPagina: number, contadorPagina: number) {
+  definirDados(
+    itens: PetViewModel[],
+    pagina: number,
+    total: number,
+    tamanhoPagina: number,
+    contadorPagina: number,
+  ) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       itens,
@@ -113,7 +119,7 @@ class PetsEstado {
     }) 
   }
 
-  definirDetalhe(pet: Pet) { 
+  definirDetalhe(pet: PetViewModel) { 
     this.estadoInterno$.next({ 
       ...this.estadoInterno$.value, 
       carregando: false, 

@@ -1,9 +1,8 @@
 import { BehaviorSubject } from 'rxjs'
-import type { Tutor } from '../dominio/modelos/Tutor'
-import type { PetVinculado } from '../dominio/modelos/PetVinculado'
+import type { PetVinculadoViewModel, TutorViewModel } from '../aplicacao/modelos'
 
 export type TutoresViewEstado = {
-  itens: Tutor[]
+  itens: TutorViewModel[]
   carregando: boolean
   criando?: boolean
   erro: string | null
@@ -11,10 +10,10 @@ export type TutoresViewEstado = {
   total: number
   tamanhoPagina: number
   contadorPagina: number
-  tutorSelecionado?: Tutor | null
+  tutorSelecionado?: TutorViewModel | null
   filtroBusca: string
-  petsVinculados: PetVinculado[]
-  petsDisponiveis: PetVinculado[]
+  petsVinculados: PetVinculadoViewModel[]
+  petsDisponiveis: PetVinculadoViewModel[]
 }
 
 const estadoInicial: TutoresViewEstado = {
@@ -28,7 +27,7 @@ const estadoInicial: TutoresViewEstado = {
   tutorSelecionado: null,
   filtroBusca: '',
   petsVinculados: [],
-  petsDisponiveis: [] as PetVinculado[],
+  petsDisponiveis: [] as PetVinculadoViewModel[],
 }
 
 class TutoresEstado {
@@ -57,7 +56,7 @@ class TutoresEstado {
     })
   }
 
-  definirPetsDisponiveis(pets: PetVinculado[]) {
+  definirPetsDisponiveis(pets: PetVinculadoViewModel[]) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       petsDisponiveis: pets,
@@ -80,7 +79,7 @@ class TutoresEstado {
   }
 
   definirDados(
-    itens: Tutor[],
+    itens: TutorViewModel[],
     pagina: number,
     total: number,
     tamanhoPagina: number,
@@ -140,7 +139,7 @@ class TutoresEstado {
     })
   }
 
-  definirDetalhe(tutor: Tutor) {
+  definirDetalhe(tutor: TutorViewModel) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       carregando: false,
@@ -148,7 +147,7 @@ class TutoresEstado {
     })
   }
 
-  definirPetsVinculados(pets: PetVinculado[]) {
+  definirPetsVinculados(pets: PetVinculadoViewModel[]) {
     this.estadoInterno$.next({
       ...this.estadoInterno$.value,
       petsVinculados: pets,

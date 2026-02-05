@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import type { PetVinculado } from "../../../../dominio/modelos/PetVinculado";
+import type { PetVinculadoViewModel } from "../../../modelos";
 import { Card } from "../../../componentes/ui/Card";
 import { Secao } from "../../../componentes/ui/Secao";
 import { Botao } from "../../../componentes/ui/Botao";
@@ -11,14 +11,14 @@ import { MENSAGENS_ERRO } from "../../../utils/mensagensErro";
 
 interface Props {
   tutorId: number;
-  pets: PetVinculado[];
+  pets: PetVinculadoViewModel[];
 }
 
 export function DetalhePetsVinculados({ tutorId, pets }: Props) {
   const [vincularAberto, setVincularAberto] = useState(false);
   const [petParaDesvincular, setPetParaDesvincular] =
-    useState<PetVinculado | null>(null);
-  const [petsDetalhe, setPetsDetalhe] = useState<PetVinculado[] | null>(null);
+    useState<PetVinculadoViewModel | null>(null);
+  const [petsDetalhe, setPetsDetalhe] = useState<PetVinculadoViewModel[] | null>(null);
   const [carregandoDetalhes, setCarregandoDetalhes] = useState(false);
   const [erroDetalhes, setErroDetalhes] = useState<string | null>(null);
 

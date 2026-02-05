@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
-import type { Tutor } from '../../../../dominio/modelos/Tutor'
+import type { TutorViewModel } from '../../../modelos'
 import { Card } from '../../../componentes/ui/Card'
 import { Secao } from '../../../componentes/ui/Secao'
 import { Botao } from '../../../componentes/ui/Botao'
@@ -13,14 +13,14 @@ import { MENSAGENS_ERRO } from '../../../utils/mensagensErro'
 
 interface Props {
   petId: number
-  tutores: Tutor[]
+  tutores: TutorViewModel[]
 }
 
 export function DetalheTutoresVinculados({ petId, tutores }: Props) {
   const [vincularAberto, setVincularAberto] = useState(false)
   const [tutorParaDesvincular, setTutorParaDesvincular] =
-    useState<Tutor | null>(null)
-  const [tutoresDetalhe, setTutoresDetalhe] = useState<Tutor[] | null>(null)
+    useState<TutorViewModel | null>(null)
+  const [tutoresDetalhe, setTutoresDetalhe] = useState<TutorViewModel[] | null>(null)
   const [carregandoDetalhes, setCarregandoDetalhes] = useState(false)
   const [erroDetalhes, setErroDetalhes] = useState<string | null>(null)
 

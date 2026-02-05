@@ -1,7 +1,6 @@
 ﻿import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import type { Pet } from '../../../../dominio/modelos/Pet'
-import type { Tutor } from '../../../../dominio/modelos/Tutor'
+import type { PetViewModel, TutorViewModel } from '../../../modelos'
 import { usePetsEstado } from '../hooks/usePetsEstado'
 import { petsFacade } from '../../../facades/PetsFacade'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
@@ -29,7 +28,7 @@ export function FormularioPetPagina() {
   const edicao = Boolean(id)
   const carregandoEdicao = edicao && (carregando || !petSelecionado)
   const [vincularTutorAberto, setVincularTutorAberto] = useState(false)
-  const [tutoresSelecionados, setTutoresSelecionados] = useState<Tutor[]>([])
+  const [tutoresSelecionados, setTutoresSelecionados] = useState<TutorViewModel[]>([])
 
   useEffect(() => {
     if (edicao && id) {
@@ -37,9 +36,7 @@ export function FormularioPetPagina() {
     }
   }, [edicao, id, versaoToken])
 
-  function montarDadosPersistencia(
-    dados: FormularioPetDados,
-  ): Omit<Pet, 'id' | 'foto'> {
+  function montarDadosPersistencia(dados: FormularioPetDados) {
     return {
       nome: dados.nome,
       raca: dados.raca,
@@ -49,7 +46,7 @@ export function FormularioPetPagina() {
 
   async function salvarPet(dados: FormularioPetDados) {
     const dadosPersistencia = montarDadosPersistencia(dados)
-    let petSalvo: Pet
+    let petSalvo: PetViewModel
 
     if (edicao && id) {
       petSalvo = await petsFacade.atualizar(Number(id), dadosPersistencia)

@@ -1,8 +1,8 @@
-import type { Pet } from '../../../../dominio/modelos/Pet'
+import type { PetViewModel } from '../../../modelos'
 import { Card } from '../../../componentes/ui/Card'
 
 interface Props {
-  pet: Pet
+  pet: PetViewModel
 }
 
 export function CardPet({ pet }: Props) {

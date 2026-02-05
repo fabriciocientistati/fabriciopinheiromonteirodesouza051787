@@ -52,6 +52,54 @@ export function ListaPetsPagina() {
     return () => clearTimeout(timeout)
   }, [busca])
 
+  const renderNavegacao = (compacto: boolean) => (
+    <section className={compacto ? 'space-y-1' : 'space-y-2'}>
+      <h3
+        className={
+          compacto
+            ? 'sr-only'
+            : 'text-sm font-semibold text-gray-700 uppercase tracking-wide text-center sm:text-left'
+        }
+      >
+        Navegação
+      </h3>
+
+      <div
+        className={
+          'flex flex-wrap justify-center sm:justify-start items-center rounded-lg border max-w-xl ' +
+          (compacto
+            ? 'gap-3 text-xs bg-gray-50/70 p-3'
+            : 'gap-4 text-sm bg-gray-50 p-4')
+        }
+      >
+        <Botao
+          disabled={pagina === 0}
+          variante="secundario"
+          onClick={() => petsFacade.paginaAnterior()}
+        >
+          Anterior
+        </Botao>
+
+        <span className="text-gray-700">
+          Página <strong>{paginaAtual}</strong> de{' '}
+          <strong>{totalPaginas}</strong>
+        </span>
+
+        <Botao
+          disabled={paginaAtual >= totalPaginas}
+          variante="secundario"
+          onClick={() => petsFacade.proximaPagina()}
+        >
+          Próxima
+        </Botao>
+
+        <span className="ml-2 text-gray-600">
+          Total de pets: {total}
+        </span>
+      </div>
+    </section>
+  )
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
       {mensagemSucesso && (
@@ -98,6 +146,8 @@ export function ListaPetsPagina() {
         </div>
       </section>
 
+      {renderNavegacao(true)}
+
       <section className="bg-white border rounded-lg shadow-sm p-2 sm:p-4 relative">
         {carregando && itens.length > 0 && (
           <div className="absolute right-3 top-3 text-xs text-gray-500 bg-white/90 px-2 py-1 rounded">
@@ -120,38 +170,7 @@ export function ListaPetsPagina() {
         )}
       </section>
 
-      <section className="space-y-2">
-        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide text-center sm:text-left">
-          Navegação
-        </h3>
-
-        <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4 text-sm bg-gray-50 p-4 rounded-lg border max-w-xl">
-          <Botao
-            disabled={pagina === 0}
-            variante="secundario"
-            onClick={() => petsFacade.paginaAnterior()}
-          >
-            Anterior
-          </Botao>
-
-          <span className="text-gray-700">
-            Página <strong>{paginaAtual}</strong> de{' '}
-            <strong>{totalPaginas}</strong>
-          </span>
-
-          <Botao
-            disabled={paginaAtual >= totalPaginas}
-            variante="secundario"
-            onClick={() => petsFacade.proximaPagina()}
-          >
-            Próxima
-          </Botao>
-
-          <span className="ml-2 text-gray-600">
-            Total de pets: {total}
-          </span>
-        </div>
-      </section>
+      {renderNavegacao(false)}
     </div>
   )
 }

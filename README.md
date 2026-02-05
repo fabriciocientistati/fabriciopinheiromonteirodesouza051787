@@ -84,6 +84,9 @@ Para rodar em modo CI:
 npm run test:run
 ```
 
+### Documentos de QA
+- Fluxo de testes: [TEST_FLOW.md](TEST_FLOW.md)
+
 ## Dados de Teste
 
 - Telefone: 10 ou 11 dígitos com DDD (apenas números).
@@ -243,6 +246,7 @@ C. Boas Práticas e Entrega
 - Axios + interceptadores: centraliza autenticação e refresh de token.
 - Facade + BehaviorSubject: desacopla UI da infraestrutura e mantém estado reativo previsível.
 - Padronização de mensagens (erro/validação): centraliza textos em utilitários para consistência de UX, facilidade de manutenção e menor acoplamento entre UI e regras de mensagem.
+- Mapper dedicado (DTO → ViewModel): isola o contrato da API e concentra transformações para a camada de apresentação, reduzindo impacto de mudanças na API.
 - Modularização por feature: organização de Pets/Tutores em `aplicacao/modulos` com páginas, componentes e hooks dedicados.
 - Debounce nas buscas: reduz chamadas e melhora UX.
 - Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
@@ -253,10 +257,6 @@ C. Boas Práticas e Entrega
 - Nginx com fallback SPA: permite refresh direto em rotas internas.
 - Health checks no Nginx: atende liveness/readiness do edital.
 - Vitest + Testing Library: testes rápidos e focados em comportamento de UI.
-
-## Notas e Pendências
-
-- O campo espécie não está disponível na API atual; na UI o rótulo "Espécie" usa o valor de `raça` para atender ao edital.
 
 ## Listagens (Pets e Tutores)
 

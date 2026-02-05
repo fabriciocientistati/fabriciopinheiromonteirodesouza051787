@@ -1,7 +1,6 @@
 ﻿import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import type { Tutor } from '../../../../dominio/modelos/Tutor'
-import type { PetVinculado } from '../../../../dominio/modelos/PetVinculado'
+import type { PetVinculadoViewModel, TutorViewModel } from '../../../modelos'
 import { useTutoresEstado } from '../hooks/useTutoresEstado'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { petsFacade } from '../../../facades/PetsFacade'
@@ -29,7 +28,8 @@ export function FormularioTutorPagina() {
   const edicao = Boolean(id)
   const carregandoEdicao = edicao && (carregando || !tutorSelecionado)
   const [vincularPetAberto, setVincularPetAberto] = useState(false)
-  const [petsSelecionados, setPetsSelecionados] = useState<PetVinculado[]>([])
+  const [petsSelecionados, setPetsSelecionados] =
+    useState<PetVinculadoViewModel[]>([])
 
   useEffect(() => {
     if (edicao && id) {
@@ -37,9 +37,7 @@ export function FormularioTutorPagina() {
     }
   }, [edicao, id, versaoToken])
 
-  function montarDadosPersistencia(
-    dados: FormularioTutorDados,
-  ): Omit<Tutor, 'id' | 'foto'> {
+  function montarDadosPersistencia(dados: FormularioTutorDados) {
     return {
       nome: dados.nome,
       telefone: dados.telefone,
@@ -49,7 +47,7 @@ export function FormularioTutorPagina() {
 
   async function salvarTutor(dados: FormularioTutorDados) {
     const dadosPersistencia = montarDadosPersistencia(dados)
-    let tutorSalvo: Tutor
+    let tutorSalvo: TutorViewModel
 
     if (edicao && id) {
       tutorSalvo = await tutoresFacade.atualizar(Number(id), dadosPersistencia)

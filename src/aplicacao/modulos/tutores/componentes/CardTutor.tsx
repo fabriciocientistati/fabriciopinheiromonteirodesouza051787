@@ -1,9 +1,9 @@
-import type { Tutor } from "../../../../dominio/modelos/Tutor";
+import type { TutorViewModel } from "../../../modelos";
 import { Card } from "../../../componentes/ui/Card";
 import { formatarTelefone } from "../../../utils/validacoes";
 
 interface Props {
-  tutor: Tutor;
+  tutor: TutorViewModel;
 }
 
 export function CardTutor({ tutor }: Props) {

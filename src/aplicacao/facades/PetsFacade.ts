@@ -1,8 +1,10 @@
 import { petsEstado } from '../../estado/petsEstado'
 import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
-import type { Pet } from '../../dominio/modelos/Pet'
-import type { Tutor } from '../../dominio/modelos/Tutor'
+import type { Pet as PetDto } from '../../dominio/modelos/Pet'
+import type { Tutor as TutorDto } from '../../dominio/modelos/Tutor'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
+import type { TutorViewModel } from '../modelos'
+import { mapPet, mapPets, mapTutor } from '../mappers/modelosMapper'
 import { erroEh401, mensagemErro } from '../utils/errosHttp'
 import { MENSAGENS_ERRO } from '../utils/mensagensErro'
 
@@ -10,14 +12,17 @@ const petsServico = new PetsServico()
 
 class PetsFacade {
   readonly estado$ = petsEstado.estado$
-  private readonly cacheTutores = new Map<number, Tutor>()
-  private readonly cacheTutoresPromise = new Map<number, Promise<Tutor>>()
+  private readonly cacheTutores = new Map<number, TutorViewModel>()
+  private readonly cacheTutoresPromise = new Map<
+    number,
+    Promise<TutorViewModel>
+  >()
 
   obterSnapshot() {
     return petsEstado.obterSnapshot()
   }
 
-  private obterTutorDetalhe(id: number): Promise<Tutor> {
+  private obterTutorDetalhe(id: number): Promise<TutorViewModel> {
     const emCache = this.cacheTutores.get(id)
     if (emCache) {
       return Promise.resolve(emCache)
@@ -30,9 +35,10 @@ class PetsFacade {
 
     const promessa = tutoresServico
       .buscarPorId(id)
-      .then(tutor => {
-        this.cacheTutores.set(id, tutor)
-        return tutor
+      .then((tutor: TutorDto) => {
+        const tutorMapeado = mapTutor(tutor, { incluirPets: false })
+        this.cacheTutores.set(id, tutorMapeado)
+        return tutorMapeado
       })
       .finally(() => {
         this.cacheTutoresPromise.delete(id)
@@ -42,8 +48,8 @@ class PetsFacade {
     return promessa
   }
 
-  async carregarTutoresDetalhe(tutores: Tutor[]): Promise<{
-    tutores: Tutor[]
+  async carregarTutoresDetalhe(tutores: TutorViewModel[]): Promise<{
+    tutores: TutorViewModel[]
     falhaIds: number[]
   }> {
     if (tutores.length === 0) {
@@ -95,7 +101,7 @@ class PetsFacade {
       )
 
       petsEstado.definirDados(
-        content,
+        mapPets(content),
         paginaResposta,
         total,
         tam,
@@ -112,14 +118,15 @@ class PetsFacade {
     }
   }
 
-async criar(dados: Omit<Pet, 'id'>) {
+async criar(dados: Omit<PetDto, 'id'>) {
   try {
     petsEstado.definirCriando()
 
     const petCriado = await petsServico.criar(dados)
+    const petMapeado = mapPet(petCriado)
 
     petsEstado.definirCriado()
-    return petCriado
+    return petMapeado
   } catch (erro) {
     const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_CRIAR)
     petsEstado.definirErro(mensagem)
@@ -127,12 +134,13 @@ async criar(dados: Omit<Pet, 'id'>) {
   }
 }
 
-async atualizar(id: number, dados: Partial<Pet>) {
+async atualizar(id: number, dados: Partial<PetDto>) {
   try {
     petsEstado.definirCriando()
     const pet = await petsServico.atualizar(id, dados)
+    const petMapeado = mapPet(pet)
     petsEstado.definirCriado()
-    return pet
+    return petMapeado
   } catch (erro) {
     const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_ATUALIZAR)
     petsEstado.definirErro(mensagem)
@@ -144,9 +152,9 @@ async buscarPorId(id: number) {
   try {
     petsEstado.definirCarregandoDetalhe() 
     
-    const pet = await petsServico.buscarPorId(id) 
-    
-    petsEstado.definirDetalhe(pet) 
+    const pet = await petsServico.buscarPorId(id)
+
+    petsEstado.definirDetalhe(mapPet(pet, { incluirTutores: true }))
   } catch (erro) { 
     petsEstado.definirErro(
       mensagemErro(erro, MENSAGENS_ERRO.PETS_DETALHE),
@@ -157,7 +165,7 @@ async buscarPorId(id: number) {
   async recarregarDetalheSilencioso(id: number) {
     try {
       const pet = await petsServico.buscarPorId(id)
-      petsEstado.definirDetalhe(pet)
+      petsEstado.definirDetalhe(mapPet(pet, { incluirTutores: true }))
     } catch (erro) {
       petsEstado.definirErro(
         mensagemErro(erro, MENSAGENS_ERRO.PETS_DETALHE),
@@ -190,11 +198,12 @@ async definirBusca(busca: string) {
   }
 
 
-async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
+async criarComImagem(dados: Omit<PetDto, 'id'>, arquivo?: File) {
   try {
     petsEstado.definirCriando()
 
     const petCriado = await petsServico.criar(dados)
+    const petMapeado = mapPet(petCriado)
 
     if (arquivo) {
       await petsServico.adicionarFoto(petCriado.id, arquivo)
@@ -202,7 +211,7 @@ async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
 
     petsEstado.definirCriado()
 
-    return petCriado
+    return petMapeado
   } catch (erro) {
     const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_CRIAR)
     petsEstado.definirErro(mensagem)
@@ -213,7 +222,8 @@ async criarComImagem(dados: Omit<Pet, 'id'>, arquivo?: File) {
 async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
   try {
     const petAtualizado = await petsServico.adicionarFoto(id, arquivo)
-    const fotoNovaId = petAtualizado.foto?.id ?? null
+    const petMapeado = mapPet(petAtualizado, { incluirTutores: true })
+    const fotoNovaId = petMapeado.foto?.id ?? null
 
     if (fotoIdAnterior && fotoIdAnterior !== fotoNovaId) {
       await petsServico.removerFoto(id, fotoIdAnterior)
@@ -221,7 +231,7 @@ async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
 
     const estadoAtual = petsEstado.obterSnapshot()
     const itensAtualizados = estadoAtual.itens.map((pet) =>
-      pet.id === id ? { ...pet, foto: petAtualizado.foto } : pet,
+      pet.id === id ? { ...pet, foto: petMapeado.foto } : pet,
     )
 
     petsEstado.definirDados(
@@ -232,8 +242,8 @@ async atualizarFoto(id: number, arquivo: File, fotoIdAnterior?: number | null) {
       estadoAtual.contadorPagina,
     )
 
-    petsEstado.definirDetalhe(petAtualizado)
-    return petAtualizado
+    petsEstado.definirDetalhe(petMapeado)
+    return petMapeado
   } catch (erro) {
     const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_ATUALIZAR_FOTO)
     petsEstado.definirErro(mensagem)

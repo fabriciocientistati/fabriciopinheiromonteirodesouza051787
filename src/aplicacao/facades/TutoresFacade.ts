@@ -1,10 +1,11 @@
 ﻿
-import type { Tutor } from '../../dominio/modelos/Tutor'
-import type { Pet } from '../../dominio/modelos/Pet'
-import type { PetVinculado } from '../../dominio/modelos/PetVinculado'
+import type { Pet as PetDto } from '../../dominio/modelos/Pet'
+import type { Tutor as TutorDto } from '../../dominio/modelos/Tutor'
 import { tutoresEstado } from '../../estado/tutoresEstado'
 import { tutoresServico } from '../../infraestrutura/servicos/TutoresServico'
 import { PetsServico } from '../../infraestrutura/servicos/PetsServico'
+import type { PetVinculadoViewModel } from '../modelos'
+import { mapPetParaVinculado, mapTutor, mapTutores } from '../mappers/modelosMapper'
 import { erroEh401, mensagemErro } from '../utils/errosHttp'
 import { MENSAGENS_ERRO } from '../utils/mensagensErro'
 import { normalizarCpf } from '../utils/validacoes'
@@ -14,24 +15,17 @@ const petsServico = new PetsServico()
 class TutoresFacade {
 
   readonly estado$ = tutoresEstado.estado$
-  private readonly cachePets = new Map<number, PetVinculado>()
-  private readonly cachePetsPromise = new Map<number, Promise<PetVinculado>>()
+  private readonly cachePets = new Map<number, PetVinculadoViewModel>()
+  private readonly cachePetsPromise = new Map<
+    number,
+    Promise<PetVinculadoViewModel>
+  >()
 
   obterSnapshot() {
     return tutoresEstado.obterSnapshot()
   }
 
-  private mapearParaPetVinculado(pet: Pet): PetVinculado {
-    return {
-      id: pet.id,
-      nome: pet.nome,
-      raca: pet.raca ?? '',
-      idade: pet.idade ?? 0,
-      foto: pet.foto,
-    }
-  }
-
-  private obterPetDetalhe(id: number): Promise<PetVinculado> {
+  private obterPetDetalhe(id: number): Promise<PetVinculadoViewModel> {
     const emCache = this.cachePets.get(id)
     if (emCache) {
       return Promise.resolve(emCache)
@@ -44,8 +38,8 @@ class TutoresFacade {
 
     const promessa = petsServico
       .buscarPorId(id)
-      .then(pet => {
-        const vinculado = this.mapearParaPetVinculado(pet)
+      .then((pet: PetDto) => {
+        const vinculado = mapPetParaVinculado(pet)
         this.cachePets.set(id, vinculado)
         return vinculado
       })
@@ -57,8 +51,8 @@ class TutoresFacade {
     return promessa
   }
 
-  async carregarPetsDetalhe(pets: PetVinculado[]): Promise<{
-    pets: PetVinculado[]
+  async carregarPetsDetalhe(pets: PetVinculadoViewModel[]): Promise<{
+    pets: PetVinculadoViewModel[]
     falhaIds: number[]
   }> {
     if (pets.length === 0) {
@@ -111,7 +105,7 @@ class TutoresFacade {
       )
 
       tutoresEstado.definirDados(
-        content,
+        mapTutores(content),
         paginaResposta,
         total,
         tam,
@@ -156,9 +150,9 @@ class TutoresFacade {
     try {
       tutoresEstado.definirCarregandoDetalhe() 
       
-      const pet = await tutoresServico.buscarPorId(id) 
+      const tutor = await tutoresServico.buscarPorId(id) 
       
-      tutoresEstado.definirDetalhe(pet) 
+      tutoresEstado.definirDetalhe(mapTutor(tutor, { incluirPets: true })) 
     } catch (erro) { 
       tutoresEstado.definirErro(
         mensagemErro(erro, MENSAGENS_ERRO.TUTORES_DETALHE),
@@ -171,10 +165,11 @@ class TutoresFacade {
       tutoresEstado.definirCarregandoDetalhe()
 
       const tutor = await tutoresServico.buscarPorId(id)
+      const tutorMapeado = mapTutor(tutor, { incluirPets: true })
 
-      tutoresEstado.definirDetalhe(tutor)
+      tutoresEstado.definirDetalhe(tutorMapeado)
 
-      const pets = tutor.pets ?? []
+      const pets = tutorMapeado.pets ?? []
       tutoresEstado.definirPetsVinculados(pets)
 
     } catch (erro) {
@@ -186,11 +181,13 @@ class TutoresFacade {
 
   async carregarPetsDisponiveis(nome: string) {
     const pets = await tutoresServico.listarPets(nome)
-    tutoresEstado.definirPetsDisponiveis(pets)
+    tutoresEstado.definirPetsDisponiveis(
+      (pets as PetDto[]).map(mapPetParaVinculado),
+    )
   }
 
 
-  async criar(tutor: Omit<Tutor, 'id' | 'foto'>) {
+  async criar(tutor: Omit<TutorDto, 'id' | 'foto'>) {
     try {
       tutoresEstado.definirCriando()
 
@@ -215,9 +212,10 @@ class TutoresFacade {
       }
 
       const novoTutor = await tutoresServico.criar(tutor)
+      const tutorMapeado = mapTutor(novoTutor, { incluirPets: true })
 
       tutoresEstado.definirCriado()
-      return novoTutor
+      return tutorMapeado
 
     } catch (erro) {
       if (
@@ -234,7 +232,7 @@ class TutoresFacade {
     }
   }
 
-  async atualizar(id: number, tutor: Omit<Tutor, 'id' | 'foto'>) {
+  async atualizar(id: number, tutor: Omit<TutorDto, 'id' | 'foto'>) {
     try {
       tutoresEstado.definirCriando()
 
@@ -259,9 +257,10 @@ class TutoresFacade {
       }
 
       const atualizado = await tutoresServico.atualizar(id, tutor)
+      const tutorMapeado = mapTutor(atualizado, { incluirPets: true })
 
       tutoresEstado.definirCriado()
-      return atualizado
+      return tutorMapeado
 
     } catch (erro) {
       if (
@@ -285,7 +284,8 @@ class TutoresFacade {
   ) {
     try {
       const tutorAtualizado = await tutoresServico.atualizarFoto(id, arquivo)
-      const fotoNovaId = tutorAtualizado.foto?.id ?? null
+      const tutorMapeado = mapTutor(tutorAtualizado, { incluirPets: true })
+      const fotoNovaId = tutorMapeado.foto?.id ?? null
 
       if (fotoIdAnterior && fotoIdAnterior !== fotoNovaId) {
         await tutoresServico.removerFoto(id, fotoIdAnterior)
@@ -293,7 +293,7 @@ class TutoresFacade {
 
       const estadoAtual = tutoresEstado.obterSnapshot()
       const itensAtualizados = estadoAtual.itens.map((tutor) =>
-        tutor.id === id ? { ...tutor, foto: tutorAtualizado.foto } : tutor,
+        tutor.id === id ? { ...tutor, foto: tutorMapeado.foto } : tutor,
       )
 
       tutoresEstado.definirDados(
@@ -304,7 +304,7 @@ class TutoresFacade {
         estadoAtual.contadorPagina,
       )
 
-      tutoresEstado.definirDetalhe(tutorAtualizado)
+      tutoresEstado.definirDetalhe(tutorMapeado)
     } catch (erro) {
       tutoresEstado.definirErro(
         mensagemErro(erro, MENSAGENS_ERRO.TUTORES_ATUALIZAR_FOTO),
@@ -349,9 +349,10 @@ class TutoresFacade {
       await tutoresServico.vincularPet(idTutor, idPet)
 
       const tutorAtualizado = await tutoresServico.buscarPorId(idTutor)
+      const tutorMapeado = mapTutor(tutorAtualizado, { incluirPets: true })
 
-      tutoresEstado.definirDetalhe(tutorAtualizado)
-      tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
+      tutoresEstado.definirDetalhe(tutorMapeado)
+      tutoresEstado.definirPetsVinculados(tutorMapeado.pets ?? [])
 
     } catch (erro) {
       tutoresEstado.definirErro(
@@ -380,9 +381,10 @@ class TutoresFacade {
       await tutoresServico.removerVinculo(idTutor, idPet)
 
       const tutorAtualizado = await tutoresServico.buscarPorId(idTutor)
+      const tutorMapeado = mapTutor(tutorAtualizado, { incluirPets: true })
 
-      tutoresEstado.definirDetalhe(tutorAtualizado) 
-      tutoresEstado.definirPetsVinculados(tutorAtualizado.pets ?? [])
+      tutoresEstado.definirDetalhe(tutorMapeado) 
+      tutoresEstado.definirPetsVinculados(tutorMapeado.pets ?? [])
 
     } catch (erro) {
       tutoresEstado.definirErro(
