@@ -5,7 +5,6 @@ import { Secao } from '../../../componentes/ui/Secao'
 import { Botao } from '../../../componentes/ui/Botao'
 import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
 import { Modal } from '../../../componentes/ui/Modal'
-import { petsFacade } from '../../../facades/PetsFacade'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { VincularPetModal } from './VincularPetModal'
 import { mensagemErro } from '../../../utils/errosHttp'
@@ -149,11 +148,7 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
         onFechar={() => setPetParaDesvincular(null)}
         onConfirmar={async () => {
           if (!petParaDesvincular) return
-          await petsFacade.removerVinculo(
-            petParaDesvincular.id,
-            tutorId
-          )
-          await tutoresFacade.recarregarDetalheSilencioso(tutorId)
+          await tutoresFacade.removerVinculo(tutorId, petParaDesvincular.id)
           setPetParaDesvincular(null)
         }}
       >
@@ -165,8 +160,7 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
         aberto={vincularAberto}
         onFechar={() => setVincularAberto(false)}
         onVincular={async idPet => {
-          await petsFacade.vincularTutor(idPet, tutorId)
-          await tutoresFacade.recarregarDetalheSilencioso(tutorId)
+          await tutoresFacade.vincularPet(tutorId, idPet)
         }}
         petsVinculados={pets}
       />
