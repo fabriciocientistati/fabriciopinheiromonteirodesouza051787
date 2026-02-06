@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Card } from './Card'
+import { ImagemAvatar } from './ImagemAvatar'
 
 type CardListagemProps = {
   titulo: string
@@ -24,10 +25,10 @@ export function CardListagem({
     <Card className="p-4 flex flex-col sm:flex-row sm:items-start gap-6 min-h-[240px] hover:shadow-md transition">
       <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:w-1/2">
         {imagemUrl ? (
-          <img
+          <ImagemAvatar
             src={imagemUrl}
             alt={imagemAlt}
-            className="w-20 h-20 rounded-full object-cover border"
+            className="w-20 h-20 rounded-full object-cover border bg-white"
           />
         ) : (
           <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">

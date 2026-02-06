@@ -47,6 +47,7 @@ export function Botao({
     <button
       className={clsx(
         'px-4 py-2 rounded-md font-medium',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#193282]/50',
         estilos[variante],
         className
       )}

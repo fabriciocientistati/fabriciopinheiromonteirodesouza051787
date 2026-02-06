@@ -1,6 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import type { PetVinculadoViewModel } from "../../../modelos";
 import { Card } from "../../../componentes/ui/Card";
+import { ImagemAvatar } from "../../../componentes/ui/ImagemAvatar";
 import { Secao } from "../../../componentes/ui/Secao";
 import { Botao } from "../../../componentes/ui/Botao";
 import { Modal } from "../../../componentes/ui/Modal";
@@ -106,10 +107,10 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
               key={pet.id}
               className="flex flex-col sm:flex-row sm:items-center gap-4 p-4"
             >
-              <img
-                src={pet.foto?.url || "/sem-foto.png"}
+              <ImagemAvatar
+                src={pet.foto?.url}
                 alt={pet.nome}
-                className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0"
+                className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0 bg-white"
               />
 
               <div className="flex-1 text-center sm:text-left">

@@ -3,6 +3,7 @@ import type { TutorViewModel } from '../../../modelos'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { useObservable } from '../../../hooks/useObservable'
 import { Card } from '../../../componentes/ui/Card'
+import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
 import { Botao } from '../../../componentes/ui/Botao'
 import { Input } from '../../../componentes/ui/Input'
 import { Toast } from '../../../componentes/ui/Toast'
@@ -104,10 +105,10 @@ export function VincularTutorModal({
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <img
-                    src={tutor.foto?.url || '/sem-foto.png'}
+                  <ImagemAvatar
+                    src={tutor.foto?.url}
                     alt={tutor.nome}
-                    className="w-12 h-12 rounded-full object-cover border"
+                    className="w-12 h-12 rounded-full object-cover border bg-white"
                   />
 
                   <div className="text-center sm:text-left">

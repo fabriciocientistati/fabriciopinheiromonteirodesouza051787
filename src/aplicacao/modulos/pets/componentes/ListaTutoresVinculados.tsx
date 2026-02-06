@@ -1,5 +1,6 @@
 ﻿import type { TutorViewModel } from '../../../modelos'
 import { Botao } from '../../../componentes/ui/Botao'
+import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
 import { formatarTelefone } from '../../../utils/validacoes'
 
 export function ListaTutoresVinculados({
@@ -21,10 +22,10 @@ export function ListaTutoresVinculados({
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border p-3 rounded"
         >
           <div className="flex items-center gap-3">
-            <img
-              src={tutor.foto?.url || '/sem-foto.png'}
+            <ImagemAvatar
+              src={tutor.foto?.url}
               alt={tutor.nome}
-              className="w-12 h-12 rounded-full object-cover border"
+              className="w-12 h-12 rounded-full object-cover border bg-white"
             />
 
             <div>

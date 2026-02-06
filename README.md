@@ -287,6 +287,14 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Sidebar com rolagem interna e botão Sair sempre visível.
 - Botão Sair disponível no topo do conteúdo em telas pequenas.
 - Campo de busca com ícone e foco alinhado ao tema da aplicação.
+- Busca com Enter, botão limpar e indicação de filtro ativo.
+- Skeletons de carregamento e estado vazio com CTA para cadastro.
+- Retry na lista em caso de erro de API.
+- Paginação com opção de ir direto para uma página.
+- Scroll automático ao trocar de página.
+- Toast de exclusão com ação de desfazer.
+- Imagens com lazy-load e fallback automático para evitar falhas.
+- Foco visível nos botões para melhor acessibilidade.
 - Cadastro de tutor e pet permite pré-vincular itens via modal (antes de salvar).
 - Listas de pré-vínculo exibem imagem, nome e detalhes básicos.
 - Destaque visual dos nomes em listagens, detalhes e modais de vínculo (pets e tutores).

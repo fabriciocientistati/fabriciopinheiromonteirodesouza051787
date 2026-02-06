@@ -3,6 +3,7 @@ import type { PetVinculadoViewModel } from '../../../modelos'
 import { petsFacade } from '../../../facades/PetsFacade'
 import { useObservable } from '../../../hooks/useObservable'
 import { Card } from '../../../componentes/ui/Card'
+import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
 import { Botao } from '../../../componentes/ui/Botao'
 import { Input } from '../../../componentes/ui/Input'
 import { Toast } from '../../../componentes/ui/Toast'
@@ -104,10 +105,10 @@ export function VincularPetModal({
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <img
-                    src={pet.foto?.url || '/sem-foto.png'}
+                  <ImagemAvatar
+                    src={pet.foto?.url}
                     alt={pet.nome}
-                    className="w-12 h-12 rounded-full object-cover border"
+                    className="w-12 h-12 rounded-full object-cover border bg-white"
                   />
 
                   <div className="text-center sm:text-left">

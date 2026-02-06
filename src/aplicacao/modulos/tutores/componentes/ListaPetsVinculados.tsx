@@ -1,5 +1,6 @@
 ﻿import type { PetVinculadoViewModel } from "../../../modelos"
 import { Botao } from "../../../componentes/ui/Botao"
+import { ImagemAvatar } from "../../../componentes/ui/ImagemAvatar"
 
 export function ListaPetsVinculados({
   pets,
@@ -20,10 +21,10 @@ export function ListaPetsVinculados({
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border p-3 rounded"
         >
           <div className="flex items-center gap-3">
-            <img
-              src={pet.foto?.url || "/sem-foto.png"}
+            <ImagemAvatar
+              src={pet.foto?.url}
               alt={pet.nome}
-              className="w-12 h-12 rounded-full object-cover border"
+              className="w-12 h-12 rounded-full object-cover border bg-white"
             />
 
             <div>

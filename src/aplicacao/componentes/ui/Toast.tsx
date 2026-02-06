@@ -7,6 +7,8 @@ interface Props {
   tipo?: TipoToast
   tempoMs?: number
   onFechar?: () => void
+  acaoLabel?: string
+  onAcao?: () => void
   posicao?: 'canto' | 'modal'
 }
 
@@ -21,6 +23,8 @@ export function Toast({
   tipo = 'sucesso',
   tempoMs = 3000,
   onFechar,
+  acaoLabel,
+  onAcao,
   posicao = 'canto',
 }: Props) {
   useEffect(() => {
@@ -42,6 +46,15 @@ export function Toast({
         aria-live="polite"
       >
         <span className="flex-1">{mensagem}</span>
+        {acaoLabel && onAcao && (
+          <button
+            type="button"
+            onClick={onAcao}
+            className="text-white/90 hover:text-white underline underline-offset-2"
+          >
+            {acaoLabel}
+          </button>
+        )}
         {onFechar && (
           <button
             type="button"

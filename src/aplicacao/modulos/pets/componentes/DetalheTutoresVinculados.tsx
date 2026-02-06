@@ -3,6 +3,7 @@ import type { TutorViewModel } from '../../../modelos'
 import { Card } from '../../../componentes/ui/Card'
 import { Secao } from '../../../componentes/ui/Secao'
 import { Botao } from '../../../componentes/ui/Botao'
+import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
 import { Modal } from '../../../componentes/ui/Modal'
 import { tutoresFacade } from '../../../facades/TutoresFacade'
 import { petsFacade } from '../../../facades/PetsFacade'
@@ -108,10 +109,10 @@ export function DetalheTutoresVinculados({ petId, tutores }: Props) {
               key={tutor.id}
               className="flex flex-col sm:flex-row sm:items-center gap-4 p-4"
             >
-              <img
-                src={tutor.foto?.url || '/sem-foto.png'}
+              <ImagemAvatar
+                src={tutor.foto?.url}
                 alt={tutor.nome}
-                className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0"
+                className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0 bg-white"
               />
 
               <div className="flex-1 text-center sm:text-left">
