@@ -66,6 +66,7 @@ export function ListaTutores({
           onFechar={() => setExclusaoPendente(null)}
           acaoLabel="Desfazer"
           onAcao={desfazerExclusao}
+          posicao="centro"
         />
       )}
 
@@ -80,6 +81,7 @@ export function ListaTutores({
               linhas={[telefoneFormatado]}
               imagemUrl={tutor.foto?.url}
               imagemAlt={`Foto do tutor ${tutor.nome}`}
+              onClick={() => onSelecionar(tutor.id)}
               acoes={
                 <>
                   <Botao onClick={() => onSelecionar(tutor.id)} className="w-full">

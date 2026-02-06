@@ -20,13 +20,25 @@ export function CardTutor({ tutor }: Props) {
         />
 
         <div className="space-y-2 text-center sm:text-left break-words">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-            {tutor.nome}
-          </h2>
-          <p><strong>Telefone:</strong> {telefoneFormatado}</p>
-          <p><strong>Endereço:</strong> {tutor.endereco}</p>
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+            Nome do TUTOR
+          </p>
+
+          <div className="inline-block max-w-full rounded-xl bg-slate-50 px-4 py-2">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+              <span className="border-l-4 border-slate-900 pl-3">{tutor.nome}</span>
+            </h2>
+          </div>
+
+          <p className="text-slate-700">
+            <strong>Telefone:</strong> {telefoneFormatado}
+          </p>
+
+          <p className="text-slate-700">
+            <strong>Endereço:</strong> {tutor.endereco}
+          </p>
         </div>
       </div>
     </Card>
-  );
+  )
 }

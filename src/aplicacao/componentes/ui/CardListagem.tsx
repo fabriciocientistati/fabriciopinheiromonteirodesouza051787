@@ -1,4 +1,9 @@
-import type { ReactNode } from 'react'
+import {
+  useState,
+  type FocusEventHandler,
+  type MouseEventHandler,
+  type ReactNode,
+} from 'react'
 import { Card } from './Card'
 import { ImagemAvatar } from './ImagemAvatar'
 
@@ -8,6 +13,7 @@ type CardListagemProps = {
   imagemUrl?: string | null
   imagemAlt: string
   acoes: ReactNode
+  onClick?: MouseEventHandler<HTMLDivElement>
 }
 
 export function CardListagem({
@@ -16,14 +22,69 @@ export function CardListagem({
   imagemUrl,
   imagemAlt,
   acoes,
+  onClick,
 }: CardListagemProps) {
   const linhasValidas = linhas.filter(
     (linha): linha is string => Boolean(linha && linha.trim()),
   )
+  const [acoesVisiveis, setAcoesVisiveis] = useState(!onClick)
+  const cardClassName =
+    'p-4 flex flex-col sm:flex-row items-center gap-6 hover:shadow-md transition' +
+    (onClick ? ' cursor-pointer' : '') +
+    (acoesVisiveis ? ' min-h-[240px]' : '')
+
+  const handleClick: MouseEventHandler<HTMLDivElement> | undefined = onClick
+    ? event => {
+        if (event.defaultPrevented) return
+        const alvo = event.target
+        if (alvo instanceof Element) {
+          const interativo = alvo.closest(
+            'button, a, input, select, textarea, [role="button"]',
+          )
+          if (interativo && interativo !== event.currentTarget) {
+            return
+          }
+        }
+        if (!acoesVisiveis) {
+          setAcoesVisiveis(true)
+          return
+        }
+        onClick(event)
+      }
+    : undefined
+
+  const handleBlur: FocusEventHandler<HTMLDivElement> | undefined = onClick
+    ? event => {
+        const proximo = event.relatedTarget
+        if (!(proximo instanceof Node) || !event.currentTarget.contains(proximo)) {
+          setAcoesVisiveis(false)
+        }
+      }
+    : undefined
+
+  const conteudoClassName =
+    'flex flex-col items-center text-center break-words' +
+    (acoesVisiveis ? ' sm:w-1/2' : ' sm:w-full')
+
+  const acoesClassName =
+    'flex flex-col gap-2 w-full transition-all duration-300 ease-out overflow-hidden ' +
+    (acoesVisiveis
+      ? 'opacity-100 max-h-96 translate-y-0 pointer-events-auto sm:w-1/2'
+      : 'opacity-0 max-h-0 -translate-y-1 pointer-events-none sm:w-0')
+
+  const handleAcoesClick: MouseEventHandler<HTMLDivElement> = event => {
+    if (onClick) {
+      event.stopPropagation()
+    }
+  }
 
   return (
-    <Card className="p-4 flex flex-col sm:flex-row sm:items-start gap-6 min-h-[240px] hover:shadow-md transition">
-      <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:w-1/2">
+    <Card
+      className={cardClassName}
+      onClick={handleClick}
+      onBlur={handleBlur}
+    >
+      <div className={conteudoClassName}>
         {imagemUrl ? (
           <ImagemAvatar
             src={imagemUrl}
@@ -48,7 +109,11 @@ export function CardListagem({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 w-full sm:w-1/2">
+      <div
+        className={acoesClassName}
+        aria-hidden={!acoesVisiveis}
+        onClick={handleAcoesClick}
+      >
         {acoes}
       </div>
     </Card>

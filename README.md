@@ -308,6 +308,13 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Mensagem de sessão expirada vem do estado de autenticação (sem location.state).
 - Tela de login redesenhada com Tailwind para melhor UX.
 
+## Fluxo de Exclusão com Desfazer (Pets e Tutores)
+
+- Ao clicar em "Excluir", a interface abre um modal de confirmação.
+- Ao confirmar, a exclusão entra em contagem regressiva (4s) e um toast aparece no centro da tela com a mensagem e o botão "Desfazer".
+- O botão "Desfazer" cancela a exclusão dentro do prazo. Fechar o toast apenas oculta o aviso, a exclusão continua em segundo plano.
+- Se o prazo expirar sem "Desfazer", a exclusão é efetivada.
+
 
 Telas de Detalhe (Pets e Tutores)
 

@@ -19,7 +19,11 @@ export function Card({
   const tabIndexFinal = tabIndex ?? (clicavel ? 0 : undefined)
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (clicavel && (event.key === 'Enter' || event.key === ' ')) {
+    if (
+      clicavel &&
+      event.currentTarget === event.target &&
+      (event.key === 'Enter' || event.key === ' ')
+    ) {
       event.preventDefault()
       event.currentTarget.click()
     }

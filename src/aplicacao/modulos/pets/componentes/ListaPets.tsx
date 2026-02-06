@@ -65,6 +65,7 @@ export function ListaPets({
           onFechar={() => setExclusaoPendente(null)}
           acaoLabel="Desfazer"
           onAcao={desfazerExclusao}
+          posicao="centro"
         />
       )}
 
@@ -82,6 +83,7 @@ export function ListaPets({
               linhas={[detalhes]}
               imagemUrl={pet.foto?.url}
               imagemAlt={`Foto do pet ${pet.nome}`}
+              onClick={() => onSelecionar(pet.id)}
               acoes={
                 <>
                   <Botao onClick={() => onSelecionar(pet.id)} className="w-full">

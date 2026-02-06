@@ -9,7 +9,7 @@ interface Props {
   onFechar?: () => void
   acaoLabel?: string
   onAcao?: () => void
-  posicao?: 'canto' | 'modal'
+  posicao?: 'canto' | 'modal' | 'centro'
 }
 
 const estilosPorTipo: Record<TipoToast, string> = {
@@ -36,6 +36,8 @@ export function Toast({
   const containerClassName =
     posicao === 'modal'
       ? 'absolute top-3 right-3 z-50 pointer-events-none'
+      : posicao === 'centro'
+      ? 'fixed inset-0 z-50 pointer-events-none flex items-center justify-center px-4'
       : 'fixed top-4 right-4 z-50 pointer-events-none'
 
   return (

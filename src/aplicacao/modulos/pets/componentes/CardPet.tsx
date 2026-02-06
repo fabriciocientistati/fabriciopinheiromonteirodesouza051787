@@ -20,13 +20,21 @@ export function CardPet({ pet }: Props) {
         />
 
         <div className="space-y-2 text-center sm:text-left break-words">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
-            {pet.nome}
-          </h2>
-          <p>
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+            Nome do PET
+          </p>
+
+          <div className="inline-block max-w-full rounded-xl bg-slate-50 px-4 py-2">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">
+              <span className="border-l-4 border-slate-900 pl-3">{pet.nome}</span>
+            </h2>
+          </div>
+
+          <p className="text-slate-700">
             <strong>Espécie:</strong> {racaTexto}
           </p>
-          <p>
+
+          <p className="text-slate-700">
             <strong>Idade:</strong> {idadeTexto}
           </p>
         </div>
