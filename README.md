@@ -292,7 +292,7 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Retry na lista em caso de erro de API.
 - Paginação com opção de ir direto para uma página.
 - Scroll automático ao trocar de página.
-- Toast de exclusão com ação de desfazer.
+- Exclusão imediata após confirmação.
 - Imagens com lazy-load e fallback automático para evitar falhas.
 - Foco visível nos botões para melhor acessibilidade.
 - Cadastro de tutor e pet permite pré-vincular itens via modal (antes de salvar).
@@ -307,14 +307,6 @@ Esse desenho garante consistência, reutilização e facilidade de manutenção.
 - Logout manual não preserva rota; sessão expirada mantém retorno para a rota anterior.
 - Mensagem de sessão expirada vem do estado de autenticação (sem location.state).
 - Tela de login redesenhada com Tailwind para melhor UX.
-
-## Fluxo de Exclusão com Desfazer (Pets e Tutores)
-
-- Ao clicar em "Excluir", a interface abre um modal de confirmação.
-- Ao confirmar, a exclusão entra em contagem regressiva (4s) e um toast aparece no centro da tela com a mensagem e o botão "Desfazer".
-- O botão "Desfazer" cancela a exclusão dentro do prazo. Fechar o toast apenas oculta o aviso, a exclusão continua em segundo plano.
-- Se o prazo expirar sem "Desfazer", a exclusão é efetivada.
-
 
 Telas de Detalhe (Pets e Tutores)
 

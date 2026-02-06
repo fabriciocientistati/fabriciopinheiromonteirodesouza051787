@@ -1,12 +1,9 @@
-﻿import { useEffect, useRef, useState } from 'react'
+﻿import { useState } from 'react'
 import type { TutorViewModel } from '../../../modelos'
 import { Botao } from '../../../componentes/ui/Botao'
 import { CardListagem } from '../../../componentes/ui/CardListagem'
 import { ConfirmacaoModal } from '../../../componentes/ui/ConfirmacaoModal'
-import { Toast } from '../../../componentes/ui/Toast'
 import { formatarTelefone } from '../../../utils/validacoes'
-
-const TEMPO_UNDO_MS = 4000
 
 interface ListaTutoresProps {
   tutores: TutorViewModel[]
@@ -22,54 +19,9 @@ export function ListaTutores({
   onExcluir,
 }: ListaTutoresProps) {
   const [tutorParaExcluir, setTutorParaExcluir] = useState<TutorViewModel | null>(null)
-  const [exclusaoPendente, setExclusaoPendente] = useState<TutorViewModel | null>(null)
-  const exclusaoTimeoutRef = useRef<number | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (exclusaoTimeoutRef.current) {
-        window.clearTimeout(exclusaoTimeoutRef.current)
-      }
-    }
-  }, [])
-
-  const agendarExclusao = (tutor: TutorViewModel) => {
-    if (exclusaoTimeoutRef.current) {
-      window.clearTimeout(exclusaoTimeoutRef.current)
-    }
-
-    setExclusaoPendente(tutor)
-
-    exclusaoTimeoutRef.current = window.setTimeout(() => {
-      exclusaoTimeoutRef.current = null
-      void onExcluir(tutor.id)
-        .catch(() => {})
-        .finally(() => setExclusaoPendente(null))
-    }, TEMPO_UNDO_MS)
-  }
-
-  const desfazerExclusao = () => {
-    if (exclusaoTimeoutRef.current) {
-      window.clearTimeout(exclusaoTimeoutRef.current)
-      exclusaoTimeoutRef.current = null
-    }
-    setExclusaoPendente(null)
-  }
 
   return (
     <>
-      {exclusaoPendente && (
-        <Toast
-          mensagem={`Exclusão de "${exclusaoPendente.nome}" em ${TEMPO_UNDO_MS / 1000}s.`}
-          tipo="info"
-          tempoMs={TEMPO_UNDO_MS}
-          onFechar={() => setExclusaoPendente(null)}
-          acaoLabel="Desfazer"
-          onAcao={desfazerExclusao}
-          posicao="centro"
-        />
-      )}
-
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tutores.map(tutor => {
           const telefoneFormatado = formatarTelefone(tutor.telefone)
@@ -112,9 +64,9 @@ export function ListaTutores({
         aberto={!!tutorParaExcluir}
         titulo="Excluir tutor"
         onCancelar={() => setTutorParaExcluir(null)}
-        onConfirmar={() => {
+        onConfirmar={async () => {
           if (!tutorParaExcluir) return
-          agendarExclusao(tutorParaExcluir)
+          await onExcluir(tutorParaExcluir.id)
           setTutorParaExcluir(null)
         }}
         mensagem={
@@ -127,5 +79,3 @@ export function ListaTutores({
     </>
   )
 }
-
-
