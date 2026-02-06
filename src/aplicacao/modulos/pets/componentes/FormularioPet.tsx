@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import type { PetViewModel } from '../../../modelos'
 import { Input } from '../../../componentes/ui/Input'
 import { Botao } from '../../../componentes/ui/Botao'
@@ -6,11 +6,13 @@ import { UploadFoto } from '../../../componentes/ui/UploadFoto'
 import { useNavigate } from 'react-router-dom'
 import { validarNumeroPositivo, validarObrigatorio } from '../../../utils/validacoes'
 import { MENSAGENS_VALIDACAO } from '../../../utils/mensagensValidacao'
+import { ESPECIES_PET } from '../constantes/especiesPet'
 
 interface FormularioPetProps {
   petInicial?: PetViewModel
   onSubmit: (dados: {
     nome: string
+    especie: string
     raca: string
     idade: number
     foto?: File | null
@@ -27,6 +29,7 @@ export function FormularioPet({
   const navigate = useNavigate()
 
   const [nome, setNome] = useState(petInicial?.nome ?? '')
+  const [especie, setEspecie] = useState(petInicial?.especie ?? '')
   const [raca, setRaca] = useState(petInicial?.raca ?? '')
   const [idade, setIdade] = useState<number | ''>(petInicial?.idade ?? '')
   const [foto, setFoto] = useState<File | null>(null)
@@ -35,6 +38,7 @@ export function FormularioPet({
 
   const [erros, setErros] = useState<{
     nome?: string
+    especie?: string
     raca?: string
     idade?: string
   }>({})
@@ -44,8 +48,10 @@ export function FormularioPet({
 
     if (!validarObrigatorio(nome))
       novoErros.nome = MENSAGENS_VALIDACAO.NOME_OBRIGATORIO
+    if (!validarObrigatorio(especie))
+      novoErros.especie = MENSAGENS_VALIDACAO.ESPECIE_OBRIGATORIA
     if (!validarObrigatorio(raca))
-      novoErros.raca = MENSAGENS_VALIDACAO.ESPECIE_OBRIGATORIA
+      novoErros.raca = MENSAGENS_VALIDACAO.RACA_OBRIGATORIA
     if (!validarNumeroPositivo(idade))
       novoErros.idade = MENSAGENS_VALIDACAO.IDADE_POSITIVA
 
@@ -61,6 +67,7 @@ export function FormularioPet({
     try {
       await onSubmit({
         nome,
+        especie,
         raca,
         idade: Number(idade),
         foto,
@@ -86,14 +93,49 @@ export function FormularioPet({
           erro={erros.nome}
         />
 
+        <div className="space-y-1">
+          <label className="text-sm text-gray-700" htmlFor="especie">
+            Espécie
+          </label>
+          <select
+            id="especie"
+            value={especie}
+            onChange={e => setEspecie(e.target.value)}
+            required
+            className={
+              'w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/10 transition bg-white ' +
+              (erros.especie ? 'border-red-500 focus:ring-red-200' : 'border-gray-300')
+            }
+            aria-invalid={Boolean(erros.especie)}
+            aria-describedby={erros.especie ? 'especie-erro' : undefined}
+          >
+            <option value="">Selecione uma espécie</option>
+            {ESPECIES_PET.map(item => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          {erros.especie && (
+            <p id="especie-erro" className="text-sm text-red-600">
+              {erros.especie}
+            </p>
+          )}
+        </div>
+
         <Input
-          label="Espécie"
+          label="Raça"
+          id="raca"
+          list="raca-opcoes"
           value={raca}
           onChange={e => setRaca(e.target.value)}
           required
           className="w-full"
           erro={erros.raca}
         />
+        <datalist id="raca-opcoes">
+          <option value="Sem raça definida" />
+        </datalist>
 
         <Input
           label="Idade"

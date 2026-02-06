@@ -1,78 +1,79 @@
-﻿import { useEffect, useMemo, useState } from "react";
-import type { PetVinculadoViewModel } from "../../../modelos";
-import { Card } from "../../../componentes/ui/Card";
-import { ImagemAvatar } from "../../../componentes/ui/ImagemAvatar";
-import { Secao } from "../../../componentes/ui/Secao";
-import { Botao } from "../../../componentes/ui/Botao";
-import { Modal } from "../../../componentes/ui/Modal";
-import { tutoresFacade } from "../../../facades/TutoresFacade";
-import { VincularPetModal } from "./VincularPetModal";
-import { mensagemErro } from "../../../utils/errosHttp";
-import { MENSAGENS_ERRO } from "../../../utils/mensagensErro";
+﻿import { useEffect, useMemo, useState } from 'react'
+import type { PetVinculadoViewModel } from '../../../modelos'
+import { Card } from '../../../componentes/ui/Card'
+import { Secao } from '../../../componentes/ui/Secao'
+import { Botao } from '../../../componentes/ui/Botao'
+import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
+import { Modal } from '../../../componentes/ui/Modal'
+import { petsFacade } from '../../../facades/PetsFacade'
+import { tutoresFacade } from '../../../facades/TutoresFacade'
+import { VincularPetModal } from './VincularPetModal'
+import { mensagemErro } from '../../../utils/errosHttp'
+import { MENSAGENS_ERRO } from '../../../utils/mensagensErro'
 
 interface Props {
-  tutorId: number;
-  pets: PetVinculadoViewModel[];
+  tutorId: number
+  pets: PetVinculadoViewModel[]
 }
 
 export function DetalhePetsVinculados({ tutorId, pets }: Props) {
-  const [vincularAberto, setVincularAberto] = useState(false);
+  const [vincularAberto, setVincularAberto] = useState(false)
   const [petParaDesvincular, setPetParaDesvincular] =
-    useState<PetVinculadoViewModel | null>(null);
-  const [petsDetalhe, setPetsDetalhe] = useState<PetVinculadoViewModel[] | null>(null);
-  const [carregandoDetalhes, setCarregandoDetalhes] = useState(false);
-  const [erroDetalhes, setErroDetalhes] = useState<string | null>(null);
+    useState<PetVinculadoViewModel | null>(null)
+  const [petsDetalhe, setPetsDetalhe] = useState<PetVinculadoViewModel[] | null>(null)
+  const [carregandoDetalhes, setCarregandoDetalhes] = useState(false)
+  const [erroDetalhes, setErroDetalhes] = useState<string | null>(null)
 
   const idsPets = useMemo(
-    () => pets.map((pet) => pet.id).join(","),
+    () => pets.map(pet => pet.id).join(','),
     [pets],
-  );
+  )
 
   useEffect(() => {
-    let ativo = true;
+    let ativo = true
 
     if (pets.length === 0) {
-      setPetsDetalhe([]);
-      setCarregandoDetalhes(false);
-      setErroDetalhes(null);
-      return;
+      setPetsDetalhe([])
+      setCarregandoDetalhes(false)
+      setErroDetalhes(null)
+      return
     }
 
-    setCarregandoDetalhes(true);
-    setErroDetalhes(null);
+    setCarregandoDetalhes(true)
+    setErroDetalhes(null)
 
     const carregarDetalhes = async () => {
       try {
         const { pets: detalhes, falhaIds } =
-          await tutoresFacade.carregarPetsDetalhe(pets);
+          await tutoresFacade.carregarPetsDetalhe(pets)
 
-        if (!ativo) return;
+        if (!ativo) return
 
-        setPetsDetalhe(detalhes);
+        setPetsDetalhe(detalhes)
         if (falhaIds.length > 0) {
-          setErroDetalhes(MENSAGENS_ERRO.DETALHE_PETS_PARCIAL);
+          setErroDetalhes(MENSAGENS_ERRO.DETALHE_PETS_PARCIAL)
         }
       } catch (erro) {
-        if (!ativo) return;
+        if (!ativo) return
         setErroDetalhes(
           mensagemErro(erro, MENSAGENS_ERRO.DETALHE_PETS_DADOS),
-        );
-        setPetsDetalhe(pets);
+        )
+        setPetsDetalhe(pets)
       } finally {
         if (ativo) {
-          setCarregandoDetalhes(false);
+          setCarregandoDetalhes(false)
         }
       }
-    };
+    }
 
-    void carregarDetalhes();
+    void carregarDetalhes()
 
     return () => {
-      ativo = false;
-    };
-  }, [tutorId, idsPets, pets]);
+      ativo = false
+    }
+  }, [tutorId, idsPets, pets])
 
-  const petsExibidos = petsDetalhe ?? pets;
+  const petsExibidos = petsDetalhe ?? pets
 
   return (
     <Secao titulo="Pets Vinculados">
@@ -102,36 +103,43 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {petsExibidos.map((pet) => (
-            <Card
-              key={pet.id}
-              className="flex flex-col sm:flex-row sm:items-center gap-4 p-4"
-            >
-              <ImagemAvatar
-                src={pet.foto?.url}
-                alt={pet.nome}
-                className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0 bg-white"
-              />
+          {petsExibidos.map(pet => {
+            const especieTexto = pet.especie ?? 'Espécie não informada'
+            const racaTexto = pet.raca ?? 'Raça não informada'
 
-              <div className="flex-1 text-center sm:text-left">
-                <p className="text-base sm:text-lg font-semibold text-slate-900">
-                  {pet.nome}
-                </p>
-                <p className="text-sm text-gray-600">{pet.raca}</p>
-                <p className="text-sm text-gray-600">
-                  {pet.idade} anos
-                </p>
-              </div>
-
-              <Botao
-                variante="perigo"
-                onClick={() => setPetParaDesvincular(pet)}
-                className="w-full sm:w-auto"
+            return (
+              <Card
+                key={pet.id}
+                className="flex flex-col sm:flex-row sm:items-center gap-4 p-4"
               >
-                Desvincular
-              </Botao>
-            </Card>
-          ))}
+                <ImagemAvatar
+                  src={pet.foto?.url}
+                  alt={pet.nome}
+                  className="w-16 h-16 rounded-full object-cover border mx-auto sm:mx-0 bg-white"
+                />
+
+                <div className="flex-1 text-center sm:text-left">
+                  <p className="text-base sm:text-lg font-semibold text-slate-900">
+                    {pet.nome}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Espécie: {especieTexto}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Raça: {racaTexto}
+                  </p>
+                </div>
+
+                <Botao
+                  variante="perigo"
+                  onClick={() => setPetParaDesvincular(pet)}
+                  className="w-full sm:w-auto"
+                >
+                  Desvincular
+                </Botao>
+              </Card>
+            )
+          })}
         </div>
       )}
 
@@ -140,23 +148,28 @@ export function DetalhePetsVinculados({ tutorId, pets }: Props) {
         titulo="Desvincular pet"
         onFechar={() => setPetParaDesvincular(null)}
         onConfirmar={async () => {
-          if (!petParaDesvincular) return;
-          await tutoresFacade.removerVinculo(tutorId, petParaDesvincular.id);
-          setPetParaDesvincular(null);
+          if (!petParaDesvincular) return
+          await petsFacade.removerVinculo(
+            petParaDesvincular.id,
+            tutorId
+          )
+          await tutoresFacade.recarregarDetalheSilencioso(tutorId)
+          setPetParaDesvincular(null)
         }}
       >
-        Deseja realmente desvincular o pet{" "}
+        Deseja realmente desvincular o pet{' '}
         <strong>{petParaDesvincular?.nome}</strong> deste tutor?
       </Modal>
 
       <VincularPetModal
         aberto={vincularAberto}
         onFechar={() => setVincularAberto(false)}
-        onVincular={async (idPet) => {
-          await tutoresFacade.vincularPet(tutorId, idPet);
+        onVincular={async idPet => {
+          await petsFacade.vincularTutor(idPet, tutorId)
+          await tutoresFacade.recarregarDetalheSilencioso(tutorId)
         }}
         petsVinculados={pets}
       />
     </Secao>
-  );
+  )
 }

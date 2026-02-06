@@ -245,7 +245,7 @@ C. Boas Práticas e Entrega
 - Modularização por feature: organização de Pets/Tutores em `aplicacao/modulos` com páginas, componentes e hooks dedicados.
 - Debounce nas buscas: reduz chamadas e melhora UX.
 - Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
-- Campo "Espécie": a API não fornece o campo espécie; por isso a UI usa o valor de `raça` como rótulo "Espécie" para atender ao edital.
+- Campo "Espécie": a API não fornece espécie. A UI permite selecionar a espécie por lista fixa e armazena localmente por id do pet, mantendo `raça` como campo separado vindo da API.
 - Detalhe de tutores: a UI mantém o `GET /v1/tutores/{id}` e, quando necessário, busca detalhes dos pets via `GET /v1/pets/{id}` com cache em memória no `TutoresFacade` para padronizar o fluxo e evitar chamadas repetidas.
 - Cadastro de tutor: a UI segue o edital com campos nome completo, telefone e endereço; e‑mail e CPF foram removidos da interface porque a API aceita `email`/`cpf` nulos.
 - Limpeza de estado por módulo: ao trocar entre Pets/Tutores, o estado anterior é limpo via hook (`useLimparEstadoPorModulo`) para evitar dados desatualizados ao retornar.

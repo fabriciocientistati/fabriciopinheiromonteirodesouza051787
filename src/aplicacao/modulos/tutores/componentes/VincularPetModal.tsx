@@ -116,7 +116,10 @@ export function VincularPetModal({
                       {pet.nome}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {pet.raca ?? 'Sem raca'}
+                      Espécie: {pet.especie ?? 'Espécie não informada'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Raça: {pet.raca ?? 'Raça não informada'}
                     </p>
                   </div>
                 </div>

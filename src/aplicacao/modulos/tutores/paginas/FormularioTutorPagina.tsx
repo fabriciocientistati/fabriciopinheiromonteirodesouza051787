@@ -144,6 +144,7 @@ export function FormularioTutorPagina() {
                     {
                       id: pet.id,
                       nome: pet.nome,
+                      especie: pet.especie,
                       raca: pet.raca ?? '',
                       idade: pet.idade ?? 0,
                       foto: pet.foto,

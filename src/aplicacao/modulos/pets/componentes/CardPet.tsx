@@ -1,4 +1,4 @@
-import type { PetViewModel } from '../../../modelos'
+﻿import type { PetViewModel } from '../../../modelos'
 import { Card } from '../../../componentes/ui/Card'
 import { ImagemAvatar } from '../../../componentes/ui/ImagemAvatar'
 
@@ -7,6 +7,7 @@ interface Props {
 }
 
 export function CardPet({ pet }: Props) {
+  const especieTexto = pet.especie ?? 'Espécie não informada'
   const racaTexto = pet.raca ?? 'Raça não informada'
   const idadeTexto = pet.idade != null ? `${pet.idade} anos` : 'Idade não informada'
 
@@ -31,7 +32,11 @@ export function CardPet({ pet }: Props) {
           </div>
 
           <p className="text-slate-700">
-            <strong>Espécie:</strong> {racaTexto}
+            <strong>Espécie:</strong> {especieTexto}
+          </p>
+
+          <p className="text-slate-700">
+            <strong>Raça:</strong> {racaTexto}
           </p>
 
           <p className="text-slate-700">

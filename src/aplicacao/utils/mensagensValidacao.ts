@@ -5,5 +5,6 @@ export const MENSAGENS_VALIDACAO = {
   TELEFONE_OBRIGATORIO: 'O telefone é obrigatório.',
   ENDERECO_OBRIGATORIO: 'O endereço é obrigatório.',
   ESPECIE_OBRIGATORIA: 'A espécie é obrigatória.',
+  RACA_OBRIGATORIA: 'A raça é obrigatória.',
   IDADE_POSITIVA: 'A idade deve ser maior que zero.',
 } as const

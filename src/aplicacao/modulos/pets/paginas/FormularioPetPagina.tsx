@@ -10,9 +10,11 @@ import { FormularioPet } from '../componentes/FormularioPet'
 import { ListaTutoresVinculados } from '../componentes/ListaTutoresVinculados'
 import { VincularTutorModal } from '../componentes/VincularTutorModal'
 import { useAutenticacao } from '../../../hooks/useAutenticacao'
+import { definirEspeciePet } from '../../../utils/especieStorage'
 
 type FormularioPetDados = {
   nome: string
+  especie: string
   raca: string
   idade: number
   foto?: File | null
@@ -70,6 +72,8 @@ export function FormularioPetPagina() {
         await tutoresFacade.vincularPet(tutor.id, petSalvo.id)
       }
     }
+
+    definirEspeciePet(petSalvo.id, dados.especie)
 
     navigate('/pets', {
       state: {

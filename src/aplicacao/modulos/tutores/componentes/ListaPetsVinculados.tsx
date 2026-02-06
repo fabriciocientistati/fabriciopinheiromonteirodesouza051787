@@ -15,36 +15,42 @@ export function ListaPetsVinculados({
 
   return (
     <ul className="space-y-2 mt-2">
-      {pets.map((pet) => (
-        <li
-          key={pet.id}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border p-3 rounded"
-        >
-          <div className="flex items-center gap-3">
-            <ImagemAvatar
-              src={pet.foto?.url}
-              alt={pet.nome}
-              className="w-12 h-12 rounded-full object-cover border bg-white"
-            />
+      {pets.map((pet) => {
+        const especieTexto = pet.especie ?? 'Espécie não informada'
+        const racaTexto = pet.raca ?? 'Raça não informada'
 
-            <div>
-              <p className="font-semibold">{pet.nome}</p>
-              <p className="text-sm text-gray-600">
-                {(pet.raca ?? 'Espécie não informada')} - {pet.idade} anos
-              </p>
-            </div>
-          </div>
-
-          <Botao
-            variante="perigo"
-            type="button"
-            onClick={() => onRemover(pet.id)}
-            className="w-full sm:w-auto"
+        return (
+          <li
+            key={pet.id}
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border p-3 rounded"
           >
-            Remover
-          </Botao>
-        </li>
-      ))}
+            <div className="flex items-center gap-3">
+              <ImagemAvatar
+                src={pet.foto?.url}
+                alt={pet.nome}
+                className="w-12 h-12 rounded-full object-cover border bg-white"
+              />
+
+              <div>
+                <p className="font-semibold">{pet.nome}</p>
+                <p className="text-sm text-gray-600">
+                  Espécie: {especieTexto} • Raça: {racaTexto}
+                </p>
+                <p className="text-sm text-gray-600">Idade: {pet.idade} anos</p>
+              </div>
+            </div>
+
+            <Botao
+              variante="perigo"
+              type="button"
+              onClick={() => onRemover(pet.id)}
+              className="w-full sm:w-auto"
+            >
+              Remover
+            </Botao>
+          </li>
+        )
+      })}
     </ul>
   )
 }

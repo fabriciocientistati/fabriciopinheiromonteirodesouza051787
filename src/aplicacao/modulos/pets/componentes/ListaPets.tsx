@@ -23,16 +23,16 @@ export function ListaPets({
     <>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {pets.map(pet => {
-          const especieTexto = pet.raca ?? 'Espécie não informada'
+          const especieTexto = pet.especie ?? 'Espécie não informada'
+          const racaTexto = pet.raca ?? 'Raça não informada'
           const idadeTexto =
-            pet.idade != null ? `${pet.idade} anos` : 'Idade não informada'
-          const detalhes = `${especieTexto} - ${idadeTexto}`
+            pet.idade != null ? `Idade: ${pet.idade} anos` : 'Idade não informada'
 
           return (
             <CardListagem
               key={pet.id}
               titulo={pet.nome}
-              linhas={[detalhes]}
+              linhas={[`Espécie: ${especieTexto}`, `Raça: ${racaTexto}`, idadeTexto]}
               imagemUrl={pet.foto?.url}
               imagemAlt={`Foto do pet ${pet.nome}`}
               onClick={() => onSelecionar(pet.id)}

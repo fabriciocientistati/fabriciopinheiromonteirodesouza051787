@@ -8,6 +8,7 @@ import type {
   PetVinculadoViewModel,
   TutorViewModel,
 } from '../modelos'
+import { obterEspeciePet } from '../utils/especieStorage'
 
 type OpcoesPet = {
   incluirTutores?: boolean
@@ -35,6 +36,7 @@ export function mapPet(
   return {
     id: pet.id,
     nome: pet.nome,
+    especie: obterEspeciePet(pet.id),
     raca: pet.raca,
     idade: pet.idade,
     foto: mapFoto(pet.foto),
@@ -80,6 +82,7 @@ export function mapPetVinculado(pet: PetVinculado): PetVinculadoViewModel {
   return {
     id: pet.id,
     nome: pet.nome,
+    especie: obterEspeciePet(pet.id),
     raca: pet.raca ?? '',
     idade: pet.idade ?? 0,
     foto: mapFoto(pet.foto),
@@ -90,6 +93,7 @@ export function mapPetParaVinculado(pet: Pet): PetVinculadoViewModel {
   return {
     id: pet.id,
     nome: pet.nome,
+    especie: obterEspeciePet(pet.id),
     raca: pet.raca ?? '',
     idade: pet.idade ?? 0,
     foto: mapFoto(pet.foto),

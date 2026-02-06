@@ -7,6 +7,7 @@ import type { TutorViewModel } from '../modelos'
 import { mapPet, mapPets, mapTutor } from '../mappers/modelosMapper'
 import { erroEh401, mensagemErro } from '../utils/errosHttp'
 import { MENSAGENS_ERRO } from '../utils/mensagensErro'
+import { removerEspeciePet } from '../utils/especieStorage'
 
 const petsServico = new PetsServico()
 
@@ -258,6 +259,7 @@ async removerPet(id: number) {
     await petsServico.remover(id)
 
     petsEstado.definirRemoverDaLista(id)
+    removerEspeciePet(id)
 
   } catch (erro) {
     const mensagem = mensagemErro(erro, MENSAGENS_ERRO.PETS_REMOVER)

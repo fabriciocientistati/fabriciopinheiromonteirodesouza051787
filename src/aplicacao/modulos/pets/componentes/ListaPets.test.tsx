@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+﻿import { render, screen } from '@testing-library/react'
 import { ListaPets } from './ListaPets'
 
 describe('ListaPets', () => {
@@ -9,6 +9,7 @@ describe('ListaPets', () => {
           {
             id: 1,
             nome: 'Thor',
+            especie: 'Cachorro',
             raca: 'Vira-premio',
             idade: 2,
           },
@@ -20,6 +21,8 @@ describe('ListaPets', () => {
     )
 
     expect(screen.getByText('Thor')).toBeInTheDocument()
-    expect(screen.getByText('Vira-premio - 2 anos')).toBeInTheDocument()
+    expect(screen.getByText('Espécie: Cachorro')).toBeInTheDocument()
+    expect(screen.getByText('Raça: Vira-premio')).toBeInTheDocument()
+    expect(screen.getByText('Idade: 2 anos')).toBeInTheDocument()
   })
 })
