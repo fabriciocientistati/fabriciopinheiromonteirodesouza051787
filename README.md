@@ -1,4 +1,4 @@
-﻿# Pet e Tutores - Front-End
+# Pet e Tutores - Front-End
 
 ## Visão Geral do Projeto
 
@@ -9,13 +9,6 @@ A aplicação consome uma API pública de Pets e Tutores, implementando fluxos c
 Trata-se de uma Single Page Application (SPA), com navegação client-side, rotas protegidas e suporte a refresh direto em URLs internas.
 
 ---
-
-## Dados da Inscrição
-
-- Nome: Fabricio Pinheiro Monteiro de Souza
-- E-mail: fabricio.cientistati@hotmail.com
-- Vaga: Analista de Tecnologia da Informação - Perfil Engenheiro da Computação (Sênior)
-- Inscrição: 16423
 
 ## API Pública
 
