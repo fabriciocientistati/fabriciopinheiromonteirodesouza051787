@@ -20,7 +20,7 @@ Trata-se de uma Single Page Application (SPA), com navegação client-side, rota
 - Usuário: admin
 - Senha: admin
 
-Observação: use as credenciais fornecidas pelo edital/ambiente de testes.
+Observação: use as credenciais fornecidas pelo ambiente de testes.
 
 ## Tecnologias Utilizadas
 
@@ -192,7 +192,7 @@ Após um refresh bem-sucedido, as telas de listagem, detalhe e edição refazem 
 
     O carregamento das páginas é feito sob demanda com React.lazy.
 
-## Requisitos do Edital (Resumo)
+## Requisitos (Resumo)
 
 - SPA com React + TypeScript, módulos por feature em `aplicacao/modulos` e rotas lazy-loaded (Pets/Tutores).
 - Consumo de API em tempo real via Axios.
@@ -240,10 +240,10 @@ C. Boas Práticas e Entrega
 - Detalhe de pets: além do `GET /v1/pets/{id}`, quando houver tutores a UI consulta `GET /v1/tutores/{id}` para dados de contato, com cache em memória no `PetsFacade` para evitar chamadas repetidas (deduplicação por id e reaproveitamento em navegações).
 - Campo "Espécie": a API não fornece espécie. A UI permite selecionar a espécie por lista fixa e armazena localmente por id do pet, mantendo `raça` como campo separado vindo da API.
 - Detalhe de tutores: a UI mantém o `GET /v1/tutores/{id}` e, quando necessário, busca detalhes dos pets via `GET /v1/pets/{id}` com cache em memória no `TutoresFacade` para padronizar o fluxo e evitar chamadas repetidas.
-- Cadastro de tutor: a UI segue o edital com campos nome completo, telefone e endereço; e‑mail e CPF foram removidos da interface porque a API aceita `email`/`cpf` nulos.
+- Cadastro de tutor: a UI segue com campos nome completo, telefone e endereço; e‑mail e CPF foram removidos da interface porque a API aceita `email`/`cpf` nulos.
 - Limpeza de estado por módulo: ao trocar entre Pets/Tutores, o estado anterior é limpo via hook (`useLimparEstadoPorModulo`) para evitar dados desatualizados ao retornar.
 - Nginx com fallback SPA: permite refresh direto em rotas internas.
-- Health checks no Nginx: atende liveness/readiness do edital.
+- Health checks no Nginx: atende liveness/readiness.
 - Vitest + Testing Library: testes rápidos e focados em comportamento de UI.
 
 ## Listagens (Pets e Tutores)
@@ -383,7 +383,7 @@ Os modelos de domínio refletem estritamente o schema oficial da API, garantindo
 ## Considerações Finais
 
 O projeto prioriza:
-- aderência aos requisitos do edital
+- aderência aos requisitos
 - organização arquitetural clara
 - previsibilidade de estado
 - navegação SPA completa
